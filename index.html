@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ForVide — Видео без границ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #F8F9FC;
+            --bg-white: #FFFFFF;
+            --text-primary: #1C1E26;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --accent: #F54A45;
+            --accent-hover: #E63946;
+            --border-light: #E5E7EB;
+            --shadow-card: 0 1px 4px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.02);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.06);
+            --radius: 12px;
+            --transition: 0.2s ease;
+        }
+
+        /* Темная тема (по желанию, но пока предлагаю светлую как более лёгкую) */
+        /* Можно легко переключить на тёмную, но оставим светлую для простоты и воздуха */
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== Шапка ===== */
+        .header {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .logo span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .nav {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background var(--transition), color var(--transition);
+        }
+        .nav a:hover {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        .nav a.active {
+            color: var(--accent);
+            font-weight: 600;
+            background: none;
+            box-shadow: inset 0 -2px 0 0 var(--accent);
+            border-radius: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .search-wrapper {
+            position: relative;
+        }
+        .search-wrapper input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 8px 16px 8px 36px;
+            font-size: 0.9rem;
+            width: 220px;
+            outline: none;
+            transition: border var(--transition);
+        }
+        .search-wrapper input:focus {
+            border-color: var(--accent);
+        }
+        .search-wrapper .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background var(--transition);
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border var(--transition);
+        }
+        .btn-outline:hover {
+            border-color: var(--text-muted);
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .hero h1 span {
+            color: var(--accent);
+        }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 550px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== Основной контент ===== */
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .see-all {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .see-all:hover {
+            text-decoration: underline;
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        .tag {
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            color: var(--text-secondary);
+        }
+        .tag.active-tag,
+        .tag:hover {
+            background: var(--text-primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .video-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            transition: box-shadow var(--transition), transform var(--transition);
+            cursor: pointer;
+        }
+        .video-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .thumb {
+            aspect-ratio: 16 / 9;
+            background: #E5E7EB;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 2rem;
+        }
+        .thumb .duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .card-body {
+            padding: 16px;
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .channel {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* ===== Футер ===== */
+        .footer {
+            border-top: 1px solid var(--border-light);
+            padding: 24px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .search-wrapper input {
+                width: 160px;
+            }
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="#" class="logo">For<span>Vide</span></a>
+            <nav class="nav">
+                <a href="#" class="active">Главная</a>
+                <a href="#">Тренды</a>
+                <a href="#">Подписки</a>
+                <a href="#">Библиотека</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Поиск...">
+                </div>
+                <button class="btn">Загрузить</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <h1>Видео без границ — <span>шире взгляд</span></h1>
+            <p>Платформа для любого формата: от вертикальных шортс до панорамных фильмов. Снимайте, смотрите, вдохновляйтесь.</p>
+            <div class="hero-buttons">
+                <button class="btn">▶ Смотреть сейчас</button>
+                <button class="btn-outline">Узнать больше</button>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="tags">
+                <span class="tag active-tag">Все</span>
+                <span class="tag">Музыка</span>
+                <span class="tag">Игры</span>
+                <span class="tag">Наука</span>
+                <span class="tag">Спорт</span>
+                <span class="tag">Кино</span>
+                <span class="tag">Технологии</span>
+                <span class="tag">Путешествия</span>
+            </div>
+
+            <div class="section-header">
+                <h2>🔥 Рекомендации</h2>
+                <a href="#" class="see-all">Смотреть все →</a>
+            </div>
+
+            <div class="video-grid" id="videoGrid"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">О платформе</a>
+                <a href="#">Правила</a>
+                <a href="#">Конфиденциальность</a>
+                <a href="#">Помощь</a>
+            </div>
+            <p>© 2026 ForVide. Видео без границ.</p>
+        </div>
+    </footer>
+
+    <script>
+        const videos = [
+            {title: "Как я снял фильм на смартфон за 24 часа", channel: "КиноLab", avatar: "К", views: "1.2M", time: "3 дня назад", duration: "18:42"},
+            {title: "Исландия: ледяные пещеры и северное сияние", channel: "WideWorld", avatar: "W", views: "890K", time: "1 нед. назад", duration: "24:15"},
+            {title: "Новый движок ForVide: взгляд изнутри", channel: "ForVide Tech", avatar: "F", views: "456K", time: "2 дня назад", duration: "12:08"},
+            {title: "Геймплей: открытый космос", channel: "DeepSpace", avatar: "D", views: "2.1M", time: "5 часов назад", duration: "32:50"},
+            {title: "Дизайн без компромиссов: интервью", channel: "ДизайнПоток", avatar: "Д", views: "320K", time: "4 дня назад", duration: "15:30"},
+            {title: "Прямой эфир: RPG-стрим", channel: "GameOn", avatar: "G", views: "678K", time: "Сейчас", duration: "LIVE"}
+        ];
+
+        const grid = document.getElementById('videoGrid');
+        videos.forEach(v => {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `
+                <div class="thumb">
+                    🎬
+                    <span class="duration">${v.duration}</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-title">${v.title}</div>
+                    <div class="card-meta">
+                        <span>${v.views} просмотров</span>
+                        <span>·</span>
+                        <span>${v.time}</span>
+                    </div>
+                    <div class="channel">
+                        <div class="avatar">${v.avatar}</div>
+                        <span style="font-size:0.8rem;">${v.channel}</span>
+                    </div>
+                </div>
+            `;
+            card.addEventListener('click', () => alert(`Воспроизведение: "${v.title}"`));
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>

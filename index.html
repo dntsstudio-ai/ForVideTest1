@@ -3,87 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForVide - Видеоплатформа</title>
-    <!-- Иконка сайта -->
+    <title>ForVide - Смотри иначе</title>
     <link rel="icon" href="photo_5460840021544867925_w.jpg" type="image/jpeg">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Подключаем иконки BoxIcons для красивого UI -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
 
-    <!-- Шапка сайта -->
-    <header class="header">
-        <div class="logo-container">
-            <i class='bx bx-menu menu-icon'></i>
-            <a href="index.html">
-                <img src="photo_5460840021544867927_w.jpg" alt="ForVide Logo" class="logo">
-            </a>
+    <!-- Стеклянная плавающая шапка -->
+    <header class="glass-header">
+        <div class="logo-wrap">
+            <img src="photo_5460840021544867927_w.jpg" alt="ForVide" class="site-logo">
         </div>
+        
+        <nav class="main-nav">
+            <a href="#" class="active">Главная</a>
+            <a href="#">Фильмы</a>
+            <a href="#">Сериалы</a>
+            <a href="#">Аниме</a>
+            <a href="#">Стримы</a>
+        </nav>
 
-        <div class="search-bar">
-            <input type="text" placeholder="Поиск видео, каналов...">
-            <button><i class='bx bx-search'></i></button>
-        </div>
-
-        <div class="user-actions">
-            <button class="upload-btn" title="Загрузить видео"><i class='bx bx-video-plus'></i></button>
-            <button class="live-btn" title="Начать трансляцию"><i class='bx bx-broadcast'></i></button>
-            <div class="auth-buttons" id="auth-container">
-                <!-- Сюда JS будет подставлять кнопку Войти или Аватарку -->
-                <button class="login-btn">Войти</button>
+        <div class="header-controls">
+            <div class="search-box">
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="Поиск...">
             </div>
+            <button class="icon-btn action-btn" onclick="alert('Откроется окно загрузки')"><i class='bx bx-cloud-upload'></i></button>
+            <button class="login-btn" onclick="alert('Откроется модальное окно авторизации')">Войти</button>
         </div>
     </header>
 
-    <!-- Основной контент -->
-    <div class="main-container">
-        <!-- Боковое меню -->
-        <aside class="sidebar">
-            <div class="nav-links">
-                <a href="#" class="active"><i class='bx bxs-home'></i> Главная</a>
-                <a href="#"><i class='bx bxs-flame'></i> В тренде</a>
-                <a href="#"><i class='bx bxs-videos'></i> Подписки</a>
-                <hr class="divider">
-                <a href="#"><i class='bx bx-history'></i> История</a>
-                <a href="#"><i class='bx bx-time-five'></i> Посмотреть позже</a>
-                <a href="#"><i class='bx bx-like'></i> Понравившиеся</a>
+    <!-- Главный баннер (Hero Section) -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070&auto=format&fit=crop" class="hero-bg" alt="Hero Background">
+        
+        <div class="hero-content">
+            <span class="hero-badge">Премьера на ForVide</span>
+            <h1 class="hero-title">Киберпанк: Наследие</h1>
+            <p class="hero-desc">Эксклюзивный сериал от независимых авторов. Погрузитесь в мир неоновых улиц и корпоративных войн.</p>
+            <div class="hero-actions">
+                <button class="play-btn"><i class='bx bx-play'></i> Смотреть</button>
+                <button class="info-btn"><i class='bx bx-info-circle'></i> Подробнее</button>
             </div>
-        </aside>
+        </div>
+    </section>
 
-        <!-- Сетка видео -->
-        <main class="content">
-            <div class="categories">
-                <button class="cat-btn active">Все</button>
-                <button class="cat-btn">Кино</button>
-                <button class="cat-btn">Аниме</button>
-                <button class="cat-btn">Игры</button>
-                <button class="cat-btn">Прямые эфиры</button>
+    <!-- Основной контент с горизонтальными лентами -->
+    <main class="content-wrapper">
+        
+        <section class="video-shelf">
+            <h2 class="shelf-title">Тизеры и трейлеры <i class='bx bx-chevron-right'></i></h2>
+            <div class="shelf-container" id="trailers-shelf">
+                <!-- Заполняется через JS -->
             </div>
+        </section>
 
-            <div class="video-grid" id="video-grid">
-                <!-- Карточки видео будут генерироваться через JS. Ниже пример верстки одной карточки -->
-                <!-- 
-                <div class="video-card">
-                    <div class="thumbnail">
-                        <img src="постер_видео" alt="Thumbnail">
-                        <span class="duration">12:34</span>
-                    </div>
-                    <div class="video-info">
-                        <img src="photo_5460840021544867928_w.jpg" alt="Avatar" class="channel-avatar">
-                        <div class="video-texts">
-                            <h3 class="video-title">Название крутого видеоролика</h3>
-                            <p class="channel-name">Автор канала</p>
-                            <p class="video-stats">120 тыс. просмотров • 2 дня назад</p>
-                        </div>
-                    </div>
-                </div> 
-                -->
+        <section class="video-shelf">
+            <h2 class="shelf-title">Популярные авторские фильмы <i class='bx bx-chevron-right'></i></h2>
+            <div class="shelf-container" id="movies-shelf">
+                <!-- Заполняется через JS -->
             </div>
-        </main>
-    </div>
+        </section>
 
-    <!-- Модульные скрипты -->
+    </main>
+
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
 </body>

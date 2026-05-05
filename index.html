@@ -1,764 +1,90 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ForVide — Видеохостинг нового поколения</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{--gold:#FFC107;--gold-dark:#e6a800;--black:#0a0a0a;--dark:#111111;--dark2:#1a1a1a;--dark3:#222222;--dark4:#2a2a2a;--white:#ffffff;--gray:#888;--gray2:#555;--gray3:#333;--r:12px}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--black);color:var(--white);font-family:'Barlow',sans-serif;overflow-x:hidden}
-.page{display:none;min-height:100vh}
-.page.active{display:block}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(10,10,10,0.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,193,7,0.1);transition:box-shadow .3s}
-nav.scrolled{box-shadow:0 4px 32px rgba(0,0,0,.7)}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
-.nav-logo-text{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;letter-spacing:3px;color:var(--white)}
-.nav-logo-text span{color:var(--gold)}
-.nav-links{display:flex;gap:4px;list-style:none}
-.nav-links a{color:#aaa;text-decoration:none;font-size:14px;font-weight:500;padding:6px 14px;border-radius:6px;transition:all .2s;cursor:pointer}
-.nav-links a:hover,.nav-links a.active{color:var(--gold);background:rgba(255,193,7,.08)}
-.nav-right{display:flex;align-items:center;gap:12px}
-.search-wrap{position:relative;width:220px}
-.search-input{width:100%;background:var(--dark2);border:1px solid rgba(255,255,255,.08);color:var(--white);padding:9px 38px 9px 14px;border-radius:8px;font-size:13px;font-family:'Barlow',sans-serif;outline:none;transition:all .2s}
-.search-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,193,7,.1)}
-.search-input::placeholder{color:var(--gray2)}
-.si{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray);pointer-events:none}
-.btn-ghost{background:transparent;border:1px solid var(--gray3);color:#ccc;padding:8px 18px;border-radius:7px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Barlow',sans-serif;font-weight:500}
-.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
-.btn-gold{background:var(--gold);color:var(--black);border:none;padding:9px 22px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .2s}
-.btn-gold:hover{background:var(--gold-dark);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,193,7,.3)}
-
-/* HERO */
-.hero{padding:140px 40px 80px;min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 62% 40%,rgba(255,193,7,.07) 0%,transparent 65%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,193,7,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,193,7,.035) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 65% 65% at 65% 48%,black,transparent)}
-.hero-content{position:relative;z-index:2;max-width:580px}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,193,7,.1);border:1px solid rgba(255,193,7,.25);color:var(--gold);font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;letter-spacing:1.5px;margin-bottom:28px;text-transform:uppercase;animation:fadeUp .7s ease both}
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
-.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(56px,8vw,100px);font-weight:900;line-height:.9;letter-spacing:-1px;text-transform:uppercase;margin-bottom:24px;animation:fadeUp .7s .1s ease both}
-.hero-title .acc{color:var(--gold)}
-.hero-title .stroke{-webkit-text-stroke:2px var(--gold);color:transparent}
-.hero-desc{font-size:17px;color:#999;line-height:1.65;max-width:440px;margin-bottom:40px;font-weight:300;animation:fadeUp .7s .2s ease both}
-.hero-cta{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .7s .3s ease both}
-.btn-lg{padding:14px 34px;font-size:15px;font-weight:700;border-radius:8px;cursor:pointer;transition:all .25s;font-family:'Barlow',sans-serif;letter-spacing:.3px;display:flex;align-items:center;gap:8px}
-.btn-lg.gold{background:var(--gold);color:var(--black);border:none}
-.btn-lg.gold:hover{background:var(--gold-dark);transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,193,7,.35)}
-.btn-lg.out{background:transparent;color:var(--white);border:1px solid var(--gray3)}
-.btn-lg.out:hover{border-color:var(--gold);color:var(--gold)}
-.hero-stats{display:flex;gap:44px;margin-top:56px;animation:fadeUp .7s .4s ease both}
-.stat-num{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;color:var(--gold);line-height:1}
-.stat-label{font-size:11px;color:var(--gray);margin-top:4px;letter-spacing:.5px;text-transform:uppercase}
-.stat-sep{width:1px;background:var(--gray3);align-self:stretch}
-
-/* HERO VISUAL */
-.hero-visual{position:absolute;right:0;top:50%;transform:translateY(-50%);width:50%;max-width:660px;animation:slideR 1s .2s ease both;padding-right:20px}
-@keyframes slideR{from{opacity:0;transform:translateY(-50%) translateX(60px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
-.bmock{background:var(--dark2);border-radius:16px;border:1px solid rgba(255,255,255,.07);overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.8),0 0 0 1px rgba(255,193,7,.06);transform:perspective(1200px) rotateY(-10deg) rotateX(4deg);transition:transform .5s}
-.bmock:hover{transform:perspective(1200px) rotateY(-5deg) rotateX(2deg)}
-.bbar{background:var(--dark3);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.05)}
-.bdot{width:10px;height:10px;border-radius:50%}
-.bdot.r{background:#ff5f57}.bdot.y{background:#febc2e}.bdot.g{background:#28c840}
-.burl{flex:1;background:rgba(255,255,255,.06);border-radius:5px;padding:4px 10px;font-size:11px;color:var(--gray);text-align:center}
-.bscreen{position:relative}
-.bthumb{aspect-ratio:16/9;background:linear-gradient(135deg,#1c1c0e 0%,#2a2200 40%,#1a1700 100%);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.bthumb::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 35% 35%,rgba(255,193,7,.18),transparent 55%)}
-.bthumb-emoji{font-size:80px;position:relative;z-index:1;filter:drop-shadow(0 0 32px rgba(255,193,7,.4))}
-.bplay-wrap{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
-.bplay-ring{width:68px;height:68px;border-radius:50%;background:rgba(255,193,7,.9);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 12px rgba(255,193,7,.15),0 0 40px rgba(255,193,7,.4);animation:rpulse 2.5s ease infinite}
-@keyframes rpulse{0%,100%{box-shadow:0 0 0 12px rgba(255,193,7,.15),0 0 40px rgba(255,193,7,.4)}50%{box-shadow:0 0 0 20px rgba(255,193,7,.06),0 0 60px rgba(255,193,7,.3)}}
-.bplay-ring svg{margin-left:5px}
-.boverlay{position:absolute;bottom:0;left:0;right:0;z-index:3;background:linear-gradient(transparent,rgba(0,0,0,.9));padding:24px 16px 14px}
-.bprog{height:3px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:10px;overflow:hidden}
-.bprog-fill{height:100%;width:34%;background:var(--gold);border-radius:2px}
-.bsinfo{display:flex;align-items:center;justify-content:space-between}
-.bsinfo-t{font-size:12px;font-weight:600;color:#eee}
-.bsinfo-d{font-size:11px;color:var(--gray)}
-.binfo{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.bmc{background:var(--dark3);border-radius:8px;padding:10px;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.04)}
-.bmc-t{width:48px;height:34px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.bmc-txt{flex:1;min-width:0}
-.bmc-title{font-size:10px;font-weight:600;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bmc-v{font-size:9px;color:var(--gray);margin-top:2px}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-
-/* SECTIONS */
-.section{padding:80px 40px}
-.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
-.st{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;letter-spacing:1px}
-.st span{color:var(--gold)}
-.st-sub{font-size:13px;color:var(--gray);margin-top:4px;font-weight:300}
-.see-all{color:var(--gold);font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:6px;transition:gap .2s;padding:6px 14px;border-radius:6px;border:1px solid rgba(255,193,7,.2);cursor:pointer}
-.see-all:hover{gap:10px;background:rgba(255,193,7,.06)}
-.divider{height:1px;background:rgba(255,255,255,.05);margin:0 40px}
-
-/* VIDEO CARDS */
-.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:20px}
-.vgrid.c4{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-.vc{background:var(--dark2);border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.05);transition:all .3s ease;cursor:pointer}
-.vc:hover{transform:translateY(-5px);border-color:rgba(255,193,7,.2);box-shadow:0 20px 56px rgba(0,0,0,.55)}
-.ct{aspect-ratio:16/9;position:relative;overflow:hidden}
-.ct-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:52px;transition:transform .4s ease}
-.vc:hover .ct-bg{transform:scale(1.06)}
-.cdur{position:absolute;bottom:8px;right:8px;z-index:2;background:rgba(0,0,0,.88);color:#fff;font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px}
-.cho{position:absolute;inset:0;z-index:1;background:rgba(0,0,0,0);transition:background .25s;display:flex;align-items:center;justify-content:center}
-.vc:hover .cho{background:rgba(0,0,0,.45)}
-.chp{width:50px;height:50px;border-radius:50%;background:rgba(255,193,7,.92);display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.7);transition:all .25s ease}
-.vc:hover .chp{opacity:1;transform:scale(1)}
-.cb{padding:14px}
-.ctitle{font-size:13px;font-weight:600;line-height:1.45;color:#eee;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.cmeta{display:flex;align-items:center;gap:10px}
-.cav{width:28px;height:28px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;color:var(--black);flex-shrink:0}
-.ci{flex:1;min-width:0}
-.cname{font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cviews{font-size:11px;color:var(--gray2);margin-top:1px}
-.cbadge{background:rgba(255,193,7,.15);color:var(--gold);font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.8px;text-transform:uppercase;flex-shrink:0}
-.cbadge.new{background:rgba(40,200,100,.15);color:#28c864}
-.cbadge.live{background:rgba(255,60,60,.15);color:#ff4444;animation:liveblink 1.5s infinite}
-@keyframes liveblink{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* AUTHORS */
-.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
-.acard{background:var(--dark2);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);padding:28px 16px 20px;text-align:center;cursor:pointer;transition:all .3s}
-.acard:hover{border-color:rgba(255,193,7,.25);transform:translateY(-4px);box-shadow:0 16px 44px rgba(0,0,0,.5)}
-.aav-wrap{position:relative;width:72px;height:72px;margin:0 auto 14px}
-.aav{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--black);border:3px solid transparent;transition:border-color .2s}
-.acard:hover .aav{border-color:var(--gold)}
-.abadge-icon{position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;background:var(--gold);border:2px solid var(--dark2);display:flex;align-items:center;justify-content:center;font-size:10px}
-.aname{font-size:14px;font-weight:700;color:#eee;margin-bottom:4px}
-.ahandle{font-size:12px;color:var(--gray);margin-bottom:10px}
-.astats{display:flex;justify-content:center;gap:16px;margin-bottom:14px}
-.asnum{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--gold);line-height:1}
-.aslabel{font-size:10px;color:var(--gray2);margin-top:1px}
-.btn-follow{width:100%;padding:8px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;letter-spacing:.3px;transition:all .2s;border:1px solid rgba(255,193,7,.35);color:var(--gold);background:transparent}
-.btn-follow:hover,.btn-follow.on{background:var(--gold);color:var(--black);border-color:var(--gold)}
-
-/* CATS */
-.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.ccat{background:var(--dark2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:20px 14px;cursor:pointer;transition:all .25s;text-align:center}
-.ccat:hover{border-color:var(--gold);background:rgba(255,193,7,.06);transform:translateY(-3px)}
-.ccat-i{font-size:30px;margin-bottom:10px}
-.ccat-n{font-size:13px;font-weight:600;color:#ccc}
-.ccat-c{font-size:11px;color:var(--gray2);margin-top:3px}
-
-/* LIVE BANNER */
-.lbanner{margin:0 40px;background:linear-gradient(135deg,#1a0000 0%,#2a0800 50%,#1a0e00 100%);border:1px solid rgba(255,60,60,.2);border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr 340px}
-.lc{padding:48px}
-.ltag{display:inline-flex;align-items:center;gap:7px;background:rgba(255,60,60,.15);border:1px solid rgba(255,60,60,.3);color:#ff4444;font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
-.ldot{width:6px;height:6px;border-radius:50%;background:#ff4444;animation:pulse 1.2s infinite}
-.ltitle{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;text-transform:uppercase;line-height:1;margin-bottom:12px}
-.ltitle span{color:#ff6644}
-.ldesc{font-size:15px;color:#aaa;line-height:1.55;margin-bottom:28px;max-width:400px}
-.lviewers{display:flex;align-items:center;gap:8px;font-size:13px;color:#888;margin-bottom:24px}
-.lviewers strong{color:#ff6644}
-.lvisual{background:linear-gradient(135deg,#2a1000,#1a0800);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.lvisual::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,80,0,.2),transparent 60%)}
-.lve{font-size:100px;position:relative;z-index:1}
-.lcnt{position:absolute;top:16px;right:16px;z-index:2;background:rgba(0,0,0,.7);border:1px solid rgba(255,100,50,.3);padding:6px 12px;border-radius:20px;font-size:12px;color:#ff8866;font-weight:600}
-
-/* FEATURES */
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.fcard{background:var(--dark2);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);padding:32px 28px;transition:all .3s}
-.fcard:hover{border-color:rgba(255,193,7,.2);transform:translateY(-4px)}
-.fnum{font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;color:var(--gold);opacity:.25;line-height:1;margin-bottom:16px}
-.ficon{font-size:36px;margin-bottom:14px}
-.ftitle{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-.fdesc{font-size:14px;color:#888;line-height:1.6}
-
-/* CTA */
-.ctabanner{margin:0 40px 80px;background:linear-gradient(135deg,#1a1200 0%,#261b00 60%,#1a1a0a 100%);border:1px solid rgba(255,193,7,.18);border-radius:20px;padding:64px 60px;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;gap:40px}
-.ctabanner::before{content:'';position:absolute;top:-80px;right:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,193,7,.12),transparent 70%)}
-.ctacontent{position:relative;z-index:2}
-.ctalabel{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
-.ctatitle{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;text-transform:uppercase;line-height:.95;margin-bottom:16px}
-.ctatitle span{color:var(--gold)}
-.ctadesc{font-size:16px;color:#aaa;line-height:1.55;max-width:520px}
-.ctaactions{position:relative;z-index:2;display:flex;gap:12px;flex-direction:column;min-width:200px}
-
-/* FOOTER */
-footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding:56px 40px 32px}
-.ftop{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
-.flogo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.flogo-t{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:3px}
-.flogo-t span{color:var(--gold)}
-.fdesc{font-size:13px;color:var(--gray);line-height:1.65;max-width:280px;margin-bottom:20px}
-.fsocials{display:flex;gap:10px}
-.sbtn{width:36px;height:36px;border-radius:8px;background:var(--dark3);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:16px}
-.sbtn:hover{border-color:var(--gold);background:rgba(255,193,7,.08)}
-.fcol h4{font-size:11px;font-weight:700;letter-spacing:1.8px;color:var(--gold);text-transform:uppercase;margin-bottom:18px}
-.fcol ul{list-style:none}
-.fcol ul li{margin-bottom:11px}
-.fcol ul a{color:var(--gray);font-size:13px;text-decoration:none;transition:color .2s}
-.fcol ul a:hover{color:var(--white)}
-.fbot{border-top:1px solid rgba(255,255,255,.05);padding-top:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.fcopy{font-size:12px;color:var(--gray2)}
-.fcopy span{color:var(--gold)}
-.flinks{display:flex;gap:20px}
-.flinks a{color:var(--gray2);font-size:12px;text-decoration:none;transition:color .2s}
-.flinks a:hover{color:var(--white)}
-
-/* PLAYER PAGE */
-.pp{padding-top:64px}
-.playout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 64px)}
-.pmain{padding:28px 28px 40px 40px}
-.pvwrap{background:#000;border-radius:14px;overflow:hidden;aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:20px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
-.pvbg{position:absolute;inset:0;background:linear-gradient(135deg,#0e0e00 0%,#1c1800 50%,#0e0d00 100%)}
-.pvbg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 40% 35%,rgba(255,193,7,.12),transparent 55%)}
-.pvemoji{position:relative;z-index:1;font-size:120px;filter:drop-shadow(0 0 40px rgba(255,193,7,.3))}
-.pctrl{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(transparent 50%,rgba(0,0,0,.85));padding:20px}
-.pprog{height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:14px;cursor:pointer;position:relative}
-.pprog-fill{height:100%;width:0%;background:var(--gold);border-radius:2px;position:relative;transition:width .1s}
-.pprog-fill::after{content:'';position:absolute;right:-6px;top:-5px;width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid #fff}
-.pcrow{display:flex;align-items:center;gap:14px}
-.cbtn{background:transparent;border:none;color:#fff;cursor:pointer;padding:6px;border-radius:6px;transition:all .15s;font-size:18px;line-height:1}
-.cbtn:hover{background:rgba(255,255,255,.1);color:var(--gold)}
-.cbtn.pm{width:40px;height:40px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--black)}
-.cbtn.pm:hover{background:var(--gold-dark);transform:scale(1.05)}
-.ctime{font-size:12px;color:rgba(255,255,255,.8);margin-left:4px}
-.csp{flex:1}
-.vbar{width:64px;height:3px;background:rgba(255,255,255,.2);border-radius:2px;overflow:hidden}
-.vbar-f{height:100%;width:70%;background:#fff;border-radius:2px}
-.ptitle{font-size:20px;font-weight:700;margin-bottom:14px;line-height:1.3}
-.pmeta{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
-.pviews,.pdate{font-size:13px;color:var(--gray)}
-.pactions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
-.abtn{display:flex;align-items:center;gap:6px;background:var(--dark3);border:1px solid rgba(255,255,255,.07);color:#ccc;padding:8px 16px;border-radius:20px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Barlow',sans-serif;font-weight:500}
-.abtn:hover{border-color:var(--gold);color:var(--gold)}
-.abtn.liked{background:rgba(255,193,7,.15);border-color:var(--gold);color:var(--gold)}
-.pauthor-row{display:flex;align-items:center;gap:14px;padding:18px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:20px}
-.paav{width:48px;height:48px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--black);flex-shrink:0}
-.painfo{flex:1}
-.paname{font-size:15px;font-weight:700}
-.pasubs{font-size:12px;color:var(--gray);margin-top:2px}
-.btn-sub{background:var(--gold);color:var(--black);border:none;padding:9px 22px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .2s}
-.btn-sub:hover{background:var(--gold-dark)}
-.pdesc{font-size:14px;color:#999;line-height:1.65}
-.ptags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.ptag{background:var(--dark3);color:var(--gray);font-size:12px;padding:4px 12px;border-radius:14px;cursor:pointer;transition:all .2s}
-.ptag:hover{background:rgba(255,193,7,.1);color:var(--gold)}
-
-/* COMMENTS */
-.comments{margin-top:32px}
-.ctitle-row{font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.ccnt{background:var(--dark3);color:var(--gray);font-size:12px;padding:2px 8px;border-radius:10px}
-.cinput-row{display:flex;gap:12px;margin-bottom:24px}
-.cav-me{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:var(--black);flex-shrink:0}
-.cinput{flex:1;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.12);color:var(--white);font-size:14px;font-family:'Barlow',sans-serif;padding:8px 0;outline:none;transition:border-color .2s}
-.cinput:focus{border-bottom-color:var(--gold)}
-.cinput::placeholder{color:var(--gray2)}
-.comment{display:flex;gap:12px;margin-bottom:20px}
-.cav2{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:var(--black);flex-shrink:0}
-.cbody{flex:1}
-.cheader{display:flex;align-items:center;gap:10px;margin-bottom:5px}
-.cname{font-size:13px;font-weight:700;color:#ddd}
-.ctime2{font-size:11px;color:var(--gray2)}
-.ctext{font-size:13px;color:#aaa;line-height:1.5}
-.cacts{display:flex;gap:14px;margin-top:8px}
-.cact{font-size:11px;color:var(--gray2);cursor:pointer;display:flex;align-items:center;gap:4px;transition:color .2s}
-.cact:hover{color:var(--gold)}
-
-/* SIDEBAR */
-.psidebar{border-left:1px solid rgba(255,255,255,.05);padding:28px 20px;overflow-y:auto;max-height:calc(100vh - 64px);background:var(--dark)}
-.psidebar-t{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;color:#ccc}
-.scard{display:flex;gap:10px;margin-bottom:14px;cursor:pointer;padding:8px;border-radius:8px;transition:background .2s;border:1px solid transparent}
-.scard:hover{background:var(--dark2);border-color:rgba(255,193,7,.1)}
-.sthumb{width:120px;height:68px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;overflow:hidden}
-.sdur{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.85);color:#fff;font-size:10px;font-weight:600;padding:1px 5px;border-radius:3px}
-.sinfo{flex:1;min-width:0}
-.svtitle{font-size:12px;font-weight:600;color:#ddd;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:5px}
-.svauthor{font-size:11px;color:var(--gray)}
-.svviews{font-size:11px;color:var(--gray2)}
-
-/* TOAST */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--dark3);border:1px solid rgba(255,193,7,.2);color:var(--white);padding:12px 24px;border-radius:10px;font-size:14px;font-weight:500;z-index:999;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:var(--black)}
-::-webkit-scrollbar-thumb{background:var(--gray3);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--gold)}
-
-@media(max-width:1024px){.playout{grid-template-columns:1fr}.psidebar{display:none}.hero-visual{display:none}.fgrid{grid-template-columns:1fr}.ftop{grid-template-columns:1fr 1fr}}
-@media(max-width:768px){nav{padding:0 16px}.nav-links{display:none}.search-wrap{display:none}.section{padding:50px 16px}.divider{margin:0 16px}.lbanner{grid-template-columns:1fr}.lvisual{display:none}.ctabanner{margin:0 16px 60px;padding:36px 24px;flex-direction:column}footer{padding:40px 16px 24px}.ftop{grid-template-columns:1fr}.pmain{padding:16px 16px 40px}.pactions{margin-left:0}.pmeta{flex-direction:column;align-items:flex-start}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide - Видеоплатформа</title>
+    <!-- Иконка сайта -->
+    <link rel="icon" href="photo_5460840021544867925_w.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Подключаем иконки BoxIcons для красивого UI -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="mainNav">
-  <div class="nav-logo" onclick="goHome()">
-    <svg width="38" height="26" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="10,10 10,70 80,70 80,58 22,58 22,48 65,48 65,36 22,36 22,22 90,22 90,10" fill="#FFC107"/>
-      <polygon points="30,15 30,31 55,23" fill="#0a0a0a"/>
-      <rect x="72" y="52" width="28" height="22" rx="5" fill="#3a3a3a"/>
-      <polygon points="79,58 79,68 90,63" fill="#FFC107"/>
-    </svg>
-    <span class="nav-logo-text">FOR<span>VIDE</span></span>
-  </div>
-  <ul class="nav-links">
-    <li><a id="na-home" class="active" onclick="goHome()">Главная</a></li>
-    <li><a onclick="goHome();setTimeout(()=>goscroll('#trending'),120)">Популярное</a></li>
-    <li><a onclick="goHome();setTimeout(()=>goscroll('#cats-section'),120)">Категории</a></li>
-    <li><a onclick="goHome();setTimeout(()=>goscroll('#live-section'),120)">Эфиры</a></li>
-    <li><a onclick="goHome();setTimeout(()=>goscroll('#new-section'),120)">Новинки</a></li>
-  </ul>
-  <div class="nav-right">
-    <div class="search-wrap">
-      <input class="search-input" placeholder="Поиск видео, авторов...">
-      <span class="si"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
-    </div>
-    <button class="btn-ghost" onclick="toast('Войдите через регистрацию!')">Войти</button>
-    <button class="btn-gold" onclick="toast('Добро пожаловать в ForVide! 🎉')">Регистрация</button>
-  </div>
-</nav>
-
-<!-- ===== HOME PAGE ===== -->
-<div id="pg-home" class="page active">
-
-<section class="hero">
-  <div class="hero-bg"></div><div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span class="badge-dot"></span>Новый видеосервис 2025</div>
-    <h1 class="hero-title">СМОТРИ.<br>ДЕЛИСЬ.<br><span class="stroke">ТВОРИ.</span></h1>
-    <p class="hero-desc">ForVide — видеохостинг нового поколения. Загружай, смотри и открывай авторов, которые вдохновляют. Без рекламы. Без ограничений.</p>
-    <div class="hero-cta">
-      <button class="btn-lg gold" onclick="toast('Добро пожаловать! 🎬')">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-        Начать смотреть
-      </button>
-      <button class="btn-lg out" onclick="toast('Загрузка видео — скоро! 📤')">
-        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Загрузить видео
-      </button>
-    </div>
-    <div class="hero-stats">
-      <div><div class="stat-num">2.4М+</div><div class="stat-label">Видео</div></div>
-      <div class="stat-sep"></div>
-      <div><div class="stat-num">840К</div><div class="stat-label">Авторов</div></div>
-      <div class="stat-sep"></div>
-      <div><div class="stat-num">12М</div><div class="stat-label">Зрителей</div></div>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="bmock">
-      <div class="bbar">
-        <div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div>
-        <div class="burl">forvide.ru/trending</div>
-      </div>
-      <div class="bscreen">
-        <div class="bthumb">
-          <div class="bthumb-emoji">🎬</div>
-          <div class="bplay-wrap"><div class="bplay-ring"><svg width="24" height="24" viewBox="0 0 24 24" fill="#000"><polygon points="6,4 20,12 6,20"/></svg></div></div>
-          <div class="boverlay">
-            <div class="bprog"><div class="bprog-fill"></div></div>
-            <div class="bsinfo"><span class="bsinfo-t">Лучшие моменты ForVide 2025</span><span class="bsinfo-d">18:42 / 44:22</span></div>
-          </div>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="logo-container">
+            <i class='bx bx-menu menu-icon'></i>
+            <a href="index.html">
+                <img src="photo_5460840021544867927_w.jpg" alt="ForVide Logo" class="logo">
+            </a>
         </div>
-        <div class="binfo">
-          <div class="bmc"><div class="bmc-t" style="background:#12122a">🎮</div><div class="bmc-txt"><div class="bmc-title">Dark Souls Speed</div><div class="bmc-v">2.1М просм.</div></div></div>
-          <div class="bmc"><div class="bmc-t" style="background:#0e1f0e">✈️</div><div class="bmc-txt"><div class="bmc-title">Япония за 30 дней</div><div class="bmc-v">890К просм.</div></div></div>
-          <div class="bmc"><div class="bmc-t" style="background:#1f0e0e">🍜</div><div class="bmc-txt"><div class="bmc-title">Рамен дома</div><div class="bmc-v">456К просм.</div></div></div>
-          <div class="bmc"><div class="bmc-t" style="background:#0e0e1f">🎵</div><div class="bmc-txt"><div class="bmc-title">Lo-fi 2h mix</div><div class="bmc-v">3.4М просм.</div></div></div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Поиск видео, каналов...">
+            <button><i class='bx bx-search'></i></button>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<div class="divider"></div>
-
-<!-- TRENDING -->
-<section class="section" id="trending">
-  <div class="sh">
-    <div><div class="st">🔥 В <span>тренде</span></div><div class="st-sub">Самые горячие видео прямо сейчас</div></div>
-    <span class="see-all" onclick="toast('Открываем все тренды...')">Все видео →</span>
-  </div>
-  <div class="vgrid" id="grid-trending"></div>
-</section>
-
-<div class="divider"></div>
-
-<!-- LIVE -->
-<section class="section" id="live-section" style="padding-bottom:0">
-  <div class="sh">
-    <div><div class="st">📡 Прямые <span>эфиры</span></div><div class="st-sub">Смотри вживую прямо сейчас</div></div>
-    <span class="see-all" onclick="toast('Открываем все эфиры...')">Все эфиры →</span>
-  </div>
-  <div class="vgrid c4" id="grid-live"></div>
-</section>
-
-<section class="section" style="padding-top:40px;padding-bottom:40px">
-  <div class="lbanner">
-    <div class="lc">
-      <div class="ltag"><span class="ldot"></span> Live сейчас</div>
-      <div class="ltitle">ФИНАЛ ЧЕМПИОНАТА<br><span>ПО КИБЕРСПОРТУ</span></div>
-      <p class="ldesc">Крупнейший турнир года в прямом эфире. Два лучших состава борются за главный приз в $500.000.</p>
-      <div class="lviewers">👁 <strong>48,230</strong> зрителей онлайн</div>
-      <button class="btn-lg gold" onclick="playV({title:'Финал Чемпионата по Киберспорту — LIVE',author:'ESL_RU',subs:'1.2М',views:'48К',date:'Сейчас',emoji:'🏆',color:'#1a0800',desc:'Прямой эфир финала чемпионата.',tags:['Киберспорт','Live','Финал']})">
-        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-        Смотреть эфир
-      </button>
-    </div>
-    <div class="lvisual"><div class="lve">🏆</div><div class="lcnt">👁 48,230 онлайн</div></div>
-  </div>
-</section>
-
-<div class="divider" style="margin-top:0"></div>
-
-<!-- AUTHORS -->
-<section class="section">
-  <div class="sh">
-    <div><div class="st">⭐ Популярные <span>авторы</span></div><div class="st-sub">Подпишись и не пропускай новые видео</div></div>
-    <span class="see-all" onclick="toast('Открываем всех авторов...')">Все авторы →</span>
-  </div>
-  <div class="agrid" id="grid-authors"></div>
-</section>
-
-<div class="divider"></div>
-
-<!-- NEW VIDEOS -->
-<section class="section" id="new-section">
-  <div class="sh">
-    <div><div class="st">🆕 <span>Новинки</span></div><div class="st-sub">Свежие загрузки последних 24 часов</div></div>
-    <span class="see-all" onclick="toast('Открываем все новинки...')">Все новинки →</span>
-  </div>
-  <div class="vgrid c4" id="grid-new"></div>
-</section>
-
-<div class="divider"></div>
-
-<!-- HOW IT WORKS -->
-<section class="section">
-  <div class="sh"><div><div class="st">Как <span>работает</span> ForVide</div><div class="st-sub">Три простых шага к контенту</div></div></div>
-  <div class="fgrid">
-    <div class="fcard"><div class="fnum">01</div><div class="ficon">🚀</div><div class="ftitle">Регистрация за 1 минуту</div><p class="fdesc">Создай аккаунт бесплатно. Никаких скрытых платежей — просто заполни форму и начни.</p></div>
-    <div class="fcard"><div class="fnum">02</div><div class="ficon">🎬</div><div class="ftitle">Загружай и публикуй</div><p class="fdesc">Загружай видео в любом формате до 20GB. Умная обработка сохранит качество 4K.</p></div>
-    <div class="fcard"><div class="fnum">03</div><div class="ficon">💰</div><div class="ftitle">Монетизируй творчество</div><p class="fdesc">Зарабатывай с первого просмотра. Подписки, донаты, партнёрская программа — всё в одном.</p></div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CATEGORIES -->
-<section class="section" id="cats-section">
-  <div class="sh"><div><div class="st">Категории <span>контента</span></div></div><span class="see-all" onclick="toast('Все категории...')">Все →</span></div>
-  <div class="cgrid" id="grid-cats"></div>
-</section>
-
-<!-- CTA -->
-<div class="ctabanner">
-  <div class="ctacontent">
-    <div class="ctalabel">🎥 Начни сегодня</div>
-    <div class="ctatitle">СТАНЬ АВТОРОМ<br><span>НА FORVIDE</span></div>
-    <p class="ctadesc">Загружай видео, набирай аудиторию и монетизируй контент. Более 840.000 авторов уже зарабатывают с нами. Присоединяйся — это бесплатно.</p>
-  </div>
-  <div class="ctaactions">
-    <button class="btn-lg gold" onclick="toast('Создаём твой канал... 🚀')">
-      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-      Создать канал
-    </button>
-    <button class="btn-lg out" onclick="toast('Узнать больше об авторах...')">Узнать больше</button>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="ftop">
-    <div>
-      <div class="flogo-wrap">
-        <svg width="32" height="22" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg"><polygon points="10,10 10,70 80,70 80,58 22,58 22,48 65,48 65,36 22,36 22,22 90,22 90,10" fill="#FFC107"/><polygon points="30,15 30,31 55,23" fill="#111"/><rect x="72" y="52" width="28" height="22" rx="5" fill="#3a3a3a"/><polygon points="79,58 79,68 90,63" fill="#FFC107"/></svg>
-        <span class="flogo-t">FOR<span>VIDE</span></span>
-      </div>
-      <p class="fdesc">Видеосервис нового поколения для авторов и зрителей. Смотри, делись, твори — без границ.</p>
-      <div class="fsocials">
-        <div class="sbtn" onclick="toast('Telegram ForVide')">✈️</div>
-        <div class="sbtn" onclick="toast('VK ForVide')">💬</div>
-        <div class="sbtn" onclick="toast('Instagram ForVide')">📸</div>
-        <div class="sbtn" onclick="toast('Twitter ForVide')">🐦</div>
-      </div>
-    </div>
-    <div class="fcol"><h4>Сервис</h4><ul><li><a href="#">Главная</a></li><li><a href="#">Тренды</a></li><li><a href="#">Прямые эфиры</a></li><li><a href="#">Подписки</a></li><li><a href="#">Плейлисты</a></li></ul></div>
-    <div class="fcol"><h4>Авторам</h4><ul><li><a href="#">Загрузить видео</a></li><li><a href="#">Монетизация</a></li><li><a href="#">Аналитика</a></li><li><a href="#">Студия</a></li><li><a href="#">Помощь</a></li></ul></div>
-    <div class="fcol"><h4>Компания</h4><ul><li><a href="#">О нас</a></li><li><a href="#">Пресс-кит</a></li><li><a href="#">Карьера</a></li><li><a href="#">Блог</a></li><li><a href="#">Контакты</a></li></ul></div>
-  </div>
-  <div class="fbot">
-    <div class="fcopy">© 2025 <span>ForVide</span>. Все права защищены.</div>
-    <div class="flinks"><a href="#">Конфиденциальность</a><a href="#">Условия</a><a href="#">Cookie</a><a href="#">Правила</a></div>
-  </div>
-</footer>
-</div><!-- /pg-home -->
-
-<!-- ===== PLAYER PAGE ===== -->
-<div id="pg-player" class="page pp">
-  <div class="playout">
-    <div class="pmain">
-      <div class="pvwrap" onclick="togglePlay()">
-        <div class="pvbg" id="pvbg"></div>
-        <div class="pvemoji" id="pvemoji">🎬</div>
-        <div class="pctrl">
-          <div class="pprog">
-            <div class="pprog-fill" id="ppfill"></div>
-          </div>
-          <div class="pcrow">
-            <button class="cbtn pm" id="playBtn" onclick="event.stopPropagation();togglePlay()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-            </button>
-            <button class="cbtn" onclick="event.stopPropagation();toast('⏮ Предыдущее')">⏮</button>
-            <button class="cbtn" onclick="event.stopPropagation();toast('⏭ Следующее')">⏭</button>
-            <span class="ctime" id="ptime">0:00 / 0:00</span>
-            <div class="csp"></div>
-            <span class="cbtn">🔊</span>
-            <div class="vbar"><div class="vbar-f"></div></div>
-            <button class="cbtn" onclick="event.stopPropagation();toast('Настройки качества')">⚙️</button>
-            <button class="cbtn" onclick="event.stopPropagation();toast('На весь экран')">⛶</button>
-          </div>
+        <div class="user-actions">
+            <button class="upload-btn" title="Загрузить видео"><i class='bx bx-video-plus'></i></button>
+            <button class="live-btn" title="Начать трансляцию"><i class='bx bx-broadcast'></i></button>
+            <div class="auth-buttons" id="auth-container">
+                <!-- Сюда JS будет подставлять кнопку Войти или Аватарку -->
+                <button class="login-btn">Войти</button>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <h1 class="ptitle" id="ptitle">Загрузка...</h1>
-      <div class="pmeta">
-        <span class="pviews" id="pviews">—</span>
-        <span class="pdate" id="pdate">—</span>
-        <div class="pactions">
-          <button class="abtn" id="likeBtn" onclick="toggleLike()">👍 <span id="likeN">4 832</span></button>
-          <button class="abtn" onclick="toast('Добавлено в закладки ✅')">🔖 Сохранить</button>
-          <button class="abtn" onclick="toast('Ссылка скопирована! 🔗')">🔗 Поделиться</button>
-        </div>
-      </div>
+    <!-- Основной контент -->
+    <div class="main-container">
+        <!-- Боковое меню -->
+        <aside class="sidebar">
+            <div class="nav-links">
+                <a href="#" class="active"><i class='bx bxs-home'></i> Главная</a>
+                <a href="#"><i class='bx bxs-flame'></i> В тренде</a>
+                <a href="#"><i class='bx bxs-videos'></i> Подписки</a>
+                <hr class="divider">
+                <a href="#"><i class='bx bx-history'></i> История</a>
+                <a href="#"><i class='bx bx-time-five'></i> Посмотреть позже</a>
+                <a href="#"><i class='bx bx-like'></i> Понравившиеся</a>
+            </div>
+        </aside>
 
-      <div class="pauthor-row">
-        <div class="paav" id="paav">A</div>
-        <div class="painfo">
-          <div class="paname" id="paname">Канал</div>
-          <div class="pasubs" id="pasubs">—</div>
-        </div>
-        <button class="btn-sub" onclick="toast('Подписка оформлена! 🔔')">Подписаться</button>
-      </div>
+        <!-- Сетка видео -->
+        <main class="content">
+            <div class="categories">
+                <button class="cat-btn active">Все</button>
+                <button class="cat-btn">Кино</button>
+                <button class="cat-btn">Аниме</button>
+                <button class="cat-btn">Игры</button>
+                <button class="cat-btn">Прямые эфиры</button>
+            </div>
 
-      <div class="pdesc" id="pdesc">—</div>
-      <div class="ptags" id="ptags"></div>
-
-      <div class="comments">
-        <div class="ctitle-row">Комментарии <span class="ccnt" id="ccnt">124</span></div>
-        <div class="cinput-row">
-          <div class="cav-me">Я</div>
-          <input class="cinput" placeholder="Напиши комментарий..." onkeydown="if(event.key==='Enter')addComment(this)">
-        </div>
-        <div id="clist"></div>
-      </div>
+            <div class="video-grid" id="video-grid">
+                <!-- Карточки видео будут генерироваться через JS. Ниже пример верстки одной карточки -->
+                <!-- 
+                <div class="video-card">
+                    <div class="thumbnail">
+                        <img src="постер_видео" alt="Thumbnail">
+                        <span class="duration">12:34</span>
+                    </div>
+                    <div class="video-info">
+                        <img src="photo_5460840021544867928_w.jpg" alt="Avatar" class="channel-avatar">
+                        <div class="video-texts">
+                            <h3 class="video-title">Название крутого видеоролика</h3>
+                            <p class="channel-name">Автор канала</p>
+                            <p class="video-stats">120 тыс. просмотров • 2 дня назад</p>
+                        </div>
+                    </div>
+                </div> 
+                -->
+            </div>
+        </main>
     </div>
 
-    <div class="psidebar">
-      <div class="psidebar-t">Смотреть далее</div>
-      <div id="sidelist"></div>
-    </div>
-  </div>
-</div><!-- /pg-player -->
-
-<div class="toast" id="toastEl"></div>
-
-<script>
-/* DATA */
-const VD = [
-  {title:"Как я прошёл Dark Souls за 1 час",author:"DarkGamer",subs:"340К",views:"2.1М",time:"1:04:22",emoji:"🎮",badge:"Тренд",color:"#12122a",date:"2 дня назад",desc:"Один из самых сложных speed-run забегов. Только скилл и отработанные маршруты.",tags:["Игры","SpeedRun","DarkSouls"]},
-  {title:"Путешествие по Японии: 30 дней за 5 минут",author:"TravelVibe",subs:"210К",views:"890К",time:"5:42",emoji:"🗾",badge:null,color:"#0e1f0e",date:"5 дней назад",desc:"Полный тайм-лапс путешествия по Японии. Токио, Киото, Фудзи и скрытые уголки.",tags:["Путешествия","Япония","Тайм-лапс"]},
-  {title:"Готовим рамен дома — простой рецепт",author:"ChefMike",subs:"95К",views:"456К",time:"12:15",emoji:"🍜",badge:"Новое",color:"#1f0e0e",date:"1 день назад",desc:"Идеальный домашний рамен без специального оборудования. Всё по шагам.",tags:["Кулинария","Рамен","Рецепт"]},
-  {title:"Lo-fi beats для работы и учёбы — 2 часа",author:"LofiWave",subs:"1.8М",views:"3.4М",time:"2:01:00",emoji:"🎵",badge:"Топ",color:"#0e0e1f",date:"3 дня назад",desc:"Расслабляющие lo-fi биты для концентрации. Идеально для работы или отдыха.",tags:["Музыка","Lo-fi","Chillhop"]},
-  {title:"MacBook Pro M4 — честный обзор через месяц",author:"TechPro",subs:"560К",views:"1.2М",time:"18:30",emoji:"💻",badge:null,color:"#1a1500",date:"1 нед. назад",desc:"Месяц с MacBook Pro M4. Реальные тесты, батарея в реальных условиях и честные минусы.",tags:["Технологии","Apple","MacBook"]},
-  {title:"Рисую персонажа с нуля — тайм-лапс 8ч",author:"ArtSpace",subs:"128К",views:"670К",time:"8:55",emoji:"🎨",badge:"Тренд",color:"#1f0e1f",date:"4 дня назад",desc:"Полный тайм-лапс создания персонажа в Procreate. От скетча до финального рендера.",tags:["Рисование","DigitalArt","Тайм-лапс"]},
-  {title:"ТОП-10 фильмов 2025 которые стоит посмотреть",author:"CineReview",subs:"430К",views:"980К",time:"14:22",emoji:"🎬",badge:null,color:"#0e1a1f",date:"6 дней назад",desc:"Отбирал лучшее полгода. Только фильмы, которые реально стоят вашего времени.",tags:["Кино","Обзор","ТОП"]},
-  {title:"Моё утро: продуктивный распорядок дня",author:"LifeStyle+",subs:"780К",views:"340К",time:"9:10",emoji:"☀️",badge:"Новое",color:"#1a1a0a",date:"12 часов назад",desc:"Рутина утра, которая изменила мою продуктивность. Подъём, зарядка, планирование.",tags:["Лайфстайл","Продуктивность","Утро"]},
-];
-const LV = [
-  {title:"🔴 LIVE: Финал CS2 — Group Stage",author:"ESL_RU",views:"12.4К",time:"LIVE",emoji:"🏆",badge:"live",color:"#1f0808"},
-  {title:"🔴 Концерт The Midnight — Прямой эфир",author:"LiveMusic_RU",views:"8.1К",time:"LIVE",emoji:"🎸",badge:"live",color:"#08081f"},
-  {title:"🔴 Стрим: Elden Ring новый патч",author:"GrayGamer",views:"5.6К",time:"LIVE",emoji:"⚔️",badge:"live",color:"#0e0a1f"},
-  {title:"🔴 Готовим с шеф-поваром Андреем",author:"ChefLive",views:"3.2К",time:"LIVE",emoji:"👨‍🍳",badge:"live",color:"#1f0e08"},
-];
-const NV = [
-  {title:"Как снять кино на iPhone 16 Pro",author:"FilmMaker_Pro",views:"12К",time:"22:11",emoji:"📱",badge:"Новое",color:"#0e1015"},
-  {title:"Топ треки апрель 2025",author:"MusicHub",views:"34К",time:"45:00",emoji:"🎧",badge:"Новое",color:"#0e0e1a"},
-  {title:"Веганский ужин за 15 минут",author:"VeganLife",views:"8.4К",time:"15:33",emoji:"🥗",badge:"Новое",color:"#0e1a0e"},
-  {title:"Обзор Tesla Model 3 2025",author:"AutoVibe",views:"28К",time:"19:44",emoji:"🚗",badge:"Новое",color:"#12121a"},
-  {title:"Йога для начинающих — 30 минут",author:"YogaZen",views:"6.1К",time:"31:07",emoji:"🧘",badge:"Новое",color:"#1a0e15"},
-  {title:"Python для AI: быстрый старт",author:"CodeGuru",views:"19К",time:"55:20",emoji:"🐍",badge:"Новое",color:"#0e150e"},
-  {title:"Интерьер за 50К рублей — до/после",author:"DesignHome",views:"41К",time:"18:02",emoji:"🏠",badge:"Новое",color:"#15100e"},
-  {title:"Разбираем лучший роман 2025",author:"BookTalk",views:"5К",time:"38:50",emoji:"📖",badge:"Новое",color:"#0e1a1a"},
-];
-const AU = [
-  {name:"DarkGamer",handle:"@darkgamer",subs:"340К",videos:"218",emoji:"🎮",color:"#c0a000",init:"D"},
-  {name:"TravelVibe",handle:"@travelvibe",subs:"210К",videos:"154",emoji:"✈️",color:"#00a060",init:"T"},
-  {name:"LofiWave",handle:"@lofiwave",subs:"1.8М",videos:"412",emoji:"🎵",color:"#6040c0",init:"L"},
-  {name:"TechPro",handle:"@techpro",subs:"560К",videos:"296",emoji:"💻",color:"#0090c0",init:"P"},
-  {name:"ArtSpace",handle:"@artspace",subs:"128К",videos:"87",emoji:"🎨",color:"#c050a0",init:"A"},
-  {name:"CineReview",handle:"@cinereview",subs:"430К",videos:"183",emoji:"🎬",color:"#c07020",init:"C"},
-  {name:"ChefMike",handle:"@chefmike",subs:"95К",videos:"341",emoji:"🍜",color:"#c03020",init:"M"},
-  {name:"LifeStyle+",handle:"@lifestylesplus",subs:"780К",videos:"529",emoji:"☀️",color:"#c09000",init:"S"},
-];
-const CATS = [
-  {i:"🎮",n:"Игры",c:"142K"},{i:"🎵",n:"Музыка",c:"98K"},{i:"🎨",n:"Творчество",c:"64K"},
-  {i:"⚽",n:"Спорт",c:"87K"},{i:"🍕",n:"Кулинария",c:"55K"},{i:"✈️",n:"Путешествия",c:"76K"},
-  {i:"💻",n:"Технологии",c:"113K"},{i:"🎬",n:"Кино",c:"49K"},{i:"📚",n:"Образование",c:"92K"},
-  {i:"😂",n:"Юмор",c:"178K"},{i:"💪",n:"Здоровье",c:"41K"},{i:"🚗",n:"Авто",c:"67K"},
-];
-const COMMENTS = [
-  {n:"Alina_V",t:"Очень круто! Давно искала такой сервис 🔥",d:"2 ч. назад",c:"#c0a000"},
-  {n:"max_cool99",t:"Лучше конкурентов однозначно. Качество видео 🔝",d:"5 ч. назад",c:"#00a060"},
-  {n:"irina.photo",t:"Наконец-то нормальный российский видеохостинг! Буду загружать свои видео.",d:"1 день назад",c:"#6040c0"},
-  {n:"dev_sergey",t:"Интерфейс огонь, мобильное приложение будет?",d:"1 день назад",c:"#0090c0"},
-];
-
-/* RENDER */
-function vcHtml(v){
-  const bc=v.badge==='live'?'live':v.badge==='Новое'?'new':'';
-  return `<div class="vc" onclick='playV(${JSON.stringify(v)})'>
-    <div class="ct" style="background:${v.color||'#1a1a1a'}">
-      <div class="ct-bg">${v.emoji}</div>
-      <div class="cho"><div class="chp"><svg width="18" height="18" viewBox="0 0 24 24" fill="#000"><polygon points="6,4 20,12 6,20"/></svg></div></div>
-      <div class="cdur">${v.time}</div>
-    </div>
-    <div class="cb">
-      <div class="ctitle">${v.title}</div>
-      <div class="cmeta">
-        <div class="cav">${v.author[0]}</div>
-        <div class="ci"><div class="cname">${v.author}</div><div class="cviews">${v.views} просм.</div></div>
-        ${v.badge?`<div class="cbadge ${bc}">${bc==='live'?'● LIVE':v.badge}</div>`:''}
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderAll(){
-  document.getElementById('grid-trending').innerHTML = VD.map(v=>vcHtml(v)).join('');
-  document.getElementById('grid-live').innerHTML = LV.map(v=>vcHtml(v)).join('');
-  document.getElementById('grid-new').innerHTML = NV.map(v=>vcHtml(v)).join('');
-
-  document.getElementById('grid-authors').innerHTML = AU.map(a=>`
-  <div class="acard">
-    <div class="aav-wrap"><div class="aav" style="background:${a.color}">${a.init}</div><div class="abadge-icon">${a.emoji}</div></div>
-    <div class="aname">${a.name}</div><div class="ahandle">${a.handle}</div>
-    <div class="astats"><div><div class="asnum">${a.subs}</div><div class="aslabel">Подп.</div></div><div><div class="asnum">${a.videos}</div><div class="aslabel">Видео</div></div></div>
-    <button class="btn-follow" onclick="this.classList.toggle('on');this.textContent=this.classList.contains('on')?'✓ Подписан':'Подписаться'">Подписаться</button>
-  </div>`).join('');
-
-  document.getElementById('grid-cats').innerHTML = CATS.map(c=>`
-  <div class="ccat" onclick="toast('Открываем: ${c.n}')"><div class="ccat-i">${c.i}</div><div class="ccat-n">${c.n}</div><div class="ccat-c">${c.c} видео</div></div>`).join('');
-
-  document.getElementById('sidelist').innerHTML = [...VD,...NV].slice(0,10).map(v=>`
-  <div class="scard" onclick='playV(${JSON.stringify(v)})'>
-    <div class="sthumb" style="background:${v.color||'#1a1a1a'}">${v.emoji}<div class="sdur">${v.time}</div></div>
-    <div class="sinfo"><div class="svtitle">${v.title}</div><div class="svauthor">${v.author}</div><div class="svviews">${v.views} просм.</div></div>
-  </div>`).join('');
-
-  document.getElementById('clist').innerHTML = '';
-  COMMENTS.forEach(c=>addCmt(c,false));
-}
-
-/* PLAYER */
-let playing=false,pInterval=null,pPct=0,liked=false;
-
-function playV(v){
-  if(typeof v==='string') v=JSON.parse(v);
-  document.getElementById('ptitle').textContent=v.title;
-  document.getElementById('pviews').textContent=(v.views||'—')+' просмотров';
-  document.getElementById('pdate').textContent=v.date||'Недавно';
-  document.getElementById('pvemoji').textContent=v.emoji;
-  document.getElementById('paav').textContent=v.author[0];
-  document.getElementById('paname').textContent=v.author;
-  document.getElementById('pasubs').textContent=(v.subs||'—')+' подписчиков';
-  document.getElementById('pdesc').textContent=v.desc||'Описание отсутствует.';
-  document.getElementById('pvbg').style.background=v.color||'#111';
-
-  const tg=document.getElementById('ptags');
-  tg.innerHTML='';
-  (v.tags||[]).forEach(t=>tg.innerHTML+=`<span class="ptag" onclick="toast('Поиск: #${t}')">#${t}</span>`);
-
-  clearInterval(pInterval);playing=false;pPct=0;
-  document.getElementById('ppfill').style.width='0%';
-  document.getElementById('ptime').textContent='0:00 / '+(v.time||'0:00');
-  setPlayIcon();
-  liked=false;document.getElementById('likeBtn').classList.remove('liked');document.getElementById('likeN').textContent='4 832';
-
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pg-player').classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function togglePlay(){
-  playing=!playing;setPlayIcon();
-  if(playing){
-    pInterval=setInterval(()=>{
-      pPct=Math.min(100,pPct+0.06);
-      document.getElementById('ppfill').style.width=pPct+'%';
-      if(pPct>=100){clearInterval(pInterval);playing=false;setPlayIcon();toast('Видео закончилось!')}
-    },60);
-  } else clearInterval(pInterval);
-}
-function setPlayIcon(){
-  document.getElementById('playBtn').innerHTML=playing
-    ?`<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`
-    :`<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>`;
-}
-function toggleLike(){
-  liked=!liked;
-  document.getElementById('likeBtn').classList.toggle('liked',liked);
-  document.getElementById('likeN').textContent=liked?'4 833':'4 832';
-  if(liked) toast('👍 Видео понравилось!');
-}
-function addComment(input){
-  const t=input.value.trim();if(!t)return;
-  addCmt({n:'Вы',t,d:'Только что',c:'#FFC107'},true);
-  const cnt=document.getElementById('ccnt');
-  cnt.textContent=parseInt(cnt.textContent)+1;
-  input.value='';toast('Комментарий опубликован ✅');
-}
-function addCmt(c,prepend){
-  const cl=document.getElementById('clist');
-  const d=document.createElement('div');d.className='comment';
-  d.innerHTML=`<div class="cav2" style="background:${c.c||'#FFC107'};color:#000">${c.n[0].toUpperCase()}</div>
-  <div class="cbody"><div class="cheader"><span class="cname">${c.n}</span><span class="ctime2">${c.d}</span></div>
-  <div class="ctext">${c.t}</div>
-  <div class="cacts"><span class="cact" onclick="toast('👍 Оценено!')">👍 Нравится</span><span class="cact" onclick="toast('💬 Ответить...')">Ответить</span></div></div>`;
-  if(prepend) cl.prepend(d); else cl.appendChild(d);
-}
-
-/* NAV */
-function goHome(){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pg-home').classList.add('active');
-  window.scrollTo(0,0);
-}
-function goscroll(id){const el=document.querySelector(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
-
-/* TOAST */
-let tt;
-function toast(msg){
-  const el=document.getElementById('toastEl');
-  el.textContent=msg;el.classList.add('show');
-  clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2800);
-}
-
-/* NAV SCROLL */
-window.addEventListener('scroll',()=>document.getElementById('mainNav').classList.toggle('scrolled',scrollY>20));
-
-/* SCROLL REVEAL */
-const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}}),{threshold:.08});
-function initReveal(){
-  document.querySelectorAll('.vc,.acard,.fcard,.ccat').forEach(el=>{
-    el.style.opacity='0';el.style.transform='translateY(22px)';
-    el.style.transition='opacity .5s ease,transform .5s ease,border-color .3s,box-shadow .3s';
-    obs.observe(el);
-  });
-}
-
-renderAll();
-setTimeout(initReveal,80);
-</script>
+    <!-- Модульные скрипты -->
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

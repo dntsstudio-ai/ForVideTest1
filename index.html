@@ -4,165 +4,377 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForVide | Главная</title>
-    <meta name="description" content="ForVide — видеохостинг нового поколения. Смотри, загружай, создавай.">
+
+    <meta name="description" content="ForVide — видеохостинг нового поколения">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
+
 <body>
 
-    <!-- ШАПКА -->
-    <header class="top-header">
-        <a href="index.html" class="logo-link">
-            <img src="main/icons/global.jpg" alt="ForVide" class="main-logo">
-        </a>
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="ИСКАТЬ КОНТЕНТ...">
-            <button class="search-btn"><i class="ph ph-magnifying-glass"></i></button>
-        </div>
-        <div class="header-controls">
-            <button class="icon-btn" id="notifBtn" title="Уведомления">
-                <i class="ph ph-bell"></i>
-                <span class="notif-badge"></span>
-            </button>
-            <button class="toggle-menu-btn" id="openMenuBtn">МЕНЮ <i class="ph ph-caret-right"></i></button>
-        </div>
-    </header>
+<!-- HEADER -->
+<header class="top-header">
 
-    <!-- БОКОВАЯ КАПЛЯ -->
-    <aside class="side-drop" id="sideMenu">
-        <div class="side-drop-header">
-            <div class="user-mini-profile" id="menuUserProfile">
-                <img src="https://ui-avatars.com/api/?name=G&background=111&color=fff" alt="Avatar" class="avatar-sm">
-                <div class="user-mini-info">
-                    <span class="user-nickname">Гость</span>
-                    <span class="user-role">Зритель</span>
-                </div>
-            </div>
-            <button class="close-drop-btn" id="closeMenuBtn"><i class="ph ph-x"></i></button>
-        </div>
+    <a href="index.html" class="logo-link">
+        <img src="main/icons/global.jpg" alt="ForVide" class="main-logo">
+    </a>
 
-        <nav class="drop-nav">
-            <a href="#" class="drop-link"><i class="ph ph-user"></i> Мой Профиль</a>
-            <a href="#" class="drop-link"><i class="ph ph-clock-counter-clockwise"></i> История</a>
-            <a href="#" class="drop-link"><i class="ph ph-heart"></i> Понравившееся</a>
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="ИСКАТЬ КОНТЕНТ...">
 
-            <div class="drop-divider"></div>
-
-            <a href="studio.html" class="drop-link author-only" style="display:none"><i class="ph ph-video-camera"></i> VideStudio</a>
-            <button class="create-channel-btn" id="createChannelTrigger" style="display:none">
-                <i class="ph ph-rocket-launch"></i> Создать канал
-            </button>
-
-            <div class="drop-divider"></div>
-
-            <a href="#" class="drop-link"><i class="ph ph-gear"></i> Настройки</a>
-            <button class="drop-link text-danger" id="logoutBtn" style="display:none"><i class="ph ph-sign-out"></i> Выйти</button>
-            <button class="drop-link" onclick="window.openAuthModal(); return false;" id="loginBtn"><i class="ph ph-sign-in"></i> Войти</button>
-        </nav>
-    </aside>
-    <div class="drop-overlay" id="dropOverlay"></div>
-
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
-    <main class="feed-container">
-
-        <!-- КАТЕГОРИИ -->
-        <div class="categories-bar">
-            <button class="category-chip active" data-cat="all">ВСЕ</button>
-            <button class="category-chip" data-cat="trends">🔥 ТРЕНДЫ</button>
-            <button class="category-chip" data-cat="gaming">🎮 ИГРЫ</button>
-            <button class="category-chip" data-cat="stream">📡 СТРИМЫ</button>
-            <button class="category-chip" data-cat="legends">⭐ ЛЕГЕНДЫ</button>
-        </div>
-
-        <!-- ТОП НЕДЕЛИ -->
-        <section class="feed-section">
-            <div class="section-header">
-                <h2><i class="ph-fill ph-fire"></i> ТОП 10 НЕДЕЛИ</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="video-grid" id="trendingGrid">
-                <!-- Скелетоны появятся тут -->
-            </div>
-        </section>
-
-        <!-- ИГРОВОЙ КОНТЕНТ -->
-        <section class="feed-section">
-            <div class="section-header">
-                <h2><i class="ph-fill ph-game-controller"></i> ИГРАЕМ В...</h2>
-                <div class="section-divider"></div>
-            </div>
-            <div class="video-grid" id="gamingGrid"></div>
-        </section>
-
-    </main>
-
-    <!-- НИЖНЯЯ НАВИГАЦИЯ -->
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item">
-            <i class="ph ph-trend-up nav-icon"></i>
-            <span>ТРЕНДЫ</span>
-        </a>
-        <a href="index.html" class="nav-item active">
-            <i class="ph-fill ph-house nav-icon"></i>
-            <span>ГЛАВНАЯ</span>
-        </a>
-        <a href="studio.html" class="nav-item">
-            <i class="ph ph-video-camera nav-icon"></i>
-            <span>СТУДИЯ</span>
-        </a>
-    </nav>
-
-    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ -->
-    <div class="modal-backdrop" id="authModal">
-        <div class="modal-content">
-            <button class="close-modal"><i class="ph ph-x"></i></button>
-            <h2>ВХОД В FORVIDE</h2>
-            <p>Стань частью нового поколения контента</p>
-            <div class="auth-buttons">
-                <button class="auth-btn google-btn">
-                    <i class="ph-fill ph-google-logo"></i> Войти через Google
-                </button>
-                <div class="modal-divider"><span>ИЛИ</span></div>
-                <input type="email" placeholder="Email" class="modal-input">
-                <input type="password" placeholder="Пароль (мин. 6 символов)" class="modal-input">
-                <button class="auth-btn primary-btn">Продолжить</button>
-            </div>
-        </div>
+        <button class="search-btn">
+            <i class="ph ph-magnifying-glass"></i>
+        </button>
     </div>
 
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/ui-controller.js"></script>
-    <script type="module" src="js/feed-generator.js"></script>
-    <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/auth.js"></script>
-    <script>
-        // Категории
-        document.querySelectorAll('.category-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
-                chip.classList.add('active');
-            });
+    <div class="header-controls">
+
+        <button class="icon-btn" id="notifBtn">
+            <i class="ph ph-bell"></i>
+            <span class="notif-badge"></span>
+        </button>
+
+        <button class="toggle-menu-btn" id="openMenuBtn">
+            МЕНЮ
+            <i class="ph ph-caret-right"></i>
+        </button>
+
+    </div>
+
+</header>
+
+<!-- SIDE MENU -->
+<aside class="side-drop" id="sideMenu">
+
+    <div class="side-drop-header">
+
+        <div class="user-mini-profile" id="menuUserProfile">
+
+            <img
+                src="https://ui-avatars.com/api/?name=G&background=111&color=fff"
+                alt="Avatar"
+                class="avatar-sm"
+                id="menuAvatar"
+            >
+
+            <div class="user-mini-info">
+                <span class="user-nickname" id="menuUsername">
+                    Гость
+                </span>
+
+                <span class="user-role" id="menuRole">
+                    Зритель
+                </span>
+            </div>
+
+        </div>
+
+        <button class="close-drop-btn" id="closeMenuBtn">
+            <i class="ph ph-x"></i>
+        </button>
+
+    </div>
+
+    <nav class="drop-nav">
+
+        <a href="profile.html" class="drop-link">
+            <i class="ph ph-user"></i>
+            Мой профиль
+        </a>
+
+        <a href="history.html" class="drop-link">
+            <i class="ph ph-clock-counter-clockwise"></i>
+            История
+        </a>
+
+        <a href="liked.html" class="drop-link">
+            <i class="ph ph-heart"></i>
+            Понравившееся
+        </a>
+
+        <div class="drop-divider"></div>
+
+        <a href="studio.html"
+           class="drop-link author-only"
+           id="studioBtn"
+           style="display:none">
+
+            <i class="ph ph-video-camera"></i>
+            VideStudio
+
+        </a>
+
+        <button class="create-channel-btn"
+                id="createChannelTrigger"
+                style="display:none">
+
+            <i class="ph ph-rocket-launch"></i>
+            Создать канал
+
+        </button>
+
+        <div class="drop-divider"></div>
+
+        <a href="settings.html" class="drop-link">
+            <i class="ph ph-gear"></i>
+            Настройки
+        </a>
+
+        <button class="drop-link text-danger"
+                id="logoutBtn"
+                style="display:none">
+
+            <i class="ph ph-sign-out"></i>
+            Выйти
+
+        </button>
+
+        <button class="drop-link"
+                id="loginBtn">
+
+            <i class="ph ph-sign-in"></i>
+            Войти
+
+        </button>
+
+    </nav>
+
+</aside>
+
+<div class="drop-overlay" id="dropOverlay"></div>
+
+<!-- MAIN -->
+<main class="feed-container">
+
+    <!-- CATEGORIES -->
+    <div class="categories-bar">
+
+        <button class="category-chip active" data-cat="all">
+            ВСЕ
+        </button>
+
+        <button class="category-chip" data-cat="trends">
+            🔥 ТРЕНДЫ
+        </button>
+
+        <button class="category-chip" data-cat="gaming">
+            🎮 ИГРЫ
+        </button>
+
+        <button class="category-chip" data-cat="stream">
+            📡 СТРИМЫ
+        </button>
+
+        <button class="category-chip" data-cat="legends">
+            ⭐ ЛЕГЕНДЫ
+        </button>
+
+    </div>
+
+    <!-- TRENDING -->
+    <section class="feed-section">
+
+        <div class="section-header">
+
+            <h2>
+                <i class="ph-fill ph-fire"></i>
+                ТОП 10 НЕДЕЛИ
+            </h2>
+
+            <div class="section-divider"></div>
+
+        </div>
+
+        <div class="video-grid" id="trendingGrid"></div>
+
+    </section>
+
+    <!-- GAMING -->
+    <section class="feed-section">
+
+        <div class="section-header">
+
+            <h2>
+                <i class="ph-fill ph-game-controller"></i>
+                ИГРАЕМ В...
+            </h2>
+
+            <div class="section-divider"></div>
+
+        </div>
+
+        <div class="video-grid" id="gamingGrid"></div>
+
+    </section>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+    <a href="#" class="nav-item">
+        <i class="ph ph-trend-up nav-icon"></i>
+        <span>ТРЕНДЫ</span>
+    </a>
+
+    <a href="index.html" class="nav-item active">
+        <i class="ph-fill ph-house nav-icon"></i>
+        <span>ГЛАВНАЯ</span>
+    </a>
+
+    <a href="studio.html" class="nav-item">
+        <i class="ph ph-video-camera nav-icon"></i>
+        <span>СТУДИЯ</span>
+    </a>
+
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-backdrop" id="authModal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeAuthModal">
+            <i class="ph ph-x"></i>
+        </button>
+
+        <h2>ВХОД В FORVIDE</h2>
+
+        <p>Стань частью нового поколения контента</p>
+
+        <div class="auth-buttons">
+
+            <!-- GOOGLE -->
+            <button class="auth-btn google-btn"
+                    id="googleLoginBtn">
+
+                <i class="ph-fill ph-google-logo"></i>
+                Войти через Google
+
+            </button>
+
+            <div class="modal-divider">
+                <span>ИЛИ</span>
+            </div>
+
+            <!-- EMAIL -->
+            <input
+                type="email"
+                placeholder="Email"
+                class="modal-input"
+                id="loginEmail"
+            >
+
+            <input
+                type="password"
+                placeholder="Пароль"
+                class="modal-input"
+                id="loginPassword"
+            >
+
+            <!-- LOGIN -->
+            <button class="auth-btn primary-btn"
+                    id="emailLoginBtn">
+
+                Войти
+
+            </button>
+
+            <!-- REGISTER -->
+            <button class="auth-btn"
+                    id="registerBtn">
+
+                Создать аккаунт
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SCRIPTS -->
+
+<script type="module" src="./js/firebase-config.js"></script>
+<script type="module" src="./js/firebase-init.js"></script>
+<script type="module" src="./js/auth.js"></script>
+<script type="module" src="./js/ui-controller.js"></script>
+<script type="module" src="./js/feed-generator.js"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // CATEGORY CHIPS
+    document.querySelectorAll('.category-chip').forEach(chip => {
+
+        chip.addEventListener('click', () => {
+
+            document.querySelectorAll('.category-chip')
+                .forEach(c => c.classList.remove('active'));
+
+            chip.classList.add('active');
+
         });
 
-        // Уведомления (заглушка)
-        document.getElementById('notifBtn')?.addEventListener('click', () => {
-            if (window.showToast) window.showToast('Уведомлений пока нет 🔔', 'info');
+    });
+
+    // OPEN AUTH MODAL
+    const authModal =
+        document.getElementById('authModal');
+
+    const loginBtn =
+        document.getElementById('loginBtn');
+
+    if (loginBtn) {
+
+        loginBtn.addEventListener('click', () => {
+
+            authModal.classList.add('active');
+
         });
 
-        // Скрываем кнопку входа если залогинен
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginBtn = document.getElementById('loginBtn');
-            if (loginBtn) loginBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.openAuthModal?.();
-            });
+    }
+
+    // CLOSE MODAL
+    const closeBtn =
+        document.getElementById('closeAuthModal');
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener('click', () => {
+
+            authModal.classList.remove('active');
+
         });
-    </script>
+
+    }
+
+    // CLICK OUTSIDE
+    authModal?.addEventListener('click', (e) => {
+
+        if (e.target === authModal) {
+
+            authModal.classList.remove('active');
+
+        }
+
+    });
+
+    console.log('✅ Index UI initialized');
+
+});
+
+</script>
+
 </body>
 </html>

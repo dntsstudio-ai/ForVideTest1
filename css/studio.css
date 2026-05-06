@@ -1,0 +1,208 @@
+/* css/studio.css */
+.studio-container {
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 90px);
+}
+
+.studio-badge {
+    background: var(--fv-black);
+    color: var(--fv-mustard);
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    letter-spacing: 1px;
+}
+
+.studio-card {
+    background: var(--fv-gray-100);
+    border: 3px solid var(--fv-black);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 8px 8px 0px var(--fv-black);
+}
+
+/* Экраны */
+.setup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.setup-header i {
+    font-size: 60px;
+    color: var(--fv-mustard);
+    margin-bottom: 15px;
+}
+
+.setup-header h2 {
+    font-weight: 900;
+    font-size: 28px;
+    text-transform: uppercase;
+}
+
+/* Формы */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.input-group input, .input-group textarea, .input-group select {
+    background: var(--fv-white);
+    border: 3px solid var(--fv-black);
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 10px;
+    outline: none;
+    transition: var(--transition);
+}
+
+.input-group input:focus, .input-group textarea:focus {
+    box-shadow: 4px 4px 0px var(--fv-mustard);
+}
+
+.input-group textarea {
+    resize: none;
+    height: 120px;
+}
+
+/* Кнопки */
+.primary-btn {
+    background: var(--fv-black);
+    color: var(--fv-white);
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: 900;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+}
+
+.primary-btn:hover {
+    background: var(--fv-mustard);
+    color: var(--fv-black);
+    transform: translateY(-2px);
+}
+
+.yellow-btn {
+    background: var(--fv-mustard);
+    color: var(--fv-black);
+}
+
+/* Панель Автора (Dashboard) */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.stat-box {
+    background: var(--fv-white);
+    border: 3px solid var(--fv-black);
+    padding: 20px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-num {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--fv-black);
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--fv-gray-400);
+    margin-top: 5px;
+}
+
+/* File Upload */
+.file-pickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.file-input-wrapper {
+    position: relative;
+    border: 3px dashed var(--fv-black);
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+    background: var(--fv-white);
+    cursor: pointer;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-label {
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.file-label i { font-size: 30px; }
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 20px;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: var(--fv-white);
+    border: 3px solid var(--fv-black);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--fv-mustard);
+    transition: width 0.1s linear;
+}
+
+#progressText {
+    font-weight: 900;
+    font-size: 12px;
+}
+
+@media (max-width: 992px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .file-pickers { grid-template-columns: 1fr; }
+}

@@ -1,47 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
     const videoGrid = document.getElementById("video-grid");
 
-    // Функция для генерации случайного времени
-    function getRandomDuration() {
-        const min = Math.floor(Math.random() * 59);
-        const sec = Math.floor(Math.random() * 59);
-        return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-    }
+    const videos = [
+        { id: 1, title: "Новый трейлер: ForVide Originals", views: "1.2M", date: "1 час назад" },
+        { id: 2, title: "Как загрузить свое первое видео через OBS", views: "45K", date: "3 часа назад" },
+        { id: 3, title: "Топ 10 аниме этого весеннего сезона", views: "890K", date: "Вчера" },
+        { id: 4, title: "Прямой эфир: Разбираем код ForVide", views: "12K", date: "Сейчас" },
+        { id: 5, title: "Лучшие моменты из популярных сериалов", views: "2.5M", date: "2 дня назад" },
+        { id: 6, title: "Интервью с создателями платформы", views: "300K", date: "Неделя назад" },
+    ];
 
-    function createCard(title, author, views) {
-        const randomId = Math.floor(Math.random() * 1000);
-        const imgUrl = `https://picsum.photos/seed/${randomId}/600/337`; 
-        
-        // В качестве аватарки пока используем заглушку из твоих картинок
-        const avatarUrl = "photo_5460840021544867928_w.jpg"; 
-        const duration = getRandomDuration();
-
-        return `
+    function renderContent() {
+        videoGrid.innerHTML = videos.map(video => `
             <div class="video-card">
-                <div class="thumbnail-box">
-                    <img src="${imgUrl}" alt="Превью">
-                    <span class="video-duration">${duration}</span>
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/seed/${video.id + 50}/800/450" alt="Preview">
+                    <span class="duration-tag">12:45</span>
                 </div>
-                <div class="video-info">
-                    <img src="${avatarUrl}" alt="Аватар" class="author-avatar">
-                    <div class="video-text-content">
-                        <div class="video-title">${title}</div>
-                        <div class="video-meta">${author}</div>
-                        <div class="video-meta">${views} • 2 дня назад</div>
+                <div class="video-details">
+                    <img src="photo_5460840021544867928_w.jpg" class="creator-avatar" alt="User">
+                    <div class="text-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <p class="video-meta-info">ForVide User • ${video.views} • ${video.date}</p>
                     </div>
                 </div>
             </div>
-        `;
+        `).join('');
     }
 
-    let html = "";
-    for (let i = 1; i <= 16; i++) {
-        html += createCard(
-            `Очень интересное видео с длинным названием, которое должно занимать ровно две строки #${i}`, 
-            "ForVide Creator", 
-            `${Math.floor(Math.random() * 500) + 10} тыс. просмотров`
-        );
-    }
-
-    videoGrid.innerHTML = html;
+    renderContent();
 });

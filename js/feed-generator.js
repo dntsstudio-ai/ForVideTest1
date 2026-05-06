@@ -103,7 +103,6 @@ async function loadVideosFromDB(category, gridId, mockFallback) {
         const q = query(
             collection(db, 'videos'),
             where('category', '==', category),
-            
             limit(8)
         );
         const snap = await getDocs(q);

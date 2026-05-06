@@ -3,80 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForVide — Твой видеохостинг</title>
+    <title>ForVide</title>
     <link rel="icon" href="photo_5460840021544867925_w.jpg" type="image/jpeg">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Подключаем иконки Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-left">
-            <a href="index.html" class="logo-link">
-                <img src="photo_5460840021544867927_w.jpg" alt="ForVide" class="main-logo">
-            </a>
-        </div>
-
-        <div class="header-center">
-            <div class="search-wrapper">
-                <input type="text" placeholder="Найти контент..." class="main-search">
-                <button class="search-trigger">
-                    <i data-lucide="search"></i>
-                </button>
+    <header class="header">
+        <div class="header-container">
+            <!-- Лево -->
+            <div class="logo">
+                <img src="photo_5460840021544867927_w.jpg" alt="Logo">
             </div>
-        </div>
 
-        <div class="header-right">
-            <button class="icon-action" title="Загрузить">
-                <i data-lucide="upload-cloud"></i>
-                <span>Загрузить</span>
-            </button>
-            <button class="profile-trigger" title="Личный кабинет">
-                <i data-lucide="user-circle"></i>
-                <span>Войти</span>
-            </button>
+            <!-- Центр -->
+            <div class="search-box">
+                <input type="text" placeholder="Поиск видео...">
+                <button>Найти</button>
+            </div>
+
+            <!-- Право -->
+            <div class="user-actions">
+                <button class="btn-upload"><span>+</span> Загрузить</button>
+                <button class="btn-login">Войти</button>
+            </div>
         </div>
     </header>
 
-    <nav class="category-nav">
-        <button class="nav-item active">Все</button>
-        <button class="nav-item">Трейлеры</button>
-        <button class="nav-item">Кино</button>
-        <button class="nav-item">Аниме</button>
-        <button class="nav-item">Трансляции</button>
-        <button class="nav-item">Подписки</button>
-    </nav>
-
-    <main class="content-area">
-        <div class="video-shelf" id="video-grid">
-            <!-- Сюда JS накидает карточки -->
+    <main class="container">
+        <div class="video-grid" id="video-grid">
+            <!-- Карточки -->
         </div>
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <img src="photo_5460840021544867927_w.jpg" alt="ForVide">
-                <p>Платформа для свободных авторов</p>
-            </div>
-            <div class="footer-links">
-                <a href="#">О нас</a>
-                <a href="#">Правообладателям</a>
-                <a href="#">Реклама</a>
-                <a href="#">Помощь</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 ForVide.ru — Все права защищены. Сделано с душой.</p>
-        </div>
+    <footer class="footer">
+        <p>&copy; 2026 ForVide. Все права защищены.</p>
     </footer>
 
-    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
-    <script>
-        // Инициализация иконок
-        lucide.createIcons();
-    </script>
 </body>
 </html>

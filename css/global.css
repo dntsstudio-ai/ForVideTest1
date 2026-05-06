@@ -1,0 +1,37 @@
+:root {
+    /* Цвета из твоего логотипа и ТЗ */
+    --fv-mustard: #facc15;
+    --fv-black: #111111;
+    --fv-dark: #0a0a0a;
+    --fv-white: #ffffff;
+    --fv-gray-100: #f4f4f4;
+    --fv-gray-400: #a1a1aa;
+    --fv-gray-800: #27272a;
+    
+    /* Геометрия и Эффекты */
+    --cut-angle: 20px;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1);
+    --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--fv-white);
+    color: var(--fv-black);
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+button, input {
+    font-family: inherit;
+}
+
+.text-danger { color: #ef4444 !important; }

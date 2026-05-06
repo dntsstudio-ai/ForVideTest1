@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForVide</title>
-    <!-- Иконка сайта -->
     <link rel="icon" href="photo_5460840021544867925_w.jpg" type="image/jpeg">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -12,19 +11,23 @@
 
     <!-- Верхний бар -->
     <header class="top-bar">
-        <!-- Логотип слева -->
+        <!-- Левая часть: Логотип -->
         <div class="logo-area">
             <a href="index.html">
                 <img src="photo_5460840021544867927_w.jpg" alt="ForVide Logo" class="logo-img">
             </a>
         </div>
 
-        <!-- Разные кнопки справа (и поиск) -->
-        <div class="buttons-area">
+        <!-- Центральная часть: Поиск -->
+        <div class="search-area">
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Поиск...">
+                <input type="text" class="search-input" placeholder="Поиск видео...">
                 <button class="search-btn">Найти</button>
             </div>
+        </div>
+
+        <!-- Правая часть: Кнопки -->
+        <div class="buttons-area">
             <button class="action-btn">Загрузить</button>
             <button class="auth-btn">Войти</button>
         </div>
@@ -33,7 +36,7 @@
     <!-- Сетка видеороликов -->
     <main class="main-content">
         <div class="video-grid" id="video-grid">
-            <!-- Карточки будут добавлены через JS -->
+            <!-- Карточки генерируются через JS -->
         </div>
     </main>
 

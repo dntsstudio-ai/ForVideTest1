@@ -1,0 +1,138 @@
+:root {
+    --fv-mustard: #facc15;
+    --fv-mustard-dark: #d4a017;
+    --fv-black: #111111;
+    --fv-dark: #0a0a0a;
+    --fv-white: #ffffff;
+    --fv-gray-50: #fafafa;
+    --fv-gray-100: #f4f4f4;
+    --fv-gray-200: #e8e8e8;
+    --fv-gray-400: #a1a1aa;
+    --fv-gray-600: #52525b;
+    --fv-gray-800: #27272a;
+    --fv-danger: #ef4444;
+    --fv-success: #22c55e;
+
+    --cut-angle: 20px;
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md: 0 8px 16px rgba(0,0,0,0.12);
+    --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+    --shadow-brutal: 6px 6px 0px var(--fv-black);
+    --shadow-brutal-yellow: 6px 6px 0px var(--fv-mustard);
+
+    --transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-fast: all 0.2s ease;
+    --header-h: 72px;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--fv-white);
+    color: var(--fv-black);
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+    padding-top: var(--header-h);
+}
+
+button, input, textarea, select { font-family: inherit; }
+
+a { color: inherit; }
+
+img { display: block; }
+
+/* Утилиты */
+.text-danger { color: var(--fv-danger) !important; }
+.text-muted { color: var(--fv-gray-400); }
+.text-yellow { color: var(--fv-mustard); }
+.fw-900 { font-weight: 900; }
+.uppercase { text-transform: uppercase; }
+
+.bento-cut {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+
+/* Скроллбар */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--fv-gray-100); }
+::-webkit-scrollbar-thumb { background: var(--fv-gray-400); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fv-black); }
+
+/* Анимации появления */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.animate-in {
+    animation: fadeInUp 0.5s ease both;
+}
+
+/* Состояние загрузки */
+.skeleton {
+    background: linear-gradient(90deg, var(--fv-gray-100) 25%, var(--fv-gray-200) 50%, var(--fv-gray-100) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Toast уведомления */
+.toast-container {
+    position: fixed;
+    bottom: 120px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: var(--fv-black);
+    color: white;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 14px;
+    animation: fadeInUp 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 320px;
+    box-shadow: var(--shadow-lg);
+}
+
+.toast.success { border-left: 4px solid var(--fv-success); }
+.toast.error { border-left: 4px solid var(--fv-danger); }
+.toast.info { border-left: 4px solid var(--fv-mustard); }

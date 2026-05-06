@@ -148,3 +148,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+window.showToast = function (message, type = 'info') {
+
+    console.log(`[${type.toUpperCase()}] ${message}`);
+
+    const toast = document.createElement('div');
+
+    toast.innerText = message;
+
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+
+    toast.style.background = '#111';
+    toast.style.color = '#fff';
+
+    toast.style.padding = '12px 18px';
+
+    toast.style.borderRadius = '12px';
+
+    toast.style.zIndex = '999999';
+
+    toast.style.fontFamily = 'Montserrat';
+
+    toast.style.boxShadow = '0 10px 30px rgba(0,0,0,0.4)';
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+};

@@ -5,7 +5,7 @@
 import {
     getAuth,
     GoogleAuthProvider,
-    signInWithPopup,
+    signInWithRedirect,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
@@ -181,7 +181,7 @@ window.googleLogin = async function () {
     try {
 
         const result =
-            await signInWithPopup(auth, provider);
+            await signInWithRedirect(auth, provider);
 
         await createUserProfile(result.user);
 

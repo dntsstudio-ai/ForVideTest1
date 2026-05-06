@@ -1,4 +1,54 @@
 // js/auth.js
+
+// js/auth.js (Обновленная логика)
+const StorageDB = {
+    saveUser: (user) => {
+        let users = JSON.parse(localStorage.getItem('fv_users') || '[]');
+        if (!users.find(u => u.uid === user.uid)) {
+            users.push(user);
+            localStorage.setItem('fv_users', JSON.stringify(users));
+        }
+    },
+    getUsers: () => JSON.parse(localStorage.getItem('fv_users') || '[]'),
+    setCurrent: (uid) => localStorage.setItem('fv_current_uid', uid),
+    getCurrent: () => {
+        const uid = localStorage.getItem('fv_current_uid');
+        const users = JSON.parse(localStorage.getItem('fv_users') || '[]');
+        return users.find(u => u.uid === uid) || null;
+    }
+};
+
+export function updateAuthUI() {
+    const loginBtn = document.getElementById('loginBtn');
+    const userControls = document.getElementById('userControls'); // Создадим этот контейнер
+    const currentUser = StorageDB.getCurrent();
+
+    if (currentUser) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        
+        // Создаем кнопку переключения аккаунтов
+        let switchBtn = document.getElementById('switchAccBtn');
+        if (!switchBtn) {
+            switchBtn = document.createElement('button');
+            switchBtn.id = 'switchAccBtn';
+            switchBtn.className = 'account-switch-btn';
+            switchBtn.innerHTML = `<img src="${currentUser.photoURL}" class="nav-avatar"> <span>${currentUser.displayName}</span>`;
+            userControls.appendChild(switchBtn);
+            
+            switchBtn.onclick = () => {
+                const all = StorageDB.getUsers();
+                const next = all.find(u => u.uid !== currentUser.uid) || all[0];
+                if (next) {
+                    StorageDB.setCurrent(next.uid);
+                    location.reload();
+                } else {
+                    window.openAuthModal(); // Если аккаунтов нет, предлагаем войти в новый
+                }
+            };
+        }
+    }
+}
+
 import { auth, db } from './firebase-config.js';
 import {
     GoogleAuthProvider,

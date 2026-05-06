@@ -3,34 +3,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForVide - Web 3.0</title>
-    <!-- Геометрический рубленый шрифт -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <title>ForVide - Web 3.0 Video Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* БАЗОВЫЕ НАСТРОЙКИ И ЦВЕТА ИЗ ЛОГОТИПА */
+        :root {
+            --fv-yellow: #FFC000;
+            --fv-black: #050505;
+            --fv-dark: #121212;
+            --fv-gray: #2A2A2A;
+            --fv-white: #FFFFFF;
+            --angle-cut: 25px; /* Острый срез, как на логотипе */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--fv-white); /* Светлый фон как на эскизе, контрастирует с черными блоками */
+            color: var(--fv-black);
+            overflow-x: hidden;
+            padding-bottom: 120px; /* Отступ для нижней панели */
+        }
+
+        /* --- ШАПКА --- */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: var(--fv-white);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--fv-black);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Имитация иконки логотипа в вебе */
+        .logo-mark {
+            width: 40px;
+            height: 30px;
+            background-color: var(--fv-yellow);
+            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%, 20% 60%, 80% 50%, 20% 40%);
+        }
+
+        .search-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 500px;
+            background-color: var(--fv-white);
+            border: 3px solid var(--fv-black);
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 800;
+            outline: none;
+            /* Слегка скошенные углы у поиска */
+            border-radius: 10px 0 10px 0;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            border-color: var(--fv-yellow);
+            box-shadow: 5px 5px 0px var(--fv-yellow);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .toggle-btn {
+            background: transparent;
+            border: 3px solid var(--fv-black);
+            padding: 10px 20px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            position: relative;
+            z-index: 1001; /* Поверх капли */
+        }
+
+        .toggle-btn:hover {
+            background: var(--fv-yellow);
+            border-color: var(--fv-yellow);
+        }
+
+        /* --- СЕТКА ВИДЕО (BENTO GRID) --- */
+        .main-content {
+            padding: 20px 40px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            grid-auto-rows: 250px;
+        }
+
+        /* Первый элемент делаем большим для стиля Bento */
+        .video-card:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .video-card {
+            background-color: var(--fv-gray);
+            position: relative;
+            cursor: pointer;
+            /* Тот самый срез угла из негативного пространства логотипа */
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--angle-cut)), calc(100% - var(--angle-cut)) 100%, 0 100%);
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            background-color: #444; /* Темно-серый по твоему эскизу */
+            object-fit: cover;
+        }
+
+        /* Кнопка Плей, появляющаяся при наведении */
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(5, 5, 5, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-btn-shape {
+            width: 60px;
+            height: 60px;
+            background-color: var(--fv-yellow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Ромбовидный/скошенный фон кнопки плей */
+            clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 16px solid var(--fv-black);
+            margin-left: 4px;
+        }
+
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            color: var(--fv-white);
+        }
+
+        .video-title {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .video-meta {
+            font-size: 12px;
+            color: var(--fv-yellow);
+            font-weight: 800;
+        }
+
+        /* --- ЖЕЛТАЯ КАПЛЯ (БОКОВОЕ МЕНЮ) --- */
+        .side-drop {
+            position: fixed;
+            top: 0;
+            right: -450px; /* Спрятано по умолчанию */
+            width: 450px;
+            height: 100vh;
+            background-color: var(--fv-yellow);
+            /* Формируем изгиб капли на левой стороне */
+            border-radius: 50% 0 0 50% / 10% 0 0 10%;
+            transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 80px; /* Сдвигаем контент от изгиба */
+        }
+
+        .side-drop.open {
+            right: 0;
+        }
+
+        .menu-link {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--fv-black);
+            text-decoration: none;
+            text-transform: uppercase;
+            margin: 15px 0;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        .menu-link:hover {
+            transform: translateX(10px);
+            color: var(--fv-white);
+        }
+
+        /* --- НИЖНЯЯ НАВИГАЦИЯ --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background-color: var(--fv-black);
+            /* Асимметричный срез верхней грани */
+            clip-path: polygon(0 20px, 100% 0, 100% 100%, 0 100%);
+            display: flex;
+            justify-content: space-evenly;
+            align-items: flex-end;
+            padding-bottom: 20px;
+            z-index: 900;
+        }
+
+        .nav-item {
+            color: var(--fv-white);
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 18px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--fv-yellow);
+        }
+
+        /* Декоративные точки/иконки из эскиза */
+        .nav-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid currentColor;
+            transform: rotate(45deg);
+        }
+        
+        .nav-icon.circle { border-radius: 50%; transform: none; }
+
+        @media (max-width: 768px) {
+            .bento-grid { display: flex; flex-direction: column; }
+            .video-card:first-child { grid-column: auto; grid-row: auto; height: 250px; }
+            .bottom-nav { height: 70px; clip-path: polygon(0 10px, 100% 0, 100% 100%, 0 100%); }
+            .nav-item { font-size: 12px; }
+            .side-drop { width: 100%; border-radius: 0; right: -100%; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Угловой поиск и Логотип -->
-    <header class="top-layer">
-        <div class="logo">FOR<span class="accent">VIDE</span></div>
-        <div class="search-corner">
-            <input type="text" placeholder="SEARCH...">
+    <!-- Шапка -->
+    <header class="top-header">
+        <div class="logo-text">
+            <div class="logo-mark"></div>
+            FORVIDE
+        </div>
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="ПОИСК..">
+        </div>
+        <div class="header-actions">
+            <button class="toggle-btn" id="menuToggle">Свернуть >></button>
         </div>
     </header>
 
-    <!-- Главный экран (без скролла) -->
-    <main class="bento-grid" id="bento-container">
-        <!-- JS сгенерирует здесь асимметричные плитки -->
+    <!-- Сетка Bento Grid -->
+    <main class="main-content">
+        <div class="bento-grid" id="videoGrid">
+            <!-- Карточки генерируются скриптом ниже для примера -->
+        </div>
     </main>
 
-    <!-- Плавающая навигация в стиле приложения -->
-    <nav class="floating-nav">
-        <button class="nav-btn active">PLAY</button>
-        <button class="nav-btn">TRENDING</button>
-        <button class="nav-btn">LIBRARY</button>
-        <button class="nav-btn">STUDIO</button>
+    <!-- Боковое меню (Желтая капля) -->
+    <aside class="side-drop" id="sideDrop">
+        <a href="#" class="menu-link">Профиль</a>
+        <a href="#" class="menu-link">Мои видео</a>
+        <a href="#" class="menu-link">Загрузить</a>
+        <a href="#" class="menu-link">Настройки</a>
+    </aside>
+
+    <!-- Наклонная нижняя панель -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item">
+            <span class="nav-icon"></span>
+            ТРЕНДЫ
+        </a>
+        <a href="#" class="nav-item active">
+            <span class="nav-icon" style="border: 2px dashed currentColor;"></span>
+            РЕКОМЕНДАЦИИ
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon circle"></span>
+            ГЛАВНАЯ
+        </a>
     </nav>
 
-    <script src="js/app.js"></script>
+    <script>
+        // Логика открытия/закрытия желтой капли
+        const menuToggle = document.getElementById('menuToggle');
+        const sideDrop = document.getElementById('sideDrop');
+
+        menuToggle.addEventListener('click', () => {
+            sideDrop.classList.toggle('open');
+            if (sideDrop.classList.contains('open')) {
+                menuToggle.innerHTML = '<< Скрыть';
+            } else {
+                menuToggle.innerHTML = 'Свернуть >>';
+            }
+        });
+
+        // Генерация серых карточек видео для демонстрации сетки
+        const grid = document.getElementById('videoGrid');
+        const titles = [
+            "ЭКСКЛЮЗИВНЫЙ ФОРМАТ", "НАШЛИ ЗАКЛАДКУ И НАС...", "UI/UX ТРЕНДЫ 2026", 
+            "КАК СОБРАТЬ ПК", "ИНТЕРВЬЮ С РАЗРАБОТЧИКОМ", "ОБЗОР FORVIDE", "СТРИМ: ИГРАЕМ"
+        ];
+
+        let html = '';
+        for (let i = 0; i < 7; i++) {
+            html += `
+                <div class="video-card">
+                    <div class="video-thumbnail"></div>
+                    <div class="play-overlay">
+                        <div class="play-btn-shape">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">${titles[i]}</div>
+                        <div class="video-meta">${(Math.random() * 5 + 1).toFixed(1)}М ПРОСМОТРОВ • ${Math.floor(Math.random() * 500) + 10} ТЫС. ЛАЙКОВ</div>
+                    </div>
+                </div>
+            `;
+        }
+        grid.innerHTML = html;
+    </script>
 </body>
 </html>

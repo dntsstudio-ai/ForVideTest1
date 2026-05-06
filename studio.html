@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | VideStudio</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <a href="index.html" class="logo-link">
+            <img src="main/icons/global.png" alt="ForVide Logo" class="main-logo">
+            <span class="studio-badge">STUDIO</span>
+        </a>
+        <div class="user-profile-header" id="studioUserHeader">
+            </div>
+    </header>
+
+    <main class="studio-container">
+        
+        <section class="studio-card bento-cut" id="createChannelSection" style="display: none;">
+            <div class="setup-header">
+                <i class="ph-fill ph-rocket-launch"></i>
+                <h2>СОЗДАЙ СВОЙ КАНАЛ</h2>
+                <p>Вы не можете загружать видео, пока не создадите канал на ForVide.</p>
+            </div>
+            
+            <div class="setup-form">
+                <div class="input-group">
+                    <label>Название вашего канала</label>
+                    <input type="text" id="newChannelName" placeholder="Например: Студия Гейминга">
+                </div>
+                <div class="input-group">
+                    <label>Уникальный никнейм (@handle)</label>
+                    <input type="text" id="newChannelHandle" placeholder="username">
+                </div>
+                <div class="input-group">
+                    <label>Описание канала</label>
+                    <textarea id="newChannelDesc" placeholder="Расскажите о своем контенте..."></textarea>
+                </div>
+                <button class="primary-btn" id="submitCreateChannel">АКТИВИРОВАТЬ КАНАЛ</button>
+            </div>
+        </section>
+
+        <section class="dashboard-grid" id="authorDashboardSection" style="display: none;">
+            
+            <div class="studio-card bento-cut stats-bento">
+                <h3>АНАЛИТИКА КАНАЛА</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-num" id="statSubs">0</span>
+                        <span class="stat-label">ПОДПИСЧИКИ</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num" id="statViews">0</span>
+                        <span class="stat-label">ПРОСМОТРЫ</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num" id="statLikes">0</span>
+                        <span class="stat-label">ЛАЙКИ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="studio-card bento-cut upload-bento">
+                <h3>ЗАГРУЗИТЬ НОВЫЙ РОЛИК</h3>
+                <div class="upload-form">
+                    <div class="input-group">
+                        <label>Название видео</label>
+                        <input type="text" id="videoTitle" placeholder="Введите цепляющее название...">
+                    </div>
+                    <div class="input-group">
+                        <label>Описание</label>
+                        <textarea id="videoDesc" placeholder="О чем ваш ролик?"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Тег / Категория</label>
+                        <select id="videoCategory">
+                            <option value="gaming">ИГРАЕМ В...</option>
+                            <option value="stream">ОБЩИЙ СБОР! СТРИМ ИДЕТ!</option>
+                            <option value="trends">ТОП 10 НЕДЕЛИ</option>
+                            <option value="legends">ЛЕГЕНДЫ?</option>
+                        </select>
+                    </div>
+
+                    <div class="file-pickers">
+                        <div class="file-input-wrapper">
+                            <span class="file-label"><i class="ph ph-video"></i> Видеофайл</span>
+                            <input type="file" id="videoFile" accept="video/*">
+                        </div>
+                        <div class="file-input-wrapper">
+                            <span class="file-label"><i class="ph ph-image"></i> Обложка (PNG/JPG)</span>
+                            <input type="file" id="thumbFile" accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="progress-container" id="uploadProgressContainer" style="display: none;">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="uploadProgressBar"></div>
+                        </div>
+                        <span id="progressText">Загрузка: 0%</span>
+                    </div>
+
+                    <button class="primary-btn yellow-btn" id="startUploadBtn">ОПУБЛИКОВАТЬ НА FORVIDE</button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/studio.js"></script>
+</body>
+</html>

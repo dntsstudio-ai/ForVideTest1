@@ -1,0 +1,117 @@
+/* КАРТОЧКА ВИДЕО */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 35px;
+    padding: 20px 0;
+}
+
+.video-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+.thumb-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--fv-gray-100);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    /* Срез угла в стиле лого */
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 92% 100%, 0 100%);
+}
+
+.thumb-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.video-card:hover .thumb-wrapper img {
+    transform: scale(1.1);
+}
+
+.video-duration {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+/* ИНФОРМАЦИЯ ПОД КАРТОЧКОЙ */
+.video-details {
+    display: flex;
+    gap: 12px;
+}
+
+.author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--fv-gray-100);
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.video-title {
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.author-name {
+    font-size: 13px;
+    color: var(--fv-gray-400);
+    font-weight: 600;
+}
+
+.video-stats {
+    font-size: 12px;
+    color: var(--fv-gray-400);
+}
+
+/* КНОПКИ В КАПЛЕ */
+.drop-link {
+    padding: 15px 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: var(--fv-black);
+    font-weight: 900;
+    font-size: 20px;
+    transition: var(--transition);
+}
+
+.drop-link i { font-size: 24px; }
+.drop-link:hover {
+    background: rgba(0,0,0,0.05);
+    padding-left: 55px;
+}
+
+.drop-divider {
+    height: 2px;
+    background: rgba(0,0,0,0.1);
+    margin: 10px 40px;
+}

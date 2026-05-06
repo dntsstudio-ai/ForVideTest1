@@ -17,6 +17,13 @@ let currentUserData = null;
 // ============================================
 // TOAST (локальный, т.к. ui-controller может не быть подключен)
 // ============================================
+
+// В studio.js
+function updateChannelStyle(color) {
+    const uid = localStorage.getItem('fv_current_uid');
+    localStorage.setItem(`style_${uid}`, JSON.stringify({ bannerColor: color }));
+}
+
 function showToast(msg, type = 'info') {
     if (window.showToast) { window.showToast(msg, type); return; }
     let c = document.getElementById('toast-container');

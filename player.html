@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | Просмотр</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/player.css">
+</head>
+<body>
+
+    <header class="top-header">
+        <a href="index.html" class="logo-link">
+            <img src="main/icons/global.png" alt="ForVide Logo" class="main-logo">
+        </a>
+        <div class="search-wrapper">
+            <input type="text" placeholder="ИСКАТЬ КОНТЕНТ...">
+            <button class="search-btn"><i class="ph ph-magnifying-glass"></i></button>
+        </div>
+        <div class="header-controls">
+            <button class="toggle-menu-btn" id="openMenuBtn">МЕНЮ <i class="ph ph-caret-right"></i></button>
+        </div>
+    </header>
+
+    <main class="player-container">
+        <section class="video-main">
+            <div class="video-frame-container bento-cut">
+                <div class="video-placeholder">
+                    <i class="ph-fill ph-play-circle"></i>
+                    <span>ЗАГРУЗКА ПОТОКА...</span>
+                </div>
+            </div>
+
+            <div class="video-header">
+                <h1 id="videoTitle" class="player-title">ЗАГРУЗКА НАЗВАНИЯ...</h1>
+                <div class="video-actions">
+                    <div class="stats-group">
+                        <span id="videoViews">0 просмотров</span>
+                        <span id="videoDate">• 24 мая 2024</span>
+                    </div>
+                    <div class="buttons-group">
+                        <button class="action-btn" id="likeBtn"><i class="ph ph-heart"></i> <span id="likeCount">0</span></button>
+                        <button class="action-btn"><i class="ph ph-share-network"></i> ПОДЕЛИТЬСЯ</button>
+                        <button class="action-btn"><i class="ph ph-dots-three-outline-fill"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="author-block bento-cut">
+                <div class="author-info">
+                    <img src="" alt="" id="authorAvatar" class="avatar-lg">
+                    <div class="author-text">
+                        <h4 id="authorName">Имя Автора</h4>
+                        <span id="subsCount">0 подписчиков</span>
+                    </div>
+                </div>
+                <button class="subscribe-btn">ПОДПИСАТЬСЯ</button>
+            </div>
+
+            <div class="video-description">
+                <p id="descriptionText">Описание видео подгружается из базы данных ForVide...</p>
+                <button class="show-more">ЕЩЕ</button>
+            </div>
+
+            <section class="comments-section">
+                <h3>КОММЕНТАРИИ <span id="commCount">(0)</span></h3>
+                <div class="comment-input-block" id="commentAuthCheck">
+                    <p>Чтобы оставить комментарий, <a href="#" onclick="window.openAuthModal()">войдите</a> в аккаунт.</p>
+                </div>
+                <div class="comments-list" id="commentsList">
+                    </div>
+            </section>
+        </section>
+
+        <aside class="video-sidebar">
+            <h3>СЛЕДУЮЩЕЕ</h3>
+            <div class="next-videos" id="sidebarRecommendations">
+                </div>
+        </aside>
+    </main>
+
+    <aside class="side-drop" id="sideMenu">
+        </aside>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/player-logic.js"></script>
+</body>
+</html>

@@ -9,7 +9,6 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import { auth, db } from './firebase-init.js';
@@ -242,38 +241,6 @@ window.showAccountSwitcher = function () {
 // =====================================
 // AUTH STATE
 // =====================================
-
-onAuthStateChanged(auth, async (user) => {
-
-    if (!user) {
-
-        window.currentUser = null;
-
-        const authBtn =
-            document.getElementById('authButton');
-
-        if (authBtn) {
-            authBtn.innerText = 'Войти';
-        }
-
-        return;
-    }
-
-    window.currentUser = user;
-
-    await createUserProfile(user);
-
-    const authBtn =
-        document.getElementById('authButton');
-
-    if (authBtn) {
-
-        authBtn.innerText = 'Сменить аккаунт';
-
-        authBtn.onclick = () => {
-            showAccountSwitcher();
-        };
-    }
 
     console.log('✅ Авторизация активна');
 });

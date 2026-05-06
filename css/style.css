@@ -1,277 +1,170 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
-
+/* Базовые настройки и цвета */
 :root {
-    --bg-dark: #050505;
-    --accent-yellow: #f8c300;
-    --text-light: #ffffff;
-    --text-gray: #a0a0a0;
-    --glass-bg: rgba(10, 10, 10, 0.7);
+    --bg-main: #0f0f0f;       /* Глубокий черный фон */
+    --bg-topbar: #181818;     /* Темно-серый для верхнего бара */
+    --bg-card: #212121;       /* Цвет подложки видеокарточки */
+    --brand-yellow: #f8c300;  /* Твой фирменный желтый */
+    --text-main: #ffffff;     /* Белый текст */
+    --text-sub: #aaaaaa;      /* Серый текст для описаний */
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-light);
-    overflow-x: hidden;
+    background-color: var(--bg-main);
+    color: var(--text-main);
 }
 
-/* Скрываем скроллбар для эстетики, но оставляем функционал */
-::-webkit-scrollbar { width: 0; background: transparent; }
-
-/* --- СТЕКЛЯННАЯ ШАПКА --- */
-.glass-header {
+/* --- ВЕРХНИЙ БАР (По твоему эскизу) --- */
+.top-bar {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    height: 70px;
+    height: 64px;
+    background-color: var(--bg-topbar);
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Логотип налево, кнопки направо */
     align-items: center;
-    padding: 0 40px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    z-index: 1000;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 0 24px;
+    z-index: 100;
+    border-bottom: 2px solid #2a2a2a;
 }
 
-.site-logo {
+/* Логотип */
+.logo-area {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
     height: 40px;
     object-fit: contain;
 }
 
-.main-nav {
-    display: flex;
-    gap: 30px;
-}
-
-.main-nav a {
-    color: var(--text-light);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    opacity: 0.7;
-    transition: 0.3s;
-}
-
-.main-nav a:hover, .main-nav a.active {
-    opacity: 1;
-    color: var(--accent-yellow);
-}
-
-.header-controls {
+/* Кнопки и поиск */
+.buttons-area {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
 }
 
-.search-box {
+.search-container {
     display: flex;
     align-items: center;
-    background: rgba(255,255,255,0.1);
-    border-radius: 30px;
-    padding: 8px 15px;
-    border: 1px solid transparent;
-    transition: 0.3s;
 }
 
-.search-box:focus-within {
-    border-color: var(--accent-yellow);
-    background: rgba(0,0,0,0.5);
-}
-
-.search-box input {
-    background: transparent;
-    border: none;
-    color: white;
+.search-input {
+    background-color: var(--bg-main);
+    border: 1px solid #333;
+    color: var(--text-main);
+    padding: 8px 16px;
+    border-radius: 4px 0 0 4px;
     outline: none;
-    margin-left: 10px;
-    width: 150px;
-    transition: width 0.3s;
+    height: 36px;
+    width: 250px;
 }
 
-.search-box input:focus {
-    width: 200px;
+.search-input:focus {
+    border-color: var(--brand-yellow);
 }
 
-.icon-btn {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 24px;
+.search-btn {
+    background-color: #333;
+    border: 1px solid #333;
+    color: var(--text-main);
+    padding: 0 16px;
+    height: 36px;
+    border-radius: 0 4px 4px 0;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.icon-btn:hover { color: var(--accent-yellow); transform: translateY(-2px); }
-
-.login-btn {
-    background: var(--accent-yellow);
-    color: black;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: 0.3s;
+.search-btn:hover {
+    background-color: #444;
 }
 
-.login-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(248, 195, 0, 0.4);
-}
-
-/* --- HERO БАННЕР --- */
-.hero-section {
-    position: relative;
-    height: 80vh;
-    width: 100%;
-    display: flex;
-    align-items: flex-end;
-    padding: 80px 50px;
-}
-
-.hero-bg {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    z-index: -2;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: linear-gradient(to top, var(--bg-dark) 0%, rgba(5,5,5,0.2) 60%, rgba(5,5,5,0.8) 100%);
-    z-index: -1;
-}
-
-.hero-content {
-    max-width: 600px;
-    z-index: 10;
-}
-
-.hero-badge {
-    background: var(--accent-yellow);
-    color: black;
-    padding: 5px 10px;
+.action-btn {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--text-sub);
+    padding: 8px 16px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-.hero-title {
-    font-size: 4rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-    line-height: 1.1;
+.action-btn:hover {
+    background-color: #333;
 }
 
-.hero-desc {
-    color: var(--text-gray);
-    font-size: 1.1rem;
-    line-height: 1.5;
-    margin-bottom: 30px;
-}
-
-.hero-actions { display: flex; gap: 15px; }
-
-.play-btn, .info-btn {
-    display: flex; align-items: center; gap: 8px;
-    padding: 12px 30px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+.auth-btn {
+    background-color: var(--brand-yellow);
+    color: #000;
     border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: 0.3s;
+    font-weight: bold;
 }
 
-.play-btn { background: white; color: black; }
-.play-btn:hover { background: var(--accent-yellow); }
-
-.info-btn { background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
-.info-btn:hover { background: rgba(255,255,255,0.3); }
-
-/* --- ЛЕНТЫ ВИДЕО --- */
-.content-wrapper {
-    padding: 20px 50px 100px 50px;
-    margin-top: -50px; /* Наезд на баннер */
-    position: relative;
-    z-index: 20;
+.auth-btn:hover {
+    filter: brightness(1.1);
 }
 
-.video-shelf { margin-bottom: 40px; }
-
-.shelf-title {
-    font-size: 20px;
-    margin-bottom: 20px;
-    display: flex; align-items: center;
-    cursor: pointer;
-    transition: color 0.3s;
+/* --- СЕТКА ВИДЕОРОЛИКОВ (Ровные ряды) --- */
+.main-content {
+    margin-top: 64px; /* Отступ на высоту верхнего бара */
+    padding: 24px;
 }
 
-.shelf-title:hover { color: var(--accent-yellow); }
-
-.shelf-container {
-    display: flex;
+.video-grid {
+    display: grid;
+    /* Автоматическое заполнение ровными колонками. Минимум 280px, максимум 1fr */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 20px;
 }
 
-.shelf-container::-webkit-scrollbar { height: 6px; }
-.shelf-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
-/* КИНО-КАРТОЧКА */
-.cinematic-card {
-    min-width: 280px;
-    width: 280px;
-    aspect-ratio: 16/9;
-    border-radius: 12px;
-    position: relative;
+/* Карточка видео */
+.video-card {
+    background-color: var(--bg-card);
+    border-radius: 8px;
     overflow: hidden;
-    cursor: pointer;
-    transition: 0.4s;
-    background: #111;
+    display: flex;
+    flex-direction: column;
 }
 
-.cinematic-card img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: 0.4s;
-}
-
-.cinematic-overlay {
-    position: absolute;
-    bottom: 0; left: 0;
+.thumbnail-box {
     width: 100%;
-    padding: 20px 15px 15px 15px;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-    transform: translateY(20px);
-    opacity: 0;
-    transition: 0.4s;
+    aspect-ratio: 16/9; /* Строгий формат кадра */
+    background-color: #000;
 }
 
-.cinematic-card:hover {
-    transform: scale(1.05) translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-    z-index: 10;
+.thumbnail-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.cinematic-card:hover img { filter: brightness(0.7); }
-.cinematic-card:hover .cinematic-overlay { transform: translateY(0); opacity: 1; }
+.video-info {
+    padding: 12px;
+}
 
-.cine-title { font-size: 15px; font-weight: 600; margin-bottom: 5px; }
-.cine-author { font-size: 12px; color: var(--accent-yellow); }
+.video-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Обрезает длинный текст точками */
+}
+
+.video-meta {
+    font-size: 14px;
+    color: var(--text-sub);
+}

@@ -1,0 +1,103 @@
+/* css/player.css */
+.player-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 40px;
+    padding: 30px 60px;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+.video-frame-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--fv-black);
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+}
+
+.video-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--fv-mustard);
+    gap: 15px;
+    font-weight: 800;
+}
+
+.video-placeholder i { font-size: 80px; opacity: 0.5; }
+
+.player-title {
+    font-size: 24px;
+    font-weight: 900;
+    margin: 25px 0 15px;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.video-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--fv-gray-100);
+}
+
+.buttons-group { display: flex; gap: 10px; }
+
+.action-btn {
+    background: var(--fv-gray-100);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.action-btn:hover { background: var(--fv-mustard); color: var(--fv-black); }
+
+/* Блок автора */
+.author-block {
+    margin: 25px 0;
+    padding: 20px;
+    background: var(--fv-gray-100);
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.author-info { display: flex; align-items: center; gap: 15px; }
+
+.avatar-lg { width: 56px; height: 56px; border-radius: 50%; }
+
+.author-text h4 { font-weight: 900; font-size: 18px; }
+.author-text span { color: var(--fv-gray-400); font-size: 13px; font-weight: 600; }
+
+.subscribe-btn {
+    background: var(--fv-black);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.subscribe-btn:hover { transform: scale(1.05); background: var(--fv-mustard); color: var(--fv-black); }
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .player-container { grid-template-columns: 1fr; padding: 20px; }
+    .video-sidebar { display: none; }
+}

@@ -255,12 +255,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-window.showAccountSwitcher=function(){
- const accounts=JSON.parse(localStorage.getItem('forvide_accounts')||'[]');
- alert('Аккаунты:
+window.showAccountSwitcher = function () {
+    const accounts = JSON.parse(localStorage.getItem('forvide_accounts') || '[]');
 
-'+accounts.map(a=>'• '+a.displayName+' ('+a.email+')').join('
-')+'
+    const message = [
+        'Аккаунты:',
+        '',
+        ...accounts.map(a => `• ${a.displayName} (${a.email})`),
+        '',
+        'Для добавления нового аккаунта просто войдите через Google снова.'
+    ].join('
+');
 
-Для добавления нового аккаунта просто войдите через Google снова.');
-}
+    alert(message);
+};

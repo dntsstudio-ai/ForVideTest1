@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | VideStudio</title>
+    <meta name="description" content="VideStudio — твоя творческая студия на ForVide. Загружай видео и управляй каналом.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+
+    <!-- ШАПКА СТУДИИ -->
+    <header class="top-header">
+        <a href="index.html" class="logo-link">
+            <img src="main/icons/global.jpg" alt="ForVide" class="main-logo">
+            <span class="studio-badge">STUDIO</span>
+        </a>
+        <div class="user-profile-header" id="studioUserHeader">
+            <!-- Заполнится через JS -->
+        </div>
+    </header>
+
+    <!-- КОНТЕНТ СТУДИИ -->
+    <main class="studio-container">
+
+        <!-- ЭКРАН СОЗДАНИЯ КАНАЛА (для зрителей) -->
+        <section class="studio-card" id="createChannelSection" style="display:none; max-width:680px; margin:0 auto;">
+            <div class="setup-header">
+                <i class="ph-fill ph-rocket-launch"></i>
+                <h2>СОЗДАЙ СВОЙ КАНАЛ</h2>
+                <p>Заполни данные канала, чтобы начать публиковать видео на ForVide</p>
+            </div>
+
+            <div class="setup-form">
+                <div class="input-group">
+                    <label>Название канала *</label>
+                    <input type="text" id="newChannelName" placeholder="Например: Студия Гейминга">
+                </div>
+                <div class="input-group">
+                    <label>Уникальный никнейм (@handle) *</label>
+                    <input type="text" id="newChannelHandle" placeholder="только_буквы_и_цифры">
+                </div>
+                <div class="input-group">
+                    <label>Описание канала</label>
+                    <textarea id="newChannelDesc" placeholder="Расскажите о своём контенте..."></textarea>
+                </div>
+                <button class="primary-btn yellow-btn" id="submitCreateChannel">
+                    <i class="ph ph-rocket-launch"></i> АКТИВИРОВАТЬ КАНАЛ
+                </button>
+            </div>
+        </section>
+
+        <!-- ДАШБОРД АВТОРА -->
+        <section class="dashboard-grid" id="authorDashboardSection" style="display:none;">
+
+            <!-- АНАЛИТИКА -->
+            <div class="studio-card stats-bento">
+                <h3><i class="ph-fill ph-chart-bar" style="color:var(--fv-mustard)"></i> АНАЛИТИКА</h3>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-left">
+                            <span class="stat-num" id="statSubs">0</span>
+                            <span class="stat-label">Подписчики</span>
+                        </div>
+                        <i class="ph-fill ph-users stat-icon"></i>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-left">
+                            <span class="stat-num" id="statViews">0</span>
+                            <span class="stat-label">Просмотры</span>
+                        </div>
+                        <i class="ph-fill ph-eye stat-icon"></i>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-left">
+                            <span class="stat-num" id="statLikes">0</span>
+                            <span class="stat-label">Лайки</span>
+                        </div>
+                        <i class="ph-fill ph-heart stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ФОРМА ЗАГРУЗКИ -->
+            <div class="studio-card upload-bento">
+                <h3><i class="ph-fill ph-upload-simple" style="color:var(--fv-mustard)"></i> ЗАГРУЗИТЬ НОВЫЙ РОЛИК</h3>
+
+                <div class="input-group">
+                    <label>Название видео *</label>
+                    <input type="text" id="videoTitle" placeholder="Придумайте цепляющее название...">
+                </div>
+                <div class="input-group">
+                    <label>Описание</label>
+                    <textarea id="videoDesc" placeholder="О чём ваш ролик? Добавьте теги и ссылки..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Категория</label>
+                    <select id="videoCategory">
+                        <option value="gaming">🎮 ИГРАЕМ В...</option>
+                        <option value="stream">📡 ОБЩИЙ СБОР! СТРИМ ИДЁТ!</option>
+                        <option value="trends">🔥 ТОП 10 НЕДЕЛИ</option>
+                        <option value="legends">⭐ ЛЕГЕНДЫ?</option>
+                    </select>
+                </div>
+
+                <div class="file-pickers">
+                    <div class="file-input-wrapper" id="videoFileWrapper">
+                        <input type="file" id="videoFile" accept="video/*">
+                        <div class="file-label">
+                            <i class="ph ph-video"></i>
+                            <span>Видеофайл</span>
+                            <span style="font-size:11px;color:var(--fv-gray-400);font-weight:600;">MP4, MOV, AVI</span>
+                        </div>
+                    </div>
+                    <div class="file-input-wrapper" id="thumbFileWrapper">
+                        <input type="file" id="thumbFile" accept="image/*">
+                        <div class="file-label">
+                            <i class="ph ph-image"></i>
+                            <span>Обложка</span>
+                            <span style="font-size:11px;color:var(--fv-gray-400);font-weight:600;">PNG, JPG, WEBP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-container" id="uploadProgressContainer" style="display:none;">
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="uploadProgressBar"></div>
+                    </div>
+                    <span id="progressText">Подготовка...</span>
+                </div>
+
+                <button class="primary-btn yellow-btn" id="startUploadBtn">
+                    <i class="ph ph-upload-simple"></i> ОПУБЛИКОВАТЬ НА FORVIDE
+                </button>
+            </div>
+
+        </section>
+
+        <!-- МОИ ВИДЕО -->
+        <section class="my-videos-section" id="myVideosSection" style="display:none;">
+            <h3><i class="ph-fill ph-film-strip" style="color:var(--fv-mustard)"></i> МОИ ВИДЕО</h3>
+            <div class="video-management-list" id="videoManagementList">
+                <p style="color:var(--fv-gray-400);font-weight:600;font-size:14px;">Загрузка...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/studio.js"></script>
+
+    <script>
+        // Показываем секцию "Мои видео" только для авторов
+        // (это делается через studio.js в onAuthStateChanged)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Проверяем что секция автора показана перед показом видео
+            const observer = new MutationObserver(() => {
+                const dash = document.getElementById('authorDashboardSection');
+                const myVids = document.getElementById('myVideosSection');
+                if (dash && dash.style.display !== 'none' && myVids) {
+                    myVids.style.display = 'block';
+                }
+            });
+            const dash = document.getElementById('authorDashboardSection');
+            if (dash) observer.observe(dash, { attributes: true, attributeFilter: ['style'] });
+        });
+    </script>
+</body>
+</html>

@@ -3,384 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForVide - Web 3.0 Video Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800;900&display=swap" rel="stylesheet">
-    <style>
-        /* БАЗОВЫЕ НАСТРОЙКИ И ЦВЕТА ИЗ ЛОГОТИПА */
-        :root {
-            --fv-yellow: #FFC000;
-            --fv-black: #050505;
-            --fv-dark: #121212;
-            --fv-gray: #2A2A2A;
-            --fv-white: #FFFFFF;
-            --angle-cut: 25px; /* Острый срез, как на логотипе */
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        body {
-            background-color: var(--fv-white); /* Светлый фон как на эскизе, контрастирует с черными блоками */
-            color: var(--fv-black);
-            overflow-x: hidden;
-            padding-bottom: 120px; /* Отступ для нижней панели */
-        }
-
-        /* --- ШАПКА --- */
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background-color: var(--fv-white);
-            position: relative;
-            z-index: 10;
-        }
-
-        .logo-text {
-            font-size: 32px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            color: var(--fv-black);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        /* Имитация иконки логотипа в вебе */
-        .logo-mark {
-            width: 40px;
-            height: 30px;
-            background-color: var(--fv-yellow);
-            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0 90%, 20% 60%, 80% 50%, 20% 40%);
-        }
-
-        .search-container {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-bar {
-            width: 100%;
-            max-width: 500px;
-            background-color: var(--fv-white);
-            border: 3px solid var(--fv-black);
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: 800;
-            outline: none;
-            /* Слегка скошенные углы у поиска */
-            border-radius: 10px 0 10px 0;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar:focus {
-            border-color: var(--fv-yellow);
-            box-shadow: 5px 5px 0px var(--fv-yellow);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .toggle-btn {
-            background: transparent;
-            border: 3px solid var(--fv-black);
-            padding: 10px 20px;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
-            position: relative;
-            z-index: 1001; /* Поверх капли */
-        }
-
-        .toggle-btn:hover {
-            background: var(--fv-yellow);
-            border-color: var(--fv-yellow);
-        }
-
-        /* --- СЕТКА ВИДЕО (BENTO GRID) --- */
-        .main-content {
-            padding: 20px 40px;
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            grid-auto-rows: 250px;
-        }
-
-        /* Первый элемент делаем большим для стиля Bento */
-        .video-card:first-child {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        .video-card {
-            background-color: var(--fv-gray);
-            position: relative;
-            cursor: pointer;
-            /* Тот самый срез угла из негативного пространства логотипа */
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--angle-cut)), calc(100% - var(--angle-cut)) 100%, 0 100%);
-            transition: transform 0.3s ease;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .video-thumbnail {
-            width: 100%;
-            height: 100%;
-            background-color: #444; /* Темно-серый по твоему эскизу */
-            object-fit: cover;
-        }
-
-        /* Кнопка Плей, появляющаяся при наведении */
-        .play-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(5, 5, 5, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .video-card:hover .play-overlay {
-            opacity: 1;
-        }
-
-        .play-btn-shape {
-            width: 60px;
-            height: 60px;
-            background-color: var(--fv-yellow);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Ромбовидный/скошенный фон кнопки плей */
-            clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
-        }
-
-        .play-icon {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 16px solid var(--fv-black);
-            margin-left: 4px;
-        }
-
-        .video-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.9));
-            color: var(--fv-white);
-        }
-
-        .video-title {
-            font-size: 18px;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .video-meta {
-            font-size: 12px;
-            color: var(--fv-yellow);
-            font-weight: 800;
-        }
-
-        /* --- ЖЕЛТАЯ КАПЛЯ (БОКОВОЕ МЕНЮ) --- */
-        .side-drop {
-            position: fixed;
-            top: 0;
-            right: -450px; /* Спрятано по умолчанию */
-            width: 450px;
-            height: 100vh;
-            background-color: var(--fv-yellow);
-            /* Формируем изгиб капли на левой стороне */
-            border-radius: 50% 0 0 50% / 10% 0 0 10%;
-            transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-left: 80px; /* Сдвигаем контент от изгиба */
-        }
-
-        .side-drop.open {
-            right: 0;
-        }
-
-        .menu-link {
-            font-size: 32px;
-            font-weight: 900;
-            color: var(--fv-black);
-            text-decoration: none;
-            text-transform: uppercase;
-            margin: 15px 0;
-            transition: transform 0.2s;
-            display: inline-block;
-        }
-
-        .menu-link:hover {
-            transform: translateX(10px);
-            color: var(--fv-white);
-        }
-
-        /* --- НИЖНЯЯ НАВИГАЦИЯ --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 90px;
-            background-color: var(--fv-black);
-            /* Асимметричный срез верхней грани */
-            clip-path: polygon(0 20px, 100% 0, 100% 100%, 0 100%);
-            display: flex;
-            justify-content: space-evenly;
-            align-items: flex-end;
-            padding-bottom: 20px;
-            z-index: 900;
-        }
-
-        .nav-item {
-            color: var(--fv-white);
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 18px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: color 0.3s;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: var(--fv-yellow);
-        }
-
-        /* Декоративные точки/иконки из эскиза */
-        .nav-icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid currentColor;
-            transform: rotate(45deg);
-        }
-        
-        .nav-icon.circle { border-radius: 50%; transform: none; }
-
-        @media (max-width: 768px) {
-            .bento-grid { display: flex; flex-direction: column; }
-            .video-card:first-child { grid-column: auto; grid-row: auto; height: 250px; }
-            .bottom-nav { height: 70px; clip-path: polygon(0 10px, 100% 0, 100% 100%, 0 100%); }
-            .nav-item { font-size: 12px; }
-            .side-drop { width: 100%; border-radius: 0; right: -100%; }
-        }
-    </style>
+    <title>ForVide | Главная</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
 
-    <!-- Шапка -->
     <header class="top-header">
-        <div class="logo-text">
-            <div class="logo-mark"></div>
-            FORVIDE
+        <a href="/" class="logo-link">
+            <img src="main/icons/global.png" alt="ForVide Logo" class="main-logo">
+        </a>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="ИСКАТЬ КОНТЕНТ...">
+            <button class="search-btn"><i class="ph ph-magnifying-glass"></i></button>
         </div>
-        <div class="search-container">
-            <input type="text" class="search-bar" placeholder="ПОИСК..">
-        </div>
-        <div class="header-actions">
-            <button class="toggle-btn" id="menuToggle">Свернуть >></button>
+
+        <div class="header-controls">
+            <button class="icon-btn" title="Уведомления"><i class="ph ph-bell"></i></button>
+            <button class="toggle-menu-btn" id="openMenuBtn">МЕНЮ <i class="ph ph-caret-right"></i></button>
         </div>
     </header>
 
-    <!-- Сетка Bento Grid -->
-    <main class="main-content">
-        <div class="bento-grid" id="videoGrid">
-            <!-- Карточки генерируются скриптом ниже для примера -->
+    <aside class="side-drop" id="sideMenu">
+        <div class="side-drop-header">
+            <div class="user-mini-profile" id="menuUserProfile">
+                <img src="https://ui-avatars.com/api/?name=Guest&background=121212&color=fff" alt="Avatar" class="avatar-sm">
+                <div class="user-mini-info">
+                    <span class="user-nickname">Гость</span>
+                    <span class="user-role">Зритель</span>
+                </div>
+            </div>
+            <button class="close-drop-btn" id="closeMenuBtn"><i class="ph ph-x"></i></button>
         </div>
+
+        <nav class="drop-nav">
+            <a href="#" class="drop-link"><i class="ph ph-user"></i> Мой Профиль</a>
+            <a href="#" class="drop-link"><i class="ph ph-clock-counter-clockwise"></i> История</a>
+            <a href="#" class="drop-link"><i class="ph ph-heart"></i> Понравившееся</a>
+            
+            <div class="drop-divider"></div>
+            
+            <a href="studio.html" class="drop-link author-only"><i class="ph ph-video-camera"></i> VideStudio</a>
+            <a href="upload.html" class="drop-link author-only"><i class="ph ph-upload-simple"></i> Загрузить видео</a>
+            
+            <button class="create-channel-btn" id="createChannelTrigger">Создать канал</button>
+
+            <div class="drop-divider"></div>
+            
+            <a href="#" class="drop-link"><i class="ph ph-gear"></i> Настройки</a>
+            <button class="drop-link text-danger" id="logoutBtn"><i class="ph ph-sign-out"></i> Выйти</button>
+        </nav>
+    </aside>
+    <div class="drop-overlay" id="dropOverlay"></div>
+
+    <main class="feed-container">
+        
+        <section class="feed-section">
+            <div class="section-header">
+                <h2><i class="ph-fill ph-fire"></i> ТОП 10 НЕДЕЛИ</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="video-grid" id="trendingGrid">
+                </div>
+        </section>
+
+        <section class="feed-section">
+            <div class="section-header">
+                <h2><i class="ph-fill ph-game-controller"></i> ИГРАЕМ В...</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="video-grid" id="gamingGrid"></div>
+        </section>
+
     </main>
 
-    <!-- Боковое меню (Желтая капля) -->
-    <aside class="side-drop" id="sideDrop">
-        <a href="#" class="menu-link">Профиль</a>
-        <a href="#" class="menu-link">Мои видео</a>
-        <a href="#" class="menu-link">Загрузить</a>
-        <a href="#" class="menu-link">Настройки</a>
-    </aside>
-
-    <!-- Наклонная нижняя панель -->
     <nav class="bottom-nav">
         <a href="#" class="nav-item">
-            <span class="nav-icon"></span>
-            ТРЕНДЫ
+            <i class="ph ph-trend-up nav-icon"></i>
+            <span>ТРЕНДЫ</span>
         </a>
         <a href="#" class="nav-item active">
-            <span class="nav-icon" style="border: 2px dashed currentColor;"></span>
-            РЕКОМЕНДАЦИИ
+            <i class="ph-fill ph-house nav-icon"></i>
+            <span>ГЛАВНАЯ</span>
         </a>
         <a href="#" class="nav-item">
-            <span class="nav-icon circle"></span>
-            ГЛАВНАЯ
+            <i class="ph ph-compass nav-icon"></i>
+            <span>РЕКОМЕНДАЦИИ</span>
         </a>
     </nav>
 
-    <script>
-        // Логика открытия/закрытия желтой капли
-        const menuToggle = document.getElementById('menuToggle');
-        const sideDrop = document.getElementById('sideDrop');
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-content bento-cut">
+            <button class="close-modal"><i class="ph ph-x"></i></button>
+            <h2>ВХОД В СИСТЕМУ</h2>
+            <p>Стань частью ForVide</p>
+            <div class="auth-buttons">
+                <button class="auth-btn google-btn"><i class="ph-fill ph-google-logo"></i> Войти через Google</button>
+                <div class="modal-divider"><span>ИЛИ</span></div>
+                <input type="email" placeholder="Email" class="modal-input">
+                <input type="password" placeholder="Пароль" class="modal-input">
+                <button class="auth-btn primary-btn">Продолжить</button>
+            </div>
+        </div>
+    </div>
 
-        menuToggle.addEventListener('click', () => {
-            sideDrop.classList.toggle('open');
-            if (sideDrop.classList.contains('open')) {
-                menuToggle.innerHTML = '<< Скрыть';
-            } else {
-                menuToggle.innerHTML = 'Свернуть >>';
-            }
-        });
-
-        // Генерация серых карточек видео для демонстрации сетки
-        const grid = document.getElementById('videoGrid');
-        const titles = [
-            "ЭКСКЛЮЗИВНЫЙ ФОРМАТ", "НАШЛИ ЗАКЛАДКУ И НАС...", "UI/UX ТРЕНДЫ 2026", 
-            "КАК СОБРАТЬ ПК", "ИНТЕРВЬЮ С РАЗРАБОТЧИКОМ", "ОБЗОР FORVIDE", "СТРИМ: ИГРАЕМ"
-        ];
-
-        let html = '';
-        for (let i = 0; i < 7; i++) {
-            html += `
-                <div class="video-card">
-                    <div class="video-thumbnail"></div>
-                    <div class="play-overlay">
-                        <div class="play-btn-shape">
-                            <div class="play-icon"></div>
-                        </div>
-                    </div>
-                    <div class="video-info">
-                        <div class="video-title">${titles[i]}</div>
-                        <div class="video-meta">${(Math.random() * 5 + 1).toFixed(1)}М ПРОСМОТРОВ • ${Math.floor(Math.random() * 500) + 10} ТЫС. ЛАЙКОВ</div>
-                    </div>
-                </div>
-            `;
-        }
-        grid.innerHTML = html;
-    </script>
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/feed-generator.js"></script>
 </body>
 </html>

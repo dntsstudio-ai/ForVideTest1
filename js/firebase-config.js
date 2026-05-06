@@ -1,13 +1,9 @@
 // js/firebase-config.js
-
-// Импортируем ядро
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-// Импортируем нужные сервисы
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
-// Конфиг ForVide
 const firebaseConfig = {
     apiKey: "AIzaSyBuzCSHGT93nxZYiUkFlZaRto8chwthVXU",
     authDomain: "forvide---site1.firebaseapp.com",
@@ -18,12 +14,10 @@ const firebaseConfig = {
     measurementId: "G-RV9TQSVR7S"
 };
 
-// Инициализация
 const app = initializeApp(firebaseConfig);
 
-// Экспортируем сервисы
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-console.log("🔥 Firebase ForVide успешно инициализирован!");
+console.log("🔥 Firebase ForVide инициализирован!");

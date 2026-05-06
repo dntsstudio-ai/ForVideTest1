@@ -3,43 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForVide</title>
-    <link rel="icon" href="photo_5460840021544867925_w.jpg" type="image/jpeg">
+    <title>ForVide - Web 3.0</title>
+    <!-- Геометрический рубленый шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header class="header">
-        <div class="header-container">
-            <!-- Лево -->
-            <div class="logo">
-                <img src="photo_5460840021544867927_w.jpg" alt="Logo">
-            </div>
-
-            <!-- Центр -->
-            <div class="search-box">
-                <input type="text" placeholder="Поиск видео...">
-                <button>Найти</button>
-            </div>
-
-            <!-- Право -->
-            <div class="user-actions">
-                <button class="btn-upload"><span>+</span> Загрузить</button>
-                <button class="btn-login">Войти</button>
-            </div>
+    <!-- Угловой поиск и Логотип -->
+    <header class="top-layer">
+        <div class="logo">FOR<span class="accent">VIDE</span></div>
+        <div class="search-corner">
+            <input type="text" placeholder="SEARCH...">
         </div>
     </header>
 
-    <main class="container">
-        <div class="video-grid" id="video-grid">
-            <!-- Карточки -->
-        </div>
+    <!-- Главный экран (без скролла) -->
+    <main class="bento-grid" id="bento-container">
+        <!-- JS сгенерирует здесь асимметричные плитки -->
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2026 ForVide. Все права защищены.</p>
-    </footer>
+    <!-- Плавающая навигация в стиле приложения -->
+    <nav class="floating-nav">
+        <button class="nav-btn active">PLAY</button>
+        <button class="nav-btn">TRENDING</button>
+        <button class="nav-btn">LIBRARY</button>
+        <button class="nav-btn">STUDIO</button>
+    </nav>
 
-    <script type="module" src="js/app.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

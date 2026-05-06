@@ -3,70 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForVide - Смотри иначе</title>
+    <title>ForVide</title>
+    <!-- Иконка сайта -->
     <link rel="icon" href="photo_5460840021544867925_w.jpg" type="image/jpeg">
     <link rel="stylesheet" href="css/style.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
 
-    <!-- Стеклянная плавающая шапка -->
-    <header class="glass-header">
-        <div class="logo-wrap">
-            <img src="photo_5460840021544867927_w.jpg" alt="ForVide" class="site-logo">
+    <!-- Верхний бар -->
+    <header class="top-bar">
+        <!-- Логотип слева -->
+        <div class="logo-area">
+            <a href="index.html">
+                <img src="photo_5460840021544867927_w.jpg" alt="ForVide Logo" class="logo-img">
+            </a>
         </div>
-        
-        <nav class="main-nav">
-            <a href="#" class="active">Главная</a>
-            <a href="#">Фильмы</a>
-            <a href="#">Сериалы</a>
-            <a href="#">Аниме</a>
-            <a href="#">Стримы</a>
-        </nav>
 
-        <div class="header-controls">
-            <div class="search-box">
-                <i class='bx bx-search'></i>
-                <input type="text" placeholder="Поиск...">
+        <!-- Разные кнопки справа (и поиск) -->
+        <div class="buttons-area">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Поиск...">
+                <button class="search-btn">Найти</button>
             </div>
-            <button class="icon-btn action-btn" onclick="alert('Откроется окно загрузки')"><i class='bx bx-cloud-upload'></i></button>
-            <button class="login-btn" onclick="alert('Откроется модальное окно авторизации')">Войти</button>
+            <button class="action-btn">Загрузить</button>
+            <button class="auth-btn">Войти</button>
         </div>
     </header>
 
-    <!-- Главный баннер (Hero Section) -->
-    <section class="hero-section">
-        <div class="hero-overlay"></div>
-        <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070&auto=format&fit=crop" class="hero-bg" alt="Hero Background">
-        
-        <div class="hero-content">
-            <span class="hero-badge">Премьера на ForVide</span>
-            <h1 class="hero-title">Киберпанк: Наследие</h1>
-            <p class="hero-desc">Эксклюзивный сериал от независимых авторов. Погрузитесь в мир неоновых улиц и корпоративных войн.</p>
-            <div class="hero-actions">
-                <button class="play-btn"><i class='bx bx-play'></i> Смотреть</button>
-                <button class="info-btn"><i class='bx bx-info-circle'></i> Подробнее</button>
-            </div>
+    <!-- Сетка видеороликов -->
+    <main class="main-content">
+        <div class="video-grid" id="video-grid">
+            <!-- Карточки будут добавлены через JS -->
         </div>
-    </section>
-
-    <!-- Основной контент с горизонтальными лентами -->
-    <main class="content-wrapper">
-        
-        <section class="video-shelf">
-            <h2 class="shelf-title">Тизеры и трейлеры <i class='bx bx-chevron-right'></i></h2>
-            <div class="shelf-container" id="trailers-shelf">
-                <!-- Заполняется через JS -->
-            </div>
-        </section>
-
-        <section class="video-shelf">
-            <h2 class="shelf-title">Популярные авторские фильмы <i class='bx bx-chevron-right'></i></h2>
-            <div class="shelf-container" id="movies-shelf">
-                <!-- Заполняется через JS -->
-            </div>
-        </section>
-
     </main>
 
     <script type="module" src="js/firebase-config.js"></script>

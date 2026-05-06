@@ -1,18 +1,19 @@
 /* Базовые настройки и цвета */
 :root {
-    --bg-main: #0f0f0f;       /* Глубокий черный фон */
-    --bg-topbar: #181818;     /* Темно-серый для верхнего бара */
-    --bg-card: #212121;       /* Цвет подложки видеокарточки */
-    --brand-yellow: #f8c300;  /* Твой фирменный желтый */
-    --text-main: #ffffff;     /* Белый текст */
-    --text-sub: #aaaaaa;      /* Серый текст для описаний */
+    --bg-main: #0f0f0f;
+    --bg-topbar: #181818;
+    --bg-card: #202020;
+    --bg-card-hover: #2a2a2a;
+    --brand-yellow: #f8c300;
+    --text-main: #ffffff;
+    --text-sub: #aaaaaa;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -20,54 +21,56 @@ body {
     color: var(--text-main);
 }
 
-/* --- ВЕРХНИЙ БАР (По твоему эскизу) --- */
+/* --- ВЕРХНИЙ БАР --- */
 .top-bar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 64px;
+    height: 70px;
     background-color: var(--bg-topbar);
     display: flex;
-    justify-content: space-between; /* Логотип налево, кнопки направо */
+    justify-content: space-between;
     align-items: center;
-    padding: 0 24px;
+    padding: 0 30px;
     z-index: 100;
-    border-bottom: 2px solid #2a2a2a;
+    border-bottom: 1px solid #222;
 }
 
-/* Логотип */
 .logo-area {
-    display: flex;
-    align-items: center;
+    width: 200px; /* Фиксируем ширину для симметрии с кнопками */
 }
 
 .logo-img {
-    height: 40px;
+    height: 45px;
     object-fit: contain;
+    display: block;
 }
 
-/* Кнопки и поиск */
-.buttons-area {
+/* Центрируем поиск */
+.search-area {
+    flex-grow: 1;
     display: flex;
-    align-items: center;
-    gap: 16px;
+    justify-content: center;
+    max-width: 700px;
 }
 
 .search-container {
     display: flex;
-    align-items: center;
+    width: 100%;
+    max-width: 600px;
 }
 
 .search-input {
-    background-color: var(--bg-main);
+    flex-grow: 1;
+    background-color: #121212;
     border: 1px solid #333;
     color: var(--text-main);
-    padding: 8px 16px;
-    border-radius: 4px 0 0 4px;
+    padding: 10px 20px;
+    border-radius: 20px 0 0 20px; /* Закругляем углы */
     outline: none;
-    height: 36px;
-    width: 250px;
+    font-size: 16px;
+    transition: border-color 0.2s;
 }
 
 .search-input:focus {
@@ -75,96 +78,160 @@ body {
 }
 
 .search-btn {
-    background-color: #333;
+    background-color: #222;
     border: 1px solid #333;
-    color: var(--text-main);
-    padding: 0 16px;
-    height: 36px;
-    border-radius: 0 4px 4px 0;
+    border-left: none;
+    color: var(--text-sub);
+    padding: 0 24px;
+    border-radius: 0 20px 20px 0;
     cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .search-btn:hover {
-    background-color: #444;
+    background-color: #333;
+    color: var(--text-main);
+}
+
+.buttons-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 200px;
+    justify-content: flex-end;
 }
 
 .action-btn {
     background-color: transparent;
     color: var(--text-main);
     border: 1px solid var(--text-sub);
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 18px;
+    border-radius: 20px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
 .action-btn:hover {
     background-color: #333;
+    border-color: var(--text-main);
 }
 
 .auth-btn {
     background-color: var(--brand-yellow);
     color: #000;
     border: none;
-    padding: 8px 20px;
-    border-radius: 4px;
+    padding: 10px 24px;
+    border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    transition: 0.2s;
 }
 
 .auth-btn:hover {
-    filter: brightness(1.1);
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(248, 195, 0, 0.3);
 }
 
-/* --- СЕТКА ВИДЕОРОЛИКОВ (Ровные ряды) --- */
+/* --- СЕТКА ВИДЕОРОЛИКОВ --- */
 .main-content {
-    margin-top: 64px; /* Отступ на высоту верхнего бара */
-    padding: 24px;
+    margin-top: 70px;
+    padding: 30px;
 }
 
 .video-grid {
     display: grid;
-    /* Автоматическое заполнение ровными колонками. Минимум 280px, максимум 1fr */
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    /* Увеличил минимальную ширину карточки до 320px для крупного вида */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px; /* Увеличил отступы между видео */
 }
 
 /* Карточка видео */
 .video-card {
-    background-color: var(--bg-card);
-    border-radius: 8px;
+    background-color: transparent;
+    border-radius: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s;
+}
+
+.video-card:hover {
+    transform: translateY(-5px); /* Легкое поднятие при наведении */
+    background-color: var(--bg-card-hover); /* Подсветка фона */
 }
 
 .thumbnail-box {
     width: 100%;
-    aspect-ratio: 16/9; /* Строгий формат кадра */
+    aspect-ratio: 16/9;
     background-color: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
 }
 
 .thumbnail-box img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.video-card:hover .thumbnail-box img {
+    transform: scale(1.05); /* Легкий зум картинки */
+}
+
+.video-duration {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .video-info {
-    padding: 12px;
+    display: flex;
+    gap: 12px;
+    padding: 12px 0; /* Отступы только сверху и снизу */
+}
+
+.author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.video-text-content {
+    display: flex;
+    flex-direction: column;
 }
 
 .video-title {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--text-main);
-    margin-bottom: 6px;
-    white-space: nowrap;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Ограничивает название 2 строками */
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis; /* Обрезает длинный текст точками */
+    line-height: 1.4;
 }
 
 .video-meta {
     font-size: 14px;
     color: var(--text-sub);
+    line-height: 1.4;
+}
+
+.video-meta:hover {
+    color: var(--text-main);
 }

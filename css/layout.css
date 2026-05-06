@@ -1,0 +1,84 @@
+/* ШАПКА */
+.top-header {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid var(--fv-gray-100);
+}
+
+.main-logo {
+    height: 45px;
+    filter: drop-shadow(var(--shadow-sm));
+    transition: var(--transition);
+}
+
+.main-logo:hover { transform: scale(1.05); }
+
+.search-wrapper {
+    flex: 0 1 600px;
+    display: flex;
+    background: var(--fv-gray-100);
+    border-radius: 14px;
+    padding: 4px;
+    margin: 0 20px;
+}
+
+.search-wrapper input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+}
+
+/* ЖЕЛТАЯ КАПЛЯ */
+.side-drop {
+    position: fixed;
+    top: 0;
+    right: -500px; /* Скрыта */
+    width: 450px;
+    height: 100vh;
+    background: var(--fv-mustard);
+    z-index: 1000;
+    transition: right 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: -20px 0 50px rgba(0,0,0,0.15);
+    /* Форма капли */
+    border-radius: 40% 0 0 40% / 15% 0 0 15%;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-drop.open { right: 0; }
+
+.side-drop-header {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* НИЖНЯЯ ПАНЕЛЬ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: var(--fv-black);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 900;
+    /* Наклонная грань */
+    clip-path: polygon(0 25%, 100% 0, 100% 100%, 0 100%);
+    padding-top: 20px;
+}

@@ -229,17 +229,15 @@ window.showAccountSwitcher = function () {
         localStorage.getItem('forvide_accounts') || '[]'
     );
 
-    const message = [
-        'Аккаунты:',
-        '',
-        ...accounts.map(
-            a => `• ${a.displayName} (${a.email})`
-        ),
-        '',
-        'Для добавления нового аккаунта просто войдите через Google снова.'
-    ].join('\\n');
+    let text = 'Аккаунты:\\n\\n';
 
-    alert(message);
+    accounts.forEach(acc => {
+        text += `• ${acc.displayName} (${acc.email})\\n`;
+    });
+
+    text += '\\nДля добавления нового аккаунта войдите снова.';
+
+    alert(text);
 };
 
 // =====================================

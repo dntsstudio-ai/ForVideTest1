@@ -1,12 +1,14 @@
 // ================================
-// ForVide Auth FIXED FULL
+// ForVide Auth FULL FIXED
 // ================================
 
 console.log('AUTH JS STARTED');
 
 import {
+
     auth,
     db
+
 } from './firebase-config.js';
 
 import {
@@ -75,7 +77,7 @@ function saveAccount(userData) {
 }
 
 // =====================================
-// CREATE USER PROFILE
+// CREATE PROFILE
 // =====================================
 
 async function createUserProfile(user) {
@@ -193,6 +195,7 @@ async function register() {
         console.error(err);
 
         alert(err.message);
+
     }
 
 }
@@ -241,7 +244,10 @@ async function login() {
         console.error(err);
 
         alert(err.message);
+
     }
+
+}
 
 // =====================================
 // GOOGLE LOGIN
@@ -252,9 +258,6 @@ async function googleLogin() {
     console.log('GOOGLE BUTTON CLICKED');
 
     try {
-
-        // popup иногда блокируется на github pages
-        // fallback redirect
 
         try {
 
@@ -278,6 +281,7 @@ async function googleLogin() {
             );
 
             return;
+
         }
 
         window.showToast?.(
@@ -292,6 +296,7 @@ async function googleLogin() {
         console.error(err);
 
         alert(err.message);
+
     }
 
 }
@@ -362,10 +367,8 @@ onAuthStateChanged(auth, async (user) => {
 
         if (loginBtn) {
 
-            loginBtn.innerHTML = `
-                <i class="ph ph-sign-in"></i>
-                Войти
-            `;
+            loginBtn.innerHTML =
+                '<i class=\"ph ph-sign-in\"></i> Войти';
 
         }
 
@@ -384,10 +387,8 @@ onAuthStateChanged(auth, async (user) => {
 
     if (loginBtn) {
 
-        loginBtn.innerHTML = `
-            <i class="ph ph-user-switch"></i>
-            Сменить аккаунт
-        `;
+        loginBtn.innerHTML =
+            '<i class=\"ph ph-user-switch\"></i> Сменить аккаунт';
 
         loginBtn.onclick = () => {
 
@@ -404,8 +405,6 @@ onAuthStateChanged(auth, async (user) => {
         logoutBtn.onclick = logoutUser;
 
     }
-
-    // PROFILE UI
 
     const username =
         document.getElementById('menuUsername');

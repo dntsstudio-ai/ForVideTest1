@@ -1,5 +1,75 @@
 // js/auth.js
+// main/js/auth.js
 
+const LocalDB = {
+    // Сохраняем всех вошедших юзеров
+    syncAccounts: (user) => {
+        let accounts = JSON.parse(localStorage.getItem('fv_accounts') || '[]');
+        if (!accounts.find(a => a.uid === user.uid)) {
+            accounts.push({
+                uid: user.uid,
+                name: user.displayName,
+                photo: user.photoURL,
+                role: 'viewer' // по умолчанию
+            });
+            localStorage.setItem('fv_accounts', JSON.stringify(accounts));
+        }
+        localStorage.setItem('fv_current_uid', user.uid);
+    },
+    getAccounts: () => JSON.parse(localStorage.getItem('fv_accounts') || '[]'),
+    getCurrentUID: () => localStorage.getItem('fv_current_uid')
+};
+
+// Функция переключения
+window.switchAccount = (uid) => {
+    localStorage.setItem('fv_current_uid', uid);
+    location.reload(); 
+};
+
+// Обновление UI Капли
+export function renderAccountSystem() {
+    const dropMenu = document.querySelector('.drop-menu-content'); // Твоя "Капля"
+    const currentUid = LocalDB.getCurrentUID();
+    const accounts = LocalDB.getAccounts();
+    
+    if (!currentUid) return; // Если не вошли, ничего не меняем (остается кнопка Войти)
+
+    const currentUser = accounts.find(a => a.uid === currentUid);
+    
+    // Находим или создаем блок аккаунтов в Капле
+    let accBlock = document.getElementById('dropAccountBlock');
+    if (!accBlock) {
+        accBlock = document.createElement('div');
+        accBlock.id = 'dropAccountBlock';
+        accBlock.className = 'drop-acc-section';
+        dropMenu.prepend(accBlock); // В самый верх меню
+    }
+
+    accBlock.innerHTML = `
+        <div class="current-user-info">
+            <img src="${currentUser.photo}" class="acc-avatar-lg">
+            <div class="acc-text">
+                <span class="acc-name">${currentUser.name}</span>
+                <span class="acc-status">Активен</span>
+            </div>
+        </div>
+        <div class="accounts-list">
+            ${accounts.filter(a => a.uid !== currentUid).map(a => `
+                <div class="acc-item" onclick="switchAccount('${a.uid}')">
+                    <img src="${a.photo}" class="acc-avatar-sm">
+                    <span>${a.name}</span>
+                </div>
+            `).join('')}
+            <button class="add-acc-btn" onclick="window.openAuthModal()">
+                <i class="ph ph-plus"></i> Добавить аккаунт
+            </button>
+        </div>
+    `;
+    
+    // Скрываем кнопку "Войти" в шапке
+    const headerLogin = document.getElementById('loginBtn');
+    if (headerLogin) headerLogin.style.display = 'none';
+}
 // js/auth.js (Обновленная логика)
 const StorageDB = {
     saveUser: (user) => {

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | История</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .page-container { padding: 32px 40px 100px; max-width: 1200px; margin: 0 auto; }
+        .page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 32px; }
+        .page-title { font-size: 26px; font-weight: 900; text-transform: uppercase; display:flex; align-items:center; gap:12px; }
+        .page-title i { color: var(--fv-mustard); font-size: 32px; }
+        .clear-btn { background:transparent; border:2px solid var(--fv-danger); color:var(--fv-danger); padding:9px 20px; border-radius:var(--radius-sm); font-weight:800; font-size:13px; cursor:pointer; transition:var(--transition); }
+        .clear-btn:hover { background:var(--fv-danger); color:white; }
+        .empty-state { text-align:center; padding:80px 20px; color:var(--fv-gray-400); }
+        .empty-state i { font-size:80px; display:block; margin-bottom:20px; opacity:0.3; }
+        .empty-state h3 { font-size:20px; font-weight:900; margin-bottom:10px; color:var(--fv-black); }
+        .empty-state p { font-weight:600; font-size:14px; margin-bottom:24px; }
+        .history-date-group { margin-bottom: 36px; }
+        .history-date-label { font-weight: 800; font-size: 12px; text-transform: uppercase; color: var(--fv-gray-400); letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1.5px solid var(--fv-gray-200); }
+        @media (max-width:768px) { .page-container { padding: 20px 16px 90px; } }
+    </style>
+</head>
+<body>
+    <header class="top-header">
+        <a href="index.html" class="logo-link"><img src="main/icons/global.png" alt="ForVide" class="main-logo"></a>
+        <div style="flex:1;"></div>
+        <div class="header-controls">
+            <button class="toggle-menu-btn" id="openMenuBtn">МЕНЮ <i class="ph ph-caret-right"></i></button>
+        </div>
+    </header>
+
+    <aside class="side-drop" id="sideMenu">
+        <div class="side-drop-header">
+            <div class="user-mini-profile" id="menuUserProfile"></div>
+            <button class="close-drop-btn" id="closeMenuBtn"><i class="ph ph-x"></i></button>
+        </div>
+        <nav class="drop-nav">
+            <a href="#" class="drop-link" id="loginBtn"><i class="ph ph-sign-in"></i> Войти</a>
+            <button class="drop-link" id="switchAccountBtn" style="display:none"><i class="ph ph-arrows-left-right"></i> Сменить аккаунт</button>
+            <div id="accountSwitcherPanel" style="display:none;background:rgba(0,0,0,0.06);border-radius:12px;margin:0 16px;overflow:hidden;"></div>
+            <div class="drop-divider"></div>
+            <a href="profile.html" class="drop-link"><i class="ph ph-user"></i> Мой Профиль</a>
+            <a href="history.html" class="drop-link"><i class="ph ph-clock-counter-clockwise"></i> История</a>
+            <a href="liked.html" class="drop-link"><i class="ph ph-heart"></i> Понравившееся</a>
+            <div class="drop-divider"></div>
+            <a href="studio.html" class="drop-link author-only" style="display:none"><i class="ph ph-video-camera"></i> VideStudio</a>
+            <button class="create-channel-btn" id="createChannelTrigger" style="display:none"><i class="ph ph-rocket-launch"></i> Создать канал</button>
+            <div class="drop-divider"></div>
+            <a href="settings.html" class="drop-link"><i class="ph ph-gear"></i> Настройки</a>
+            <button class="drop-link text-danger" id="logoutBtn" style="display:none"><i class="ph ph-sign-out"></i> Выйти</button>
+        </nav>
+    </aside>
+    <div class="drop-overlay" id="dropOverlay"></div>
+
+    <main class="page-container">
+        <div class="page-header">
+            <h1 class="page-title"><i class="ph-fill ph-clock-counter-clockwise"></i> ИСТОРИЯ</h1>
+            <button class="clear-btn" id="clearHistoryBtn"><i class="ph ph-trash"></i> Очистить</button>
+        </div>
+        <div id="historyContent">
+            <div style="text-align:center;padding:60px;color:var(--fv-gray-400);font-weight:700;">
+                <i class="ph ph-spinner" style="font-size:40px;animation:spin 1s linear infinite;display:block;margin-bottom:16px;"></i>
+                Загрузка...
+            </div>
+        </div>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="ph ph-house nav-icon"></i><span>ГЛАВНАЯ</span></a>
+        <a href="history.html" class="nav-item active"><i class="ph-fill ph-clock-counter-clockwise nav-icon"></i><span>ИСТОРИЯ</span></a>
+        <a href="studio.html" class="nav-item"><i class="ph ph-video-camera nav-icon"></i><span>СТУДИЯ</span></a>
+    </nav>
+
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal"><i class="ph ph-x"></i></button>
+            <h2>ВХОД В FORVIDE</h2>
+            <p>Войди для доступа к истории</p>
+            <div class="auth-buttons">
+                <button class="auth-btn google-btn"><i class="ph-fill ph-google-logo"></i> Войти через Google</button>
+                <div class="modal-divider"><span>ИЛИ</span></div>
+                <input type="email" placeholder="Email" class="modal-input">
+                <input type="password" placeholder="Пароль" class="modal-input">
+                <button class="auth-btn primary-btn">Продолжить</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getHistory, clearHistory } from './js/local-db.js';
+
+        function groupByDate(items) {
+            const groups = {};
+            items.forEach(item => {
+                const date = new Date(item.watchedAt);
+                const today = new Date(); today.setHours(0,0,0,0);
+                const yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+                let label;
+                if (date >= today) label = 'Сегодня';
+                else if (date >= yesterday) label = 'Вчера';
+                else label = date.toLocaleDateString('ru-RU', { day:'numeric', month:'long' });
+                if (!groups[label]) groups[label] = [];
+                groups[label].push(item);
+            });
+            return groups;
+        }
+
+        function renderHistory(uid) {
+            const history = getHistory(uid);
+            const container = document.getElementById('historyContent');
+            if (!history.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="ph ph-clock-counter-clockwise"></i>
+                        <h3>История пуста</h3>
+                        <p>Просмотренные видео будут появляться здесь</p>
+                        <a href="index.html" style="display:inline-block;background:var(--fv-black);color:white;text-decoration:none;padding:12px 28px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;">НА ГЛАВНУЮ</a>
+                    </div>`;
+                return;
+            }
+            const groups = groupByDate(history);
+            container.innerHTML = Object.entries(groups).map(([date, videos]) => `
+                <div class="history-date-group">
+                    <div class="history-date-label">${date}</div>
+                    <div class="video-grid">${videos.map(v => `
+                        <a href="player.html?id=${v.id}" class="video-card">
+                            <div class="thumb-wrapper">
+                                <img src="${v.thumbnailUrl || v.thumb || 'https://picsum.photos/seed/'+v.id+'/800/450'}" loading="lazy">
+                                <div class="thumb-overlay"><div class="play-icon-overlay"><i class="ph-fill ph-play"></i></div></div>
+                                <span class="video-duration">${v.duration || ''}</span>
+                            </div>
+                            <div class="video-details">
+                                <img src="${v.authorPhotoURL || v.avatar || 'https://ui-avatars.com/api/?name=A&background=111&color=fff'}" alt="" class="author-avatar">
+                                <div class="info-content">
+                                    <h3 class="video-title">${v.title}</h3>
+                                    <span class="author-name">${v.authorName || v.author || ''}</span>
+                                    <span class="video-stats">${new Date(v.watchedAt).toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'})}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `).join('')}</div>
+                </div>
+            `).join('');
+        }
+
+        onAuthStateChanged(auth, user => {
+            if (!user) {
+                document.getElementById('historyContent').innerHTML = `
+                    <div class="empty-state">
+                        <i class="ph ph-lock"></i>
+                        <h3>Войди, чтобы видеть историю</h3>
+                        <p>История сохраняется для авторизованных пользователей</p>
+                        <button onclick="window.openAuthModal()" style="background:var(--fv-black);color:white;border:none;padding:12px 28px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;cursor:pointer;">ВОЙТИ</button>
+                    </div>`;
+                return;
+            }
+            renderHistory(user.uid);
+
+            document.getElementById('clearHistoryBtn')?.addEventListener('click', () => {
+                if (!confirm('Очистить историю просмотров?')) return;
+                clearHistory(user.uid);
+                renderHistory(user.uid);
+                window.showToast('История очищена', 'info');
+            });
+        });
+    </script>
+</body>
+</html>

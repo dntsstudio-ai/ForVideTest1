@@ -1,0 +1,155 @@
+/* ============================================
+   GLOBAL.CSS — ForVide Design System
+   ============================================ */
+
+/* LIGHT THEME (default) */
+:root {
+    --fv-mustard: #facc15;
+    --fv-mustard-dark: #d4a017;
+    --fv-black: #111111;
+    --fv-dark: #0a0a0a;
+    --fv-white: #ffffff;
+    --fv-bg: #ffffff;
+    --fv-surface: #fafafa;
+    --fv-border: #e8e8e8;
+    --fv-text: #111111;
+    --fv-text-muted: #a1a1aa;
+    --fv-gray-50: #fafafa;
+    --fv-gray-100: #f4f4f4;
+    --fv-gray-200: #e8e8e8;
+    --fv-gray-400: #a1a1aa;
+    --fv-gray-600: #52525b;
+    --fv-gray-800: #27272a;
+    --fv-danger: #ef4444;
+    --fv-success: #22c55e;
+    --fv-logo: url('../main/icons/logo_light.jpg');
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-md: 0 8px 16px rgba(0,0,0,0.12);
+    --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+    --shadow-brutal: 6px 6px 0px var(--fv-black);
+    --shadow-brutal-yellow: 6px 6px 0px var(--fv-mustard);
+
+    --transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-fast: all 0.2s ease;
+    --header-h: 72px;
+}
+
+/* DARK THEME */
+[data-theme="dark"] {
+    --fv-bg: #0a0a0a;
+    --fv-surface: #1a1a1a;
+    --fv-border: #2d2d2d;
+    --fv-text: #f4f4f4;
+    --fv-text-muted: #6b7280;
+    --fv-white: #111111;
+    --fv-black: #f4f4f4;
+    --fv-gray-50: #1a1a1a;
+    --fv-gray-100: #222222;
+    --fv-gray-200: #333333;
+    --fv-gray-400: #6b7280;
+    --fv-gray-600: #9ca3af;
+    --fv-gray-800: #d1d5db;
+    --fv-logo: url('../main/icons/logo_dark.jpg');
+}
+
+/* CUSTOM THEME */
+[data-theme="custom"] {
+    --fv-bg: var(--custom-bg, #1a0533);
+    --fv-surface: var(--custom-surface, #2d1158);
+    --fv-border: var(--custom-border, #4c1d95);
+    --fv-text: var(--custom-text, #f5f3ff);
+    --fv-text-muted: var(--custom-muted, #a78bfa);
+    --fv-white: var(--custom-surface, #2d1158);
+    --fv-black: var(--custom-text, #f5f3ff);
+    --fv-gray-50: var(--custom-surface, #2d1158);
+    --fv-gray-100: var(--custom-surface, #3b1f69);
+    --fv-gray-200: var(--custom-border, #4c1d95);
+    --fv-gray-400: #a78bfa;
+    --fv-gray-600: #c4b5fd;
+    --fv-gray-800: #ede9fe;
+    --fv-mustard: var(--custom-accent, #8b5cf6);
+    --fv-mustard-dark: var(--custom-accent-dark, #7c3aed);
+    --fv-logo: url('../main/icons/logo_inv.jpg');
+}
+
+*, *::before, *::after {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background-color: var(--fv-bg);
+    color: var(--fv-text);
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+    padding-top: var(--header-h);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button, input, textarea, select { font-family: inherit; color: var(--fv-text); }
+a { color: inherit; }
+img { display: block; }
+
+/* Утилиты */
+.text-danger { color: var(--fv-danger) !important; }
+.text-muted { color: var(--fv-text-muted); }
+.text-yellow { color: var(--fv-mustard); }
+.fw-900 { font-weight: 900; }
+.uppercase { text-transform: uppercase; }
+
+/* Скроллбар */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--fv-gray-100); }
+::-webkit-scrollbar-thumb { background: var(--fv-gray-400); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fv-text); }
+
+/* Анимации */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.animate-in { animation: fadeInUp 0.5s ease both; }
+
+.skeleton {
+    background: linear-gradient(90deg, var(--fv-gray-100) 25%, var(--fv-gray-200) 50%, var(--fv-gray-100) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+}
+
+/* Toast */
+.toast-container {
+    position: fixed;
+    bottom: 120px; right: 24px;
+    z-index: 9999;
+    display: flex; flex-direction: column; gap: 10px;
+}
+.toast {
+    background: var(--fv-text);
+    color: var(--fv-bg);
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 700; font-size: 14px;
+    animation: fadeInUp 0.3s ease;
+    display: flex; align-items: center; gap: 10px;
+    max-width: 320px;
+    box-shadow: var(--shadow-lg);
+}
+.toast.success { border-left: 4px solid var(--fv-success); }
+.toast.error { border-left: 4px solid var(--fv-danger); }
+.toast.info { border-left: 4px solid var(--fv-mustard); }

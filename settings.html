@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | Настройки</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .settings-container{padding:32px 40px 100px;max-width:800px;margin:0 auto;}
+        .settings-title{font-size:26px;font-weight:900;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:36px;color:var(--fv-text);}
+        .settings-title i{color:var(--fv-mustard);}
+        .s-card{background:var(--fv-gray-50);border:2px solid var(--fv-border);border-radius:var(--radius-xl);padding:28px 32px;margin-bottom:20px;}
+        .s-card h3{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+        .s-card h3 i{color:var(--fv-mustard);font-size:18px;}
+        .s-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--fv-border);}
+        .s-row:last-child{border-bottom:none;}
+        .s-label{font-weight:700;font-size:14px;color:var(--fv-text);}
+        .s-desc{font-size:12px;color:var(--fv-text-muted);font-weight:600;margin-top:2px;}
+        .toggle{position:relative;width:48px;height:26px;flex-shrink:0;}
+        .toggle input{opacity:0;width:0;height:0;}
+        .tslider{position:absolute;cursor:pointer;inset:0;background:var(--fv-border);border-radius:13px;transition:0.3s;}
+        .tslider::before{content:'';position:absolute;width:20px;height:20px;left:3px;bottom:3px;background:white;border-radius:50%;transition:0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+        .toggle input:checked+.tslider{background:var(--fv-mustard);}
+        .toggle input:checked+.tslider::before{transform:translateX(22px);}
+        .s-select{background:var(--fv-gray-100);border:2px solid var(--fv-border);border-radius:var(--radius-sm);padding:8px 32px 8px 12px;font-size:13px;font-weight:700;font-family:inherit;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;color:var(--fv-text);}
+        .s-select:focus{border-color:var(--fv-text);box-shadow:2px 2px 0 var(--fv-mustard);}
+        .danger-btn{background:transparent;border:2px solid var(--fv-danger);color:var(--fv-danger);padding:9px 18px;border-radius:var(--radius-sm);font-weight:800;font-size:13px;cursor:pointer;transition:var(--transition);font-family:inherit;}
+        .danger-btn:hover{background:var(--fv-danger);color:white;}
+        /* THEME PICKER */
+        .theme-picker{display:flex;gap:12px;flex-wrap:wrap;padding:16px 0;}
+        .theme-opt{border:3px solid var(--fv-border);border-radius:var(--radius-md);padding:14px 20px;cursor:pointer;transition:var(--transition);text-align:center;min-width:100px;font-weight:800;font-size:13px;}
+        .theme-opt:hover{border-color:var(--fv-text-muted);}
+        .theme-opt.active{border-color:var(--fv-mustard);box-shadow:4px 4px 0 var(--fv-mustard);}
+        .theme-opt .theme-preview{width:100%;height:36px;border-radius:8px;margin-bottom:8px;}
+        /* Custom theme */
+        .custom-vars{display:none;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;padding-top:16px;border-top:1.5px solid var(--fv-border);}
+        .custom-vars.visible{display:grid;}
+        .cvar-row{display:flex;flex-direction:column;gap:6px;}
+        .cvar-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--fv-text-muted);}
+        .cvar-input{height:40px;border:2px solid var(--fv-border);border-radius:8px;cursor:pointer;width:100%;}
+        /* Save bar */
+        .save-bar{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--fv-text);color:var(--fv-bg);padding:14px 28px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;display:none;gap:16px;align-items:center;z-index:500;box-shadow:var(--shadow-lg);animation:fadeInUp 0.3s ease;white-space:nowrap;}
+        .save-bar.visible{display:flex;}
+        .save-bar button{background:var(--fv-mustard);color:#111;border:none;padding:8px 20px;border-radius:8px;font-weight:900;font-size:13px;cursor:pointer;font-family:inherit;}
+        @media(max-width:768px){.settings-container{padding:20px 16px 100px;}.custom-vars.visible{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+    <header class="top-header">
+        <a href="index.html" class="logo-link"><img src="main/icons/logo_light.jpg" alt="ForVide" class="main-logo" id="headerLogo"></a>
+        <div style="flex:1;"></div>
+        <button class="toggle-menu-btn" id="openMenuBtn">МЕНЮ <i class="ph ph-caret-right"></i></button>
+    </header>
+
+    <aside class="side-drop" id="sideMenu">
+        <div class="side-drop-header">
+            <div class="user-mini-profile" id="menuUserProfile"></div>
+            <button class="close-drop-btn" id="closeMenuBtn"><i class="ph ph-x"></i></button>
+        </div>
+        <nav class="drop-nav">
+            <a href="#" class="drop-link" id="loginBtn"><i class="ph ph-sign-in"></i> Войти</a>
+            <button class="drop-link" id="switchAccountBtn" style="display:none"><i class="ph ph-arrows-left-right"></i> Сменить аккаунт</button>
+            <div id="accountSwitcherPanel" style="display:none;background:rgba(0,0,0,0.06);border-radius:12px;margin:0 16px;overflow:hidden;"></div>
+            <div class="drop-divider"></div>
+            <a href="profile.html" class="drop-link"><i class="ph ph-user"></i> Мой Профиль</a>
+            <a href="history.html" class="drop-link"><i class="ph ph-clock-counter-clockwise"></i> История</a>
+            <a href="liked.html" class="drop-link"><i class="ph ph-heart"></i> Понравившееся</a>
+            <div class="drop-divider"></div>
+            <a href="studio.html" class="drop-link author-only" style="display:none"><i class="ph ph-video-camera"></i> VideStudio</a>
+            <button class="create-channel-btn" id="createChannelTrigger" style="display:none"><i class="ph ph-rocket-launch"></i> Создать канал</button>
+            <div class="drop-divider"></div>
+            <a href="settings.html" class="drop-link"><i class="ph ph-gear"></i> Настройки</a>
+            <button class="drop-link text-danger" id="logoutBtn" style="display:none"><i class="ph ph-sign-out"></i> Выйти</button>
+        </nav>
+    </aside>
+    <div class="drop-overlay" id="dropOverlay"></div>
+
+    <main class="settings-container">
+        <h1 class="settings-title"><i class="ph-fill ph-gear"></i> НАСТРОЙКИ</h1>
+
+        <!-- THEME -->
+        <div class="s-card">
+            <h3><i class="ph-fill ph-paint-brush"></i> Тема оформления</h3>
+            <div class="theme-picker">
+                <div class="theme-opt active" data-theme="light" onclick="selectTheme('light',this)">
+                    <div class="theme-preview" style="background:linear-gradient(135deg,#fff 50%,#facc15 100%);border:1.5px solid #e8e8e8;"></div>
+                    ☀️ Светлая
+                </div>
+                <div class="theme-opt" data-theme="dark" onclick="selectTheme('dark',this)">
+                    <div class="theme-preview" style="background:linear-gradient(135deg,#111 50%,#facc15 100%);"></div>
+                    🌙 Тёмная
+                </div>
+                <div class="theme-opt" data-theme="custom" onclick="selectTheme('custom',this)">
+                    <div class="theme-preview" style="background:linear-gradient(135deg,#1a0533 50%,#8b5cf6 100%);"></div>
+                    🎨 Кастомная
+                </div>
+            </div>
+            <div class="custom-vars" id="customVarsPanel">
+                <div class="cvar-row"><div class="cvar-label">Фон</div><input type="color" class="cvar-input" id="cv_bg" value="#1a0533"></div>
+                <div class="cvar-row"><div class="cvar-label">Поверхности</div><input type="color" class="cvar-input" id="cv_surface" value="#2d1158"></div>
+                <div class="cvar-row"><div class="cvar-label">Текст</div><input type="color" class="cvar-input" id="cv_text" value="#f5f3ff"></div>
+                <div class="cvar-row"><div class="cvar-label">Акцент</div><input type="color" class="cvar-input" id="cv_accent" value="#8b5cf6"></div>
+            </div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="s-card">
+            <h3><i class="ph-fill ph-bell"></i> Уведомления</h3>
+            <div class="s-row">
+                <div><div class="s-label">Push-уведомления</div><div class="s-desc">Новые видео от подписок</div></div>
+                <label class="toggle"><input type="checkbox" id="notifSubs" checked><span class="tslider"></span></label>
+            </div>
+            <div class="s-row">
+                <div><div class="s-label">Уведомления о комментариях</div><div class="s-desc">Ответы на ваши комментарии</div></div>
+                <label class="toggle"><input type="checkbox" id="notifComments" checked><span class="tslider"></span></label>
+            </div>
+            <div class="s-row">
+                <div><div class="s-label">Email-рассылка</div><div class="s-desc">Дайджест новинок раз в неделю</div></div>
+                <label class="toggle"><input type="checkbox" id="notifEmail"><span class="tslider"></span></label>
+            </div>
+        </div>
+
+        <!-- PLAYBACK -->
+        <div class="s-card">
+            <h3><i class="ph-fill ph-play-circle"></i> Воспроизведение</h3>
+            <div class="s-row">
+                <div><div class="s-label">Автовоспроизведение</div><div class="s-desc">Следующее видео запускается автоматически</div></div>
+                <label class="toggle"><input type="checkbox" id="autoplay" checked><span class="tslider"></span></label>
+            </div>
+            <div class="s-row">
+                <div><div class="s-label">Качество по умолчанию</div></div>
+                <select class="s-select" id="quality">
+                    <option value="auto">Авто</option>
+                    <option value="1080">1080p HD</option>
+                    <option value="720">720p</option>
+                    <option value="480">480p</option>
+                    <option value="360">360p</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- LANGUAGE -->
+        <div class="s-card">
+            <h3><i class="ph-fill ph-translate"></i> Язык и регион</h3>
+            <div class="s-row">
+                <div><div class="s-label">Язык интерфейса</div></div>
+                <select class="s-select" id="language">
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="uk">🇺🇦 Українська</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- PRIVACY -->
+        <div class="s-card">
+            <h3><i class="ph-fill ph-shield-warning" style="color:var(--fv-danger)"></i> Приватность</h3>
+            <div class="s-row">
+                <div><div class="s-label">Публичная история</div><div class="s-desc">Другие могут видеть просмотренные видео</div></div>
+                <label class="toggle"><input type="checkbox" id="publicHistory"><span class="tslider"></span></label>
+            </div>
+            <div class="s-row">
+                <div><div class="s-label">Очистить историю</div><div class="s-desc">Удалить все просмотренные видео</div></div>
+                <button class="danger-btn" id="clearHistoryBtn"><i class="ph ph-trash"></i> Очистить</button>
+            </div>
+            <div class="s-row">
+                <div><div class="s-label">Сбросить кэш</div><div class="s-desc">Удалить локальные данные (лайки, история)</div></div>
+                <button class="danger-btn" id="clearCacheBtn"><i class="ph ph-broom"></i> Сбросить</button>
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <div class="s-card">
+            <h3><i class="ph-fill ph-info"></i> О приложении</h3>
+            <div class="s-row"><div class="s-label">Версия</div><span style="font-weight:700;font-size:13px;color:var(--fv-text-muted);">ForVide v1.2.0</span></div>
+            <div class="s-row"><div class="s-label">Сделано с ❤️ командой ForVide</div><span style="font-size:20px;">🎬</span></div>
+        </div>
+    </main>
+
+    <div class="save-bar" id="saveBar">
+        <span>Есть несохранённые изменения</span>
+        <button id="saveSettingsBtn">СОХРАНИТЬ</button>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="ph ph-house nav-icon"></i><span>ГЛАВНАЯ</span></a>
+        <a href="settings.html" class="nav-item active"><i class="ph-fill ph-gear nav-icon"></i><span>НАСТРОЙКИ</span></a>
+        <a href="studio.html" class="nav-item"><i class="ph ph-video-camera nav-icon"></i><span>СТУДИЯ</span></a>
+    </nav>
+
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal"><i class="ph ph-x"></i></button>
+            <h2>ВХОД В FORVIDE</h2><p>Войди для управления настройками</p>
+            <div class="auth-buttons">
+                <button class="auth-btn google-btn"><i class="ph-fill ph-google-logo"></i> Войти через Google</button>
+                <div class="modal-divider"><span>ИЛИ</span></div>
+                <input type="email" placeholder="Email" class="modal-input">
+                <input type="password" placeholder="Пароль" class="modal-input">
+                <button class="auth-btn primary-btn">Продолжить</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/theme.js"></script>
+    <script type="module">
+    import { auth } from './js/firebase-config.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    import { getSettings, saveSettings, clearHistory } from './js/local-db.js';
+    import { applyTheme } from './js/theme.js';
+
+    const LANG_STRINGS = {
+        ru:{ home:'ГЛАВНАЯ', settings:'НАСТРОЙКИ', studio:'СТУДИЯ' },
+        en:{ home:'HOME', settings:'SETTINGS', studio:'STUDIO' },
+        uk:{ home:'ГОЛОВНА', settings:'НАЛАШТУВАННЯ', studio:'СТУДІЯ' },
+        de:{ home:'STARTSEITE', settings:'EINSTELLUNGEN', studio:'STUDIO' }
+    };
+
+    let currentUid = null;
+    let changed = false;
+
+    // Theme selection
+    window.selectTheme = (theme, el) => {
+        document.querySelectorAll('.theme-opt').forEach(o=>o.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('customVarsPanel').classList.toggle('visible', theme==='custom');
+        const customVars = theme==='custom' ? getCustomVars() : {};
+        applyTheme(theme, customVars);
+        markChanged();
+    };
+
+    function getCustomVars() {
+        return {
+            bg: document.getElementById('cv_bg')?.value,
+            surface: document.getElementById('cv_surface')?.value,
+            text: document.getElementById('cv_text')?.value,
+            accent: document.getElementById('cv_accent')?.value,
+            accentDark: document.getElementById('cv_accent')?.value,
+        };
+    }
+
+    document.querySelectorAll('.cvar-input').forEach(inp => {
+        inp.addEventListener('input', () => {
+            if(document.querySelector('[data-theme="custom"]')?.classList.contains('active')){
+                applyTheme('custom', getCustomVars());
+                markChanged();
+            }
+        });
+    });
+
+    // Language
+    document.getElementById('language')?.addEventListener('change', function() {
+        const lang = this.value;
+        const strings = LANG_STRINGS[lang] || LANG_STRINGS.ru;
+        // Update bottom nav labels
+        const navItems = document.querySelectorAll('.nav-item span');
+        if(navItems[0]) navItems[0].textContent = strings.home;
+        if(navItems[1]) navItems[1].textContent = strings.settings;
+        if(navItems[2]) navItems[2].textContent = strings.studio;
+        // Store
+        localStorage.setItem('fv_lang', lang);
+        markChanged();
+    });
+
+    function loadSettings(uid) {
+        const s = getSettings(uid);
+        document.getElementById('notifSubs').checked = s.notifications !== false;
+        document.getElementById('notifComments').checked = s.notifComments !== false;
+        document.getElementById('notifEmail').checked = !!s.notifEmail;
+        document.getElementById('autoplay').checked = s.autoplay !== false;
+        document.getElementById('quality').value = s.quality || 'auto';
+        document.getElementById('language').value = s.language || 'ru';
+        document.getElementById('publicHistory').checked = !!s.publicHistory;
+        // Theme
+        const theme = localStorage.getItem('fv_theme') || 'light';
+        document.querySelectorAll('.theme-opt').forEach(o => {
+            o.classList.toggle('active', o.dataset.theme === theme);
+        });
+        if(theme === 'custom') document.getElementById('customVarsPanel').classList.add('visible');
+        // Custom vars
+        const cv = JSON.parse(localStorage.getItem('fv_custom_vars')||'{}');
+        if(cv.bg) document.getElementById('cv_bg').value = cv.bg;
+        if(cv.surface) document.getElementById('cv_surface').value = cv.surface;
+        if(cv.text) document.getElementById('cv_text').value = cv.text;
+        if(cv.accent) document.getElementById('cv_accent').value = cv.accent;
+    }
+
+    function markChanged() {
+        changed = true;
+        document.getElementById('saveBar').classList.add('visible');
+    }
+
+    document.querySelectorAll('.toggle input, .s-select').forEach(el => el.addEventListener('change', markChanged));
+
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+        if(!currentUid){ window.showToast('Войди для сохранения','info'); return; }
+        saveSettings(currentUid, {
+            notifications: document.getElementById('notifSubs').checked,
+            notifComments: document.getElementById('notifComments').checked,
+            notifEmail: document.getElementById('notifEmail').checked,
+            autoplay: document.getElementById('autoplay').checked,
+            quality: document.getElementById('quality').value,
+            language: document.getElementById('language').value,
+            publicHistory: document.getElementById('publicHistory').checked,
+        });
+        window.showToast('Настройки сохранены ✅','success');
+        document.getElementById('saveBar').classList.remove('visible');
+        changed = false;
+    });
+
+    document.getElementById('clearHistoryBtn')?.addEventListener('click', () => {
+        if(!currentUid){ window.showToast('Сначала войди','info'); return; }
+        if(!confirm('Очистить историю просмотров?')) return;
+        clearHistory(currentUid);
+        window.showToast('История очищена','info');
+    });
+
+    document.getElementById('clearCacheBtn')?.addEventListener('click', () => {
+        if(!confirm('Сбросить все локальные данные? Лайки и история будут удалены.')) return;
+        const keep = ['fv_linked_accounts','fv_active_account','fv_theme','fv_custom_vars'];
+        Object.keys(localStorage).forEach(k => { if(k.startsWith('fv_')&&!keep.includes(k)) localStorage.removeItem(k); });
+        window.showToast('Кэш очищен','info');
+    });
+
+    onAuthStateChanged(auth, user => { if(user){ currentUid=user.uid; loadSettings(user.uid); } });
+    </script>
+</body>
+</html>

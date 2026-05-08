@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | Профиль</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .profile-container{padding:24px 40px 100px;max-width:1200px;margin:0 auto;}
+        .profile-hero{background:var(--fv-text);border-radius:var(--radius-xl);padding:0 0 32px;margin-bottom:32px;position:relative;overflow:hidden;}
+        .profile-cover{height:200px;position:relative;background:linear-gradient(135deg,#1a1a1a,#333);overflow:hidden;}
+        .profile-cover img{width:100%;height:100%;object-fit:cover;opacity:0.5;}
+        .cover-edit-btn{position:absolute;bottom:12px;right:16px;background:rgba(255,255,255,0.2);border:none;color:white;padding:7px 16px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;backdrop-filter:blur(8px);font-family:inherit;transition:background 0.2s;}
+        .cover-edit-btn:hover{background:rgba(255,255,255,0.35);}
+        .profile-main{padding:0 32px;position:relative;margin-top:-50px;display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;}
+        .avatar-wrap{position:relative;flex-shrink:0;}
+        .profile-avatar{width:100px;height:100px;border-radius:50%;border:4px solid var(--fv-mustard);object-fit:cover;background:var(--fv-gray-200);}
+        .avatar-edit-btn{position:absolute;bottom:2px;right:2px;width:30px;height:30px;border-radius:50%;background:var(--fv-mustard);border:2px solid var(--fv-text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:var(--transition);z-index:2;}
+        .avatar-edit-btn:hover{transform:scale(1.15);}
+        .profile-info{flex:1;min-width:0;padding-bottom:4px;}
+        .profile-name{color:white;font-size:26px;font-weight:900;margin-bottom:4px;}
+        .profile-handle{color:var(--fv-mustard);font-size:13px;font-weight:700;margin-bottom:8px;}
+        .profile-bio{color:rgba(255,255,255,0.65);font-size:13px;font-weight:600;max-width:500px;line-height:1.5;}
+        .profile-stats{display:flex;gap:28px;margin-top:16px;flex-wrap:wrap;}
+        .pstat-num{color:white;font-size:22px;font-weight:900;display:block;}
+        .pstat-label{color:rgba(255,255,255,0.45);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;}
+        .profile-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;}
+        .btn-edit{background:var(--fv-mustard);color:#111;border:none;padding:9px 20px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;cursor:pointer;transition:var(--transition);font-family:inherit;}
+        .btn-edit:hover{opacity:0.85;transform:translateY(-2px);}
+        .btn-sub{background:transparent;color:white;border:2px solid rgba(255,255,255,0.3);padding:9px 20px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;cursor:pointer;transition:var(--transition);font-family:inherit;}
+        .btn-sub:hover,.btn-sub.subscribed{border-color:var(--fv-mustard);color:var(--fv-mustard);}
+        .profile-tabs{display:flex;gap:2px;border-bottom:2px solid var(--fv-border);margin-bottom:24px;overflow-x:auto;scrollbar-width:none;}
+        .profile-tabs::-webkit-scrollbar{display:none;}
+        .ptab{padding:11px 22px;font-weight:800;font-size:13px;cursor:pointer;background:none;border:none;color:var(--fv-text-muted);position:relative;transition:var(--transition);text-transform:uppercase;white-space:nowrap;font-family:inherit;}
+        .ptab::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--fv-text);transform:scaleX(0);transition:var(--transition);}
+        .ptab.active{color:var(--fv-text);}
+        .ptab.active::after{transform:scaleX(1);}
+        .tab-panel{display:none;}
+        .tab-panel.active{display:block;}
+        .empty-state{text-align:center;padding:60px 20px;color:var(--fv-text-muted);}
+        .empty-state i{font-size:64px;display:block;margin-bottom:16px;opacity:0.3;}
+        .empty-state p{font-weight:700;font-size:14px;}
+        .edit-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:3000;display:none;justify-content:center;align-items:center;padding:20px;}
+        .edit-modal.open{display:flex;}
+        .edit-box{background:var(--fv-bg);border-radius:var(--radius-xl);padding:40px;width:100%;max-width:480px;border:3px solid var(--fv-text);box-shadow:8px 8px 0 var(--fv-mustard);animation:fadeInUp 0.3s ease;max-height:90vh;overflow-y:auto;}
+        .edit-box h3{font-weight:900;font-size:20px;margin-bottom:24px;text-transform:uppercase;color:var(--fv-text);}
+        .edit-inp{width:100%;border:2px solid var(--fv-border);border-radius:var(--radius-sm);padding:12px 16px;font-size:14px;font-weight:600;outline:none;font-family:inherit;margin-bottom:14px;transition:var(--transition);background:var(--fv-gray-50);color:var(--fv-text);}
+        .edit-inp:focus{border-color:var(--fv-text);box-shadow:4px 4px 0 var(--fv-mustard);}
+        .edit-ta{resize:none;height:90px;}
+        .edit-btns{display:flex;gap:12px;margin-top:4px;}
+        .btn-save{flex:1;background:var(--fv-text);color:var(--fv-bg);border:2px solid var(--fv-text);padding:12px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;cursor:pointer;transition:var(--transition);font-family:inherit;}
+        .btn-save:hover{background:var(--fv-mustard);color:#111;border-color:#111;}
+        .btn-cancel{flex:1;background:transparent;color:var(--fv-text);border:2px solid var(--fv-border);padding:12px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;cursor:pointer;transition:var(--transition);font-family:inherit;}
+        .btn-cancel:hover{border-color:var(--fv-text);}
+        .visibility-toggle{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;cursor:pointer;color:rgba(255,255,255,0.6);background:none;border:none;font-family:inherit;padding:0;}
+        .visibility-toggle:hover{color:white;}
+        @media(max-width:768px){.profile-container{padding:16px 16px 100px;}.profile-main{padding:0 16px;}.profile-name{font-size:20px;}.profile-stats{gap:16px;}}
+    </style>
+</head>
+<body>
+    <header class="top-header">
+        <a href="index.html" class="logo-link"><img src="main/icons/logo_light.jpg" alt="ForVide" class="main-logo"></a>
+        <div style="flex:1;"></div>
+        <div class="header-controls">
+            <button class="toggle-menu-btn" id="openMenuBtn">МЕНЮ <i class="ph ph-caret-right"></i></button>
+        </div>
+    </header>
+    <aside class="side-drop" id="sideMenu">
+        <div class="side-drop-header">
+            <div class="user-mini-profile" id="menuUserProfile"></div>
+            <button class="close-drop-btn" id="closeMenuBtn"><i class="ph ph-x"></i></button>
+        </div>
+        <nav class="drop-nav">
+            <a href="#" class="drop-link" id="loginBtn"><i class="ph ph-sign-in"></i> Войти</a>
+            <button class="drop-link" id="switchAccountBtn" style="display:none"><i class="ph ph-arrows-left-right"></i> Сменить аккаунт</button>
+            <div id="accountSwitcherPanel" style="display:none;background:rgba(0,0,0,0.06);border-radius:12px;margin:0 16px;overflow:hidden;"></div>
+            <div class="drop-divider"></div>
+            <a href="profile.html" class="drop-link"><i class="ph ph-user"></i> Мой Профиль</a>
+            <a href="history.html" class="drop-link"><i class="ph ph-clock-counter-clockwise"></i> История</a>
+            <a href="liked.html" class="drop-link"><i class="ph ph-heart"></i> Понравившееся</a>
+            <div class="drop-divider"></div>
+            <a href="studio.html" class="drop-link author-only" style="display:none"><i class="ph ph-video-camera"></i> VideStudio</a>
+            <button class="create-channel-btn" id="createChannelTrigger" style="display:none"><i class="ph ph-rocket-launch"></i> Создать канал</button>
+            <div class="drop-divider"></div>
+            <a href="settings.html" class="drop-link"><i class="ph ph-gear"></i> Настройки</a>
+            <button class="drop-link text-danger" id="logoutBtn" style="display:none"><i class="ph ph-sign-out"></i> Выйти</button>
+        </nav>
+    </aside>
+    <div class="drop-overlay" id="dropOverlay"></div>
+
+    <main class="profile-container"><div id="profileContent"><div style="text-align:center;padding:80px;color:var(--fv-text-muted);"><i class="ph ph-spinner" style="font-size:40px;animation:spin 1s linear infinite;display:block;margin-bottom:16px;color:var(--fv-mustard);"></i>Загрузка...</div></div></main>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item"><i class="ph ph-house nav-icon"></i><span>ГЛАВНАЯ</span></a>
+        <a href="profile.html" class="nav-item active"><i class="ph-fill ph-user nav-icon"></i><span>ПРОФИЛЬ</span></a>
+        <a href="studio.html" class="nav-item"><i class="ph ph-video-camera nav-icon"></i><span>СТУДИЯ</span></a>
+    </nav>
+
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal"><i class="ph ph-x"></i></button>
+            <h2>ВХОД В FORVIDE</h2><p>Войди, чтобы видеть профиль</p>
+            <div class="auth-buttons">
+                <button class="auth-btn google-btn"><i class="ph-fill ph-google-logo"></i> Войти через Google</button>
+                <div class="modal-divider"><span>ИЛИ</span></div>
+                <input type="email" placeholder="Email" class="modal-input">
+                <input type="password" placeholder="Пароль" class="modal-input">
+                <button class="auth-btn primary-btn">Продолжить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE MODAL -->
+    <div class="edit-modal" id="editModal">
+        <div class="edit-box">
+            <h3>✏️ Редактировать профиль</h3>
+            <input type="text" class="edit-inp" id="editName" placeholder="Имя / Название канала">
+            <input type="text" class="edit-inp" id="editHandle" placeholder="@никнейм">
+            <textarea class="edit-inp edit-ta" id="editBio" placeholder="Расскажите о себе..."></textarea>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--fv-text);">
+                <input type="checkbox" id="editHideLiked"> Скрыть раздел «Понравившееся» в профиле
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13px;font-weight:700;cursor:pointer;color:var(--fv-text);">
+                <input type="checkbox" id="editHideHistory"> Скрыть раздел «История» в профиле
+            </label>
+            <div class="edit-btns">
+                <button class="btn-save" id="saveProfileBtn">СОХРАНИТЬ</button>
+                <button class="btn-cancel" onclick="document.getElementById('editModal').classList.remove('open')">ОТМЕНА</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+    <input type="file" id="coverFileInput" accept="image/*" style="display:none">
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/theme.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module">
+    import { auth, db, storage } from './js/firebase-config.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    import { doc, getDoc, updateDoc, collection, query, where, orderBy, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+    import { getUserProfile, saveUserProfile, getLiked, getHistory, isSubscribed, subscribe, unsubscribe } from './js/local-db.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const targetUid = params.get('uid');
+    const fmt = n => !n?'0':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(1)+'K':String(n);
+
+    async function loadProfile(uid) {
+        try { const s=await getDoc(doc(db,'users',uid)); if(s.exists()) return{id:s.id,...s.data()}; } catch {}
+        return getUserProfile(uid);
+    }
+
+    async function loadVideos(uid) {
+        try {
+            const q=query(collection(db,'videos'),where('authorId','==',uid),orderBy('createdAt','desc'),limit(12));
+            const s=await getDocs(q); const v=[]; s.forEach(d=>v.push({id:d.id,...d.data()})); return v;
+        } catch { return []; }
+    }
+
+    function videoGrid(videos) {
+        if(!videos.length) return `<div class="empty-state"><i class="ph ph-video-slash"></i><p>Видео пока нет</p></div>`;
+        return `<div class="video-grid">${videos.map(v=>`
+            <a href="player.html?id=${v.id}" class="video-card">
+                <div class="thumb-wrapper">
+                    <img src="${v.thumbnailUrl||'https://picsum.photos/seed/'+v.id+'/800/450'}" loading="lazy">
+                    <div class="thumb-overlay"><div class="play-icon-overlay"><i class="ph-fill ph-play"></i></div></div>
+                    <span class="video-duration">${v.duration||'—'}</span>
+                </div>
+                <div class="video-details">
+                    <img src="${v.authorAvatar||v.authorPhotoURL||'https://ui-avatars.com/api/?name=A&background=111&color=facc15'}" alt="" class="author-avatar">
+                    <div class="info-content">
+                        <h3 class="video-title">${v.title}</h3>
+                        <span class="author-name">${v.authorName||''}</span>
+                        <span class="video-stats">${fmt(v.views||0)} просмотров</span>
+                    </div>
+                </div>
+            </a>`).join('')}</div>`;
+    }
+
+    function likedGrid(liked) {
+        if(!liked.length) return `<div class="empty-state"><i class="ph ph-heart"></i><p>Нет понравившихся видео</p></div>`;
+        return `<div class="video-grid">${liked.map(v=>`
+            <a href="player.html?id=${v.id}" class="video-card">
+                <div class="thumb-wrapper">
+                    <img src="${v.thumbnailUrl||v.thumb||'https://picsum.photos/seed/'+v.id+'/800/450'}" loading="lazy">
+                    <div class="thumb-overlay"><div class="play-icon-overlay"><i class="ph-fill ph-play"></i></div></div>
+                </div>
+                <div class="video-details">
+                    <div class="info-content">
+                        <h3 class="video-title">${v.title}</h3>
+                        <span class="author-name">${v.authorName||v.author||''}</span>
+                        <span class="video-stats">${fmt(v.views||0)} просмотров</span>
+                    </div>
+                </div>
+            </a>`).join('')}</div>`;
+    }
+
+    function historyGrid(history) {
+        if(!history.length) return `<div class="empty-state"><i class="ph ph-clock-counter-clockwise"></i><p>История пуста</p></div>`;
+        return `<div class="video-grid">${history.map(v=>`
+            <a href="player.html?id=${v.id}" class="video-card">
+                <div class="thumb-wrapper">
+                    <img src="${v.thumbnailUrl||v.thumb||'https://picsum.photos/seed/'+v.id+'/800/450'}" loading="lazy">
+                    <div class="thumb-overlay"><div class="play-icon-overlay"><i class="ph-fill ph-play"></i></div></div>
+                </div>
+                <div class="video-details">
+                    <div class="info-content">
+                        <h3 class="video-title">${v.title}</h3>
+                        <span class="author-name">${v.authorName||v.author||''}</span>
+                        <span class="video-stats">${fmt(v.views||0)} просмотров · ${new Date(v.watchedAt).toLocaleDateString('ru-RU')}</span>
+                    </div>
+                </div>
+            </a>`).join('')}</div>`;
+    }
+
+    async function render(profile, currentUser) {
+        const isOwn = currentUser && currentUser.uid === profile.uid;
+        const isAuthor = ['author','moderator','admin'].includes(profile.role);
+        const liked = getLiked(profile.uid);
+        const history = getHistory(profile.uid);
+        const subbed = currentUser ? isSubscribed(currentUser.uid, profile.uid) : false;
+        const videos = isAuthor ? await loadVideos(profile.uid) : [];
+        const hideLiked = profile.hideLiked;
+        const hideHistory = profile.hideHistory;
+
+        const roleLabel = {author:'АВТОР',moderator:'🛡️ МОДЕРАТОР',admin:'👑 АДМИНИСТРАТОР',viewer:''}[profile.role]||'';
+
+        document.getElementById('profileContent').innerHTML = `
+            <div class="profile-hero">
+                <div class="profile-cover">
+                    ${profile.coverURL?`<img src="${profile.coverURL}" id="coverImg">`:'<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 100%);"></div>'}
+                    ${isOwn?`<button class="cover-edit-btn" id="editCoverBtn"><i class="ph ph-camera"></i> Изменить обложку</button>`:''}
+                </div>
+                <div class="profile-main">
+                    <div class="avatar-wrap">
+                        <img src="${profile.photoURL||'https://ui-avatars.com/api/?name=U&background=111&color=facc15'}" class="profile-avatar" id="avatarImg">
+                        ${isOwn?`<button class="avatar-edit-btn" id="editAvatarBtn"><i class="ph ph-pencil"></i></button>`:''}
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">${profile.displayName} ${roleLabel?`<span style="font-size:14px;opacity:0.7;">${roleLabel}</span>`:''}</div>
+                        ${profile.handle?`<div class="profile-handle">${profile.handle}</div>`:''}
+                        <div class="profile-bio">${profile.bio||''}</div>
+                        <div class="profile-stats">
+                            ${isAuthor?`<div class="pstat"><span class="pstat-num">${fmt(profile.subscribers||0)}</span><span class="pstat-label">Подписчики</span></div>`:''}
+                            ${isAuthor?`<div class="pstat"><span class="pstat-num">${fmt(profile.totalViews||0)}</span><span class="pstat-label">Просмотры</span></div>`:''}
+                            ${isOwn?`<div class="pstat"><span class="pstat-num">${liked.length}</span><span class="pstat-label">Лайки</span></div>`:''}
+                            ${isOwn?`<div class="pstat"><span class="pstat-num">${history.length}</span><span class="pstat-label">История</span></div>`:''}
+                        </div>
+                        <div class="profile-actions">
+                            ${isOwn?`<button class="btn-edit" id="openEditBtn"><i class="ph ph-pencil-simple"></i> Редактировать</button>`:''}
+                            ${isAuthor&&!isOwn&&currentUser?`<button class="btn-sub ${subbed?'subscribed':''}" id="subBtn">${subbed?'✓ ПОДПИСАН':'ПОДПИСАТЬСЯ'}</button>`:''}
+                            ${isOwn&&isAuthor?`<a href="studio.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);color:white;text-decoration:none;padding:9px 18px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;border:2px solid rgba(255,255,255,0.2);transition:var(--transition);" onmouseover="this.style.borderColor='var(--fv-mustard)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)'"><i class="ph ph-video-camera"></i> Студия</a>`:''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tabs" id="profileTabs">
+                ${isAuthor?`<button class="ptab active" data-tab="videos">Видео (${videos.length})</button>`:''}
+                ${isOwn&&!hideLiked?`<button class="ptab ${!isAuthor?'active':''}" data-tab="liked">Понравившееся (${liked.length})</button>`:''}
+                ${isOwn&&!hideHistory?`<button class="ptab" data-tab="history">История (${history.length})</button>`:''}
+                ${isOwn&&!isAuthor?`<button class="ptab ${!isOwn||hideLiked?'active':''}" data-tab="become">Стать автором</button>`:''}
+            </div>
+
+            ${isAuthor?`<div class="tab-panel active" id="tab-videos">${videoGrid(videos)}</div>`:''}
+            ${isOwn&&!hideLiked?`<div class="tab-panel ${!isAuthor?'active':''}" id="tab-liked">${likedGrid(liked)}</div>`:''}
+            ${isOwn&&!hideHistory?`<div class="tab-panel" id="tab-history">${historyGrid(history)}</div>`:''}
+            ${isOwn&&!isAuthor?`<div class="tab-panel" id="tab-become" style="text-align:center;padding:60px 20px;"><i class="ph-fill ph-rocket-launch" style="font-size:72px;color:var(--fv-mustard);display:block;margin-bottom:20px;"></i><h3 style="font-size:24px;font-weight:900;margin-bottom:12px;">СТАНЬ АВТОРОМ ForVide</h3><p style="color:var(--fv-text-muted);font-weight:600;margin-bottom:28px;">Создай свой канал и начни загружать видео — бесплатно!</p><a href="studio.html" style="display:inline-block;background:var(--fv-mustard);color:#111;text-decoration:none;padding:14px 36px;border-radius:var(--radius-sm);font-weight:900;font-size:15px;border:2px solid #111;box-shadow:4px 4px 0 #111;">СОЗДАТЬ КАНАЛ</a></div>`:''}
+        `;
+
+        // TABS
+        document.querySelectorAll('.ptab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-'+tab.dataset.tab)?.classList.add('active');
+            });
+        });
+
+        // EDIT PROFILE
+        document.getElementById('openEditBtn')?.addEventListener('click', () => {
+            document.getElementById('editName').value = profile.displayName||'';
+            document.getElementById('editHandle').value = (profile.handle||'').replace('@','');
+            document.getElementById('editBio').value = profile.bio||'';
+            document.getElementById('editHideLiked').checked = !!profile.hideLiked;
+            document.getElementById('editHideHistory').checked = !!profile.hideHistory;
+            document.getElementById('editModal').classList.add('open');
+        });
+
+        document.getElementById('saveProfileBtn')?.addEventListener('click', async () => {
+            const newName = document.getElementById('editName').value.trim();
+            if(!newName){ window.showToast('Введите имя','error'); return; }
+            const updates = {
+                displayName: newName,
+                handle: document.getElementById('editHandle').value.trim() ? '@'+document.getElementById('editHandle').value.trim() : '',
+                bio: document.getElementById('editBio').value.trim(),
+                hideLiked: document.getElementById('editHideLiked').checked,
+                hideHistory: document.getElementById('editHideHistory').checked,
+            };
+            try { await updateDoc(doc(db,'users',profile.uid), updates); } catch {}
+            saveUserProfile(profile.uid, {...profile,...updates});
+            window.showToast('Профиль сохранён ✅','success');
+            document.getElementById('editModal').classList.remove('open');
+            setTimeout(()=>window.location.reload(), 800);
+        });
+
+        // AVATAR EDIT
+        const avatarBtn = document.getElementById('editAvatarBtn');
+        const avatarInput = document.getElementById('avatarFileInput');
+        avatarBtn?.addEventListener('click', () => avatarInput?.click());
+        avatarInput?.addEventListener('change', async () => {
+            const file = avatarInput.files[0];
+            if(!file) return;
+            window.showToast('Загрузка аватара...','info');
+            try {
+                const r = ref(storage, `avatars/${profile.uid}/${Date.now()}_${file.name}`);
+                await uploadBytes(r, file, {contentType: file.type});
+                const url = await getDownloadURL(r);
+                await updateDoc(doc(db,'users',profile.uid), {photoURL:url});
+                saveUserProfile(profile.uid, {...profile, photoURL:url});
+                document.getElementById('avatarImg').src = url;
+                window.showToast('Аватар обновлён! ✅','success');
+            } catch(e) { window.showToast('Ошибка загрузки: '+e.message,'error'); }
+        });
+
+        // COVER EDIT
+        const coverBtn = document.getElementById('editCoverBtn');
+        const coverInput = document.getElementById('coverFileInput');
+        coverBtn?.addEventListener('click', () => coverInput?.click());
+        coverInput?.addEventListener('change', async () => {
+            const file = coverInput.files[0];
+            if(!file) return;
+            window.showToast('Загрузка обложки...','info');
+            try {
+                const r = ref(storage, `covers/${profile.uid}/${Date.now()}_${file.name}`);
+                await uploadBytes(r, file, {contentType: file.type});
+                const url = await getDownloadURL(r);
+                await updateDoc(doc(db,'users',profile.uid), {coverURL:url});
+                saveUserProfile(profile.uid, {...profile, coverURL:url});
+                const coverDiv = document.querySelector('.profile-cover');
+                if(coverDiv) coverDiv.style.backgroundImage = `url('${url}')`;
+                window.showToast('Обложка обновлена! ✅','success');
+            } catch(e) { window.showToast('Ошибка загрузки: '+e.message,'error'); }
+        });
+
+        // SUBSCRIBE
+        document.getElementById('subBtn')?.addEventListener('click', () => {
+            if(!currentUser){ window.openAuthModal(); return; }
+            const now = isSubscribed(currentUser.uid, profile.uid);
+            const btn = document.getElementById('subBtn');
+            if(now){ unsubscribe(currentUser.uid, profile.uid); btn.textContent='ПОДПИСАТЬСЯ'; btn.classList.remove('subscribed'); window.showToast('Отписались','info'); }
+            else { subscribe(currentUser.uid, profile.uid); btn.textContent='✓ ПОДПИСАН'; btn.classList.add('subscribed'); window.showToast('Подписались! 🔔','success'); }
+        });
+    }
+
+    // MAIN
+    onAuthStateChanged(auth, async user => {
+        const uid = targetUid || user?.uid;
+        if(!uid){
+            document.getElementById('profileContent').innerHTML=`<div style="text-align:center;padding:80px;"><i class="ph ph-user-circle" style="font-size:80px;color:var(--fv-text-muted);display:block;margin-bottom:20px;"></i><h3 style="font-size:20px;font-weight:900;margin-bottom:12px;color:var(--fv-text);">Войди, чтобы увидеть профиль</h3><button onclick="window.openAuthModal()" style="background:var(--fv-text);color:var(--fv-bg);border:none;padding:12px 28px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;cursor:pointer;">ВОЙТИ</button></div>`;
+            return;
+        }
+        const profile = await loadProfile(uid);
+        if(!profile){ document.getElementById('profileContent').innerHTML=`<div class="empty-state"><i class="ph ph-user-x"></i><p>Пользователь не найден</p></div>`; return; }
+        await render(profile, user);
+    });
+
+    document.getElementById('editModal')?.addEventListener('click', e => {
+        if(e.target===document.getElementById('editModal')) document.getElementById('editModal').classList.remove('open');
+    });
+    </script>
+</body>
+</html>

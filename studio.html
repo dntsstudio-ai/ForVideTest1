@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForVide | VideStudio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+    <header class="top-header">
+        <a href="index.html" class="logo-link">
+            <img src="main/icons/logo_light.jpg" alt="ForVide" class="main-logo">
+            <span class="studio-badge">STUDIO</span>
+        </a>
+        <div class="user-profile-header" id="studioUserHeader"></div>
+    </header>
+
+    <main class="studio-container">
+
+        <div id="studioLoading" style="text-align:center;padding:80px;color:var(--fv-text-muted);">
+            <i class="ph-fill ph-spinner" style="font-size:48px;animation:spin 1s linear infinite;display:block;margin-bottom:16px;color:var(--fv-mustard);"></i>
+            <span style="font-weight:700;font-size:14px;">Проверка авторизации...</span>
+        </div>
+
+        <!-- СОЗДАНИЕ КАНАЛА -->
+        <section class="studio-card" id="createChannelSection" style="display:none;max-width:680px;margin:0 auto;">
+            <div class="setup-header">
+                <i class="ph-fill ph-rocket-launch"></i>
+                <h2>СОЗДАЙ СВОЙ КАНАЛ</h2>
+                <p>Заполни данные канала, чтобы начать публиковать видео</p>
+            </div>
+            <div class="setup-form">
+                <div class="input-group"><label>Название канала *</label><input type="text" id="newChannelName" placeholder="Например: Студия Гейминга"></div>
+                <div class="input-group"><label>Никнейм (@handle) *</label><input type="text" id="newChannelHandle" placeholder="только_буквы_и_цифры"></div>
+                <div class="input-group"><label>Описание</label><textarea id="newChannelDesc" placeholder="Расскажите о своём контенте..."></textarea></div>
+                <button class="primary-btn yellow-btn" id="submitCreateChannel"><i class="ph ph-rocket-launch"></i> АКТИВИРОВАТЬ КАНАЛ</button>
+            </div>
+        </section>
+
+        <!-- ДАШБОРД АВТОРА -->
+        <section class="dashboard-grid" id="authorDashboardSection" style="display:none;">
+            <div class="studio-card stats-bento">
+                <h3><i class="ph-fill ph-chart-bar" style="color:var(--fv-mustard)"></i> АНАЛИТИКА</h3>
+                <div class="stats-grid">
+                    <div class="stat-box"><div class="stat-left"><span class="stat-num" id="statSubs">0</span><span class="stat-label">Подписчики</span></div><i class="ph-fill ph-users stat-icon"></i></div>
+                    <div class="stat-box"><div class="stat-left"><span class="stat-num" id="statViews">0</span><span class="stat-label">Просмотры</span></div><i class="ph-fill ph-eye stat-icon"></i></div>
+                    <div class="stat-box"><div class="stat-left"><span class="stat-num" id="statLikes">0</span><span class="stat-label">Лайки</span></div><i class="ph-fill ph-heart stat-icon"></i></div>
+                </div>
+                <a href="profile.html" style="display:flex;align-items:center;gap:8px;margin-top:20px;background:var(--fv-gray-50);border:2px solid var(--fv-border);border-radius:var(--radius-sm);padding:12px 16px;text-decoration:none;color:var(--fv-text);font-weight:800;font-size:13px;">
+                    <i class="ph ph-arrow-square-out"></i> Мой канал
+                </a>
+            </div>
+            <div class="studio-card upload-bento">
+                <h3><i class="ph-fill ph-upload-simple" style="color:var(--fv-mustard)"></i> ЗАГРУЗИТЬ НОВЫЙ РОЛИК</h3>
+                <div class="input-group"><label>Название видео *</label><input type="text" id="videoTitle" placeholder="Придумайте цепляющее название..."></div>
+                <div class="input-group"><label>Описание</label><textarea id="videoDesc" placeholder="О чём ваш ролик?"></textarea></div>
+                <div class="input-group">
+                    <label>Категория</label>
+                    <select id="videoCategory">
+                        <option value="gaming">🎮 ИГРАЕМ В...</option>
+                        <option value="stream">📡 СТРИМЫ</option>
+                        <option value="trends">🔥 ТОП НЕДЕЛИ</option>
+                        <option value="legends">⭐ ЛЕГЕНДЫ</option>
+                    </select>
+                </div>
+                <div class="file-pickers">
+                    <div class="file-input-wrapper"><input type="file" id="videoFile" accept="video/*"><div class="file-label"><i class="ph ph-video"></i><span>Видеофайл</span><span style="font-size:11px;color:var(--fv-text-muted);font-weight:600;">MP4, MOV, AVI</span></div></div>
+                    <div class="file-input-wrapper"><input type="file" id="thumbFile" accept="image/*"><div class="file-label"><i class="ph ph-image"></i><span>Обложка</span><span style="font-size:11px;color:var(--fv-text-muted);font-weight:600;">PNG, JPG, WEBP</span></div></div>
+                </div>
+                <div class="progress-container" id="uploadProgressContainer" style="display:none;">
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="uploadProgressBar"></div></div>
+                    <span id="progressText">Подготовка...</span>
+                </div>
+                <button class="primary-btn yellow-btn" id="startUploadBtn"><i class="ph ph-upload-simple"></i> ОПУБЛИКОВАТЬ НА FORVIDE</button>
+            </div>
+        </section>
+
+        <!-- МОИ ВИДЕО -->
+        <section class="my-videos-section" id="myVideosSection" style="display:none;">
+            <h3><i class="ph-fill ph-film-strip" style="color:var(--fv-mustard)"></i> МОИ ВИДЕО</h3>
+            <div class="video-management-list" id="videoManagementList"></div>
+        </section>
+
+        <!-- ADMIN/MOD PANEL -->
+        <section id="adminSection" style="display:none;margin-top:36px;">
+            <div class="studio-card" style="margin-bottom:24px;">
+                <h3 style="font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);margin-bottom:20px;">
+                    <i class="ph-fill ph-shield-check" style="color:var(--fv-mustard)"></i> ПАНЕЛЬ УПРАВЛЕНИЯ
+                </h3>
+                <!-- Быстрые кнопки -->
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+                    <button onclick="openModal('assignRoleModal')" style="background:var(--fv-mustard);color:#111;border:none;padding:10px 18px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;cursor:pointer;"><i class="ph ph-shield"></i> Выдать роль</button>
+                    <button onclick="openModal('banModal')" style="background:var(--fv-danger);color:white;border:none;padding:10px 18px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;cursor:pointer;"><i class="ph ph-prohibit"></i> Бан / Мьют</button>
+                    <button onclick="openModal('staffModal')" style="background:var(--fv-gray-100);color:var(--fv-text);border:2px solid var(--fv-border);padding:10px 18px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;cursor:pointer;"><i class="ph ph-users-three"></i> Список стафа</button>
+                    <button onclick="openModal('bannerModal')" style="background:var(--fv-gray-100);color:var(--fv-text);border:2px solid var(--fv-border);padding:10px 18px;border-radius:var(--radius-sm);font-weight:900;font-size:13px;cursor:pointer;"><i class="ph ph-image"></i> Рекламный баннер</button>
+                </div>
+                <!-- Статистика сайта -->
+                <div style="font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);margin-bottom:12px;">Статистика сайта</div>
+                <div class="stats-grid" id="adminStats"></div>
+                <!-- Топ видео -->
+                <div style="font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);margin:20px 0 12px;">Топ 3 видео</div>
+                <div id="adminTopVideos"></div>
+            </div>
+            <!-- Жалобы -->
+            <div class="studio-card">
+                <h3 style="font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+                    <i class="ph-fill ph-warning" style="color:var(--fv-danger)"></i> ЖАЛОБЫ
+                </h3>
+                <div id="adminReportsList"><p style="color:var(--fv-text-muted);font-weight:600;font-size:13px;">Загрузка...</p></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: ASSIGN ROLE -->
+    <div id="assignRoleModal" class="fv-modal-backdrop" style="display:none;">
+        <div class="fv-modal-box">
+            <div class="fv-modal-header"><h3>🛡️ Выдать / Снять роль</h3><button class="fv-modal-close" onclick="closeModal('assignRoleModal')"><i class="ph ph-x"></i></button></div>
+            <input type="text" id="roleSearchInput" placeholder="Введите @handle или имя..." class="fv-modal-input" oninput="searchUsersForRole(this.value)">
+            <div id="roleUserResults" style="margin-top:12px;max-height:200px;overflow-y:auto;"></div>
+            <div id="roleSelectedUser" style="display:none;margin-top:16px;padding:12px;background:var(--fv-gray-50);border-radius:var(--radius-sm);border:2px solid var(--fv-border);"></div>
+            <div style="margin-top:16px;">
+                <label style="font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);display:block;margin-bottom:8px;">Роль</label>
+                <select id="roleSelect" class="fv-modal-input">
+                    <option value="viewer">Зритель</option>
+                    <option value="author">Автор</option>
+                    <option value="moderator">Модератор</option>
+                    <option value="admin">Администратор</option>
+                </select>
+            </div>
+            <button onclick="applyRole()" class="fv-modal-btn" style="margin-top:16px;">ПРИМЕНИТЬ</button>
+        </div>
+    </div>
+
+    <!-- MODAL: BAN -->
+    <div id="banModal" class="fv-modal-backdrop" style="display:none;">
+        <div class="fv-modal-box">
+            <div class="fv-modal-header"><h3>🚫 Бан / Мьют / Предупреждение</h3><button class="fv-modal-close" onclick="closeModal('banModal')"><i class="ph ph-x"></i></button></div>
+            <input type="text" id="banSearchInput" placeholder="@handle или имя..." class="fv-modal-input" oninput="searchUsersForBan(this.value)">
+            <div id="banUserResults" style="margin-top:12px;max-height:200px;overflow-y:auto;"></div>
+            <div id="banSelectedUser" style="display:none;margin-top:16px;padding:12px;background:var(--fv-gray-50);border-radius:var(--radius-sm);border:2px solid var(--fv-border);"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+                <div>
+                    <label style="font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);display:block;margin-bottom:8px;">Действие</label>
+                    <select id="banAction" class="fv-modal-input">
+                        <option value="ban">Бан</option>
+                        <option value="mute">Мьют (запрет комментариев)</option>
+                        <option value="warn">Предупреждение</option>
+                        <option value="unban">Снять бан</option>
+                        <option value="unmute">Снять мьют</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);display:block;margin-bottom:8px;">Срок</label>
+                    <select id="banDuration" class="fv-modal-input">
+                        <option value="1">1 час</option>
+                        <option value="24">24 часа</option>
+                        <option value="72">3 дня</option>
+                        <option value="168">7 дней</option>
+                        <option value="720">30 дней</option>
+                        <option value="forever">Навсегда</option>
+                    </select>
+                </div>
+            </div>
+            <input type="text" id="banReason" placeholder="Причина..." class="fv-modal-input" style="margin-top:12px;">
+            <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-weight:700;font-size:13px;cursor:pointer;">
+                <input type="checkbox" id="banDeleteContent"> Удалить весь контент пользователя
+            </label>
+            <button onclick="applyBan()" class="fv-modal-btn" style="margin-top:16px;background:var(--fv-danger);">ПРИМЕНИТЬ</button>
+        </div>
+    </div>
+
+    <!-- MODAL: STAFF LIST -->
+    <div id="staffModal" class="fv-modal-backdrop" style="display:none;">
+        <div class="fv-modal-box">
+            <div class="fv-modal-header"><h3>👥 Администраторы и Модераторы</h3><button class="fv-modal-close" onclick="closeModal('staffModal')"><i class="ph ph-x"></i></button></div>
+            <div id="staffList"><p style="color:var(--fv-text-muted);font-weight:600;">Загрузка...</p></div>
+        </div>
+    </div>
+
+    <!-- MODAL: BANNER -->
+    <div id="bannerModal" class="fv-modal-backdrop" style="display:none;">
+        <div class="fv-modal-box" style="max-width:560px;">
+            <div class="fv-modal-header"><h3>🎯 Рекламный баннер</h3><button class="fv-modal-close" onclick="closeModal('bannerModal')"><i class="ph ph-x"></i></button></div>
+            <div style="display:grid;gap:12px;">
+                <div><label class="fv-modal-label">Заголовок</label><input type="text" id="bannerTitle" class="fv-modal-input" placeholder="Например: Новый курс по дизайну!"></div>
+                <div><label class="fv-modal-label">Подзаголовок</label><input type="text" id="bannerSubtitle" class="fv-modal-input" placeholder="Короткое описание..."></div>
+                <div><label class="fv-modal-label">Ссылка</label><input type="url" id="bannerUrl" class="fv-modal-input" placeholder="https://..."></div>
+                <div><label class="fv-modal-label">Цвет фона</label><input type="color" id="bannerBg" value="#facc15" style="width:100%;height:42px;border:2px solid var(--fv-border);border-radius:var(--radius-sm);cursor:pointer;"></div>
+                <div><label class="fv-modal-label">Цвет текста</label><input type="color" id="bannerColor" value="#111111" style="width:100%;height:42px;border:2px solid var(--fv-border);border-radius:var(--radius-sm);cursor:pointer;"></div>
+                <div><label class="fv-modal-label">Тип баннера</label>
+                    <select id="bannerType" class="fv-modal-input">
+                        <option value="top">Верхний (под шапкой)</option>
+                        <option value="feed">В ленте</option>
+                        <option value="popup">Всплывающий</option>
+                    </select>
+                </div>
+                <!-- Preview -->
+                <div style="margin-top:8px;">
+                    <div class="fv-modal-label">Предпросмотр</div>
+                    <div id="bannerPreview" style="padding:16px 20px;border-radius:var(--radius-sm);background:#facc15;color:#111;font-weight:900;font-size:15px;text-align:center;cursor:pointer;margin-top:8px;transition:all 0.2s;">
+                        <div id="bannerPreviewTitle">Новый курс по дизайну!</div>
+                        <div id="bannerPreviewSub" style="font-weight:600;font-size:12px;opacity:0.7;margin-top:4px;">Короткое описание...</div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="publishBanner()" class="fv-modal-btn" style="margin-top:16px;">ОПУБЛИКОВАТЬ БАННЕР</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/theme.js"></script>
+    <script type="module" src="js/ui-controller.js"></script>
+    <script type="module" src="js/studio.js"></script>
+
+    <style>
+    .fv-modal-backdrop { position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:3000;display:none;justify-content:center;align-items:center;padding:20px; }
+    .fv-modal-backdrop.open { display:flex; }
+    .fv-modal-box { background:var(--fv-bg);border-radius:var(--radius-xl);padding:36px;width:100%;max-width:480px;border:2.5px solid var(--fv-text);box-shadow:8px 8px 0 var(--fv-mustard);animation:fadeInUp 0.3s ease;max-height:90vh;overflow-y:auto; }
+    .fv-modal-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:20px; }
+    .fv-modal-header h3 { font-weight:900;font-size:18px;color:var(--fv-text); }
+    .fv-modal-close { background:var(--fv-gray-100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:var(--transition); }
+    .fv-modal-close:hover { background:var(--fv-text);color:var(--fv-bg);transform:rotate(90deg); }
+    .fv-modal-input { width:100%;padding:11px 14px;border:2px solid var(--fv-border);border-radius:var(--radius-sm);font-size:14px;font-weight:600;outline:none;background:var(--fv-gray-50);color:var(--fv-text);font-family:inherit;transition:var(--transition); }
+    .fv-modal-input:focus { border-color:var(--fv-text);box-shadow:3px 3px 0 var(--fv-mustard); }
+    .fv-modal-label { font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--fv-text-muted);display:block;margin-bottom:6px; }
+    .fv-modal-btn { width:100%;background:var(--fv-text);color:var(--fv-bg);border:none;padding:13px;border-radius:var(--radius-sm);font-weight:900;font-size:14px;cursor:pointer;transition:var(--transition);font-family:inherit; }
+    .fv-modal-btn:hover { background:var(--fv-mustard);color:#111; }
+    .user-result-item { display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background 0.15s; }
+    .user-result-item:hover { background:var(--fv-gray-100); }
+    </style>
+
+    <script type="module">
+    import { searchUsersByHandle, setRole, banUser, muteUser, warnUser, unbanUser, unmuteUser } from './js/admin.js';
+    import { db } from './js/firebase-config.js';
+    import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    let selectedRoleUser = null;
+    let selectedBanUser = null;
+
+    window.openModal = id => document.getElementById(id).classList.add('open');
+    window.closeModal = id => document.getElementById(id).classList.remove('open');
+
+    // Close on backdrop click
+    document.querySelectorAll('.fv-modal-backdrop').forEach(m => {
+        m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+    });
+
+    // ROLE SEARCH
+    window.searchUsersForRole = async (val) => {
+        if (val.length < 2) { document.getElementById('roleUserResults').innerHTML=''; return; }
+        const users = await searchUsersByHandle(val);
+        document.getElementById('roleUserResults').innerHTML = users.map(u => `
+            <div class="user-result-item" onclick="selectRoleUser(${JSON.stringify(u).replace(/"/g,'&quot;')})">
+                <img src="${u.photoURL||''}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                <div><div style="font-weight:800;font-size:13px;">${u.displayName||''}</div><div style="font-size:11px;color:var(--fv-text-muted);">${u.handle||''} · ${u.subscribers||0} подп.</div></div>
+            </div>`).join('') || '<p style="color:var(--fv-text-muted);font-size:13px;padding:8px;">Не найдено</p>';
+    };
+
+    window.selectRoleUser = u => {
+        selectedRoleUser = u;
+        document.getElementById('roleUserResults').innerHTML = '';
+        document.getElementById('roleSearchInput').value = u.displayName;
+        const el = document.getElementById('roleSelectedUser');
+        el.style.display='block';
+        el.innerHTML = `<div style="display:flex;align-items:center;gap:10px;"><img src="${u.photoURL||''}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"><div><div style="font-weight:800;">${u.displayName}</div><div style="font-size:12px;color:var(--fv-text-muted);">${u.handle||''} · Текущая роль: ${u.role||'viewer'}</div></div></div>`;
+        document.getElementById('roleSelect').value = u.role || 'viewer';
+    };
+
+    window.applyRole = async () => {
+        if (!selectedRoleUser) { window.showToast('Выберите пользователя','error'); return; }
+        const role = document.getElementById('roleSelect').value;
+        await setRole(selectedRoleUser.uid, role);
+        window.closeModal('assignRoleModal');
+        selectedRoleUser = null;
+    };
+
+    // BAN SEARCH
+    window.searchUsersForBan = async (val) => {
+        if (val.length < 2) { document.getElementById('banUserResults').innerHTML=''; return; }
+        const users = await searchUsersByHandle(val);
+        document.getElementById('banUserResults').innerHTML = users.map(u => `
+            <div class="user-result-item" onclick="selectBanUser(${JSON.stringify(u).replace(/"/g,'&quot;')})">
+                <img src="${u.photoURL||''}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+                <div><div style="font-weight:800;font-size:13px;">${u.displayName||''}</div><div style="font-size:11px;color:var(--fv-text-muted);">${u.handle||''} · ${u.banned?'⛔ Забанен':'✅ Активен'}</div></div>
+            </div>`).join('') || '<p style="color:var(--fv-text-muted);font-size:13px;padding:8px;">Не найдено</p>';
+    };
+
+    window.selectBanUser = u => {
+        selectedBanUser = u;
+        document.getElementById('banUserResults').innerHTML='';
+        document.getElementById('banSearchInput').value = u.displayName;
+        const el = document.getElementById('banSelectedUser');
+        el.style.display='block';
+        el.innerHTML=`<div style="display:flex;align-items:center;gap:10px;"><img src="${u.photoURL||''}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"><div><div style="font-weight:800;">${u.displayName}</div><div style="font-size:12px;color:var(--fv-text-muted);">${u.handle||''} · ${u.banned?'⛔ Забанен':'✅ Активен'} ${u.muted?'| 🔇 Мьют':''}</div></div></div>`;
+    };
+
+    window.applyBan = async () => {
+        if (!selectedBanUser) { window.showToast('Выберите пользователя','error'); return; }
+        const action = document.getElementById('banAction').value;
+        const duration = document.getElementById('banDuration').value;
+        const reason = document.getElementById('banReason').value;
+        const delContent = document.getElementById('banDeleteContent').checked;
+        const uid = selectedBanUser.uid;
+        if (action==='ban') await banUser(uid, { duration: duration==='forever'?'forever':parseInt(duration), reason, deleteContent:delContent });
+        else if (action==='mute') await muteUser(uid, { duration: duration==='forever'?'forever':parseInt(duration), reason });
+        else if (action==='warn') { const { warnUser } = await import('./js/admin.js'); await warnUser(uid, reason); }
+        else if (action==='unban') await unbanUser(uid);
+        else if (action==='unmute') await unmuteUser(uid);
+        window.closeModal('banModal'); selectedBanUser=null;
+    };
+
+    // STAFF LIST
+    window.openModal = id => {
+        document.getElementById(id)?.classList.add('open');
+        if (id==='staffModal') loadStaff();
+    };
+
+    async function loadStaff() {
+        const el = document.getElementById('staffList');
+        if (!el) return;
+        try {
+            const roles = ['admin','moderator'];
+            const snap = await getDocs(collection(db,'users'));
+            const staff = [];
+            snap.forEach(d => { const u={id:d.id,...d.data()}; if (roles.includes(u.role)) staff.push(u); });
+            if (!staff.length) { el.innerHTML='<p style="color:var(--fv-text-muted);font-weight:600;">Стаф не назначен</p>'; return; }
+            el.innerHTML = staff.map(u=>`
+                <a href="profile.html?uid=${u.uid}" style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius-sm);text-decoration:none;color:var(--fv-text);transition:background 0.15s;margin-bottom:8px;" onmouseover="this.style.background='var(--fv-gray-100)'" onmouseout="this.style.background=''">
+                    <img src="${u.photoURL||''}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                    <div style="flex:1;"><div style="font-weight:800;font-size:14px;">${u.displayName}</div><div style="font-size:12px;color:var(--fv-text-muted);">${u.role==='admin'?'👑 Администратор':'🛡️ Модератор'} · ${u.handle||''}</div></div>
+                </a>`).join('');
+        } catch { el.innerHTML='<p style="color:var(--fv-text-muted);">Firestore недоступен</p>'; }
+    }
+
+    // BANNER PREVIEW
+    ['bannerTitle','bannerSubtitle','bannerBg','bannerColor'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', updateBannerPreview);
+    });
+    function updateBannerPreview() {
+        const preview = document.getElementById('bannerPreview');
+        if (!preview) return;
+        const bg = document.getElementById('bannerBg')?.value || '#facc15';
+        const color = document.getElementById('bannerColor')?.value || '#111';
+        const title = document.getElementById('bannerTitle')?.value || 'Заголовок';
+        const sub = document.getElementById('bannerSubtitle')?.value || 'Подзаголовок';
+        preview.style.background = bg; preview.style.color = color;
+        document.getElementById('bannerPreviewTitle').textContent = title;
+        document.getElementById('bannerPreviewSub').textContent = sub;
+    }
+
+    window.publishBanner = () => {
+        const banner = {
+            title: document.getElementById('bannerTitle')?.value,
+            subtitle: document.getElementById('bannerSubtitle')?.value,
+            url: document.getElementById('bannerUrl')?.value,
+            bg: document.getElementById('bannerBg')?.value,
+            color: document.getElementById('bannerColor')?.value,
+            type: document.getElementById('bannerType')?.value,
+            active: true,
+            createdAt: Date.now()
+        };
+        localStorage.setItem('fv_active_banner', JSON.stringify(banner));
+        window.showToast('Баннер опубликован! 🎯','success');
+        window.closeModal('bannerModal');
+    };
+    </script>
+</body>
+</html>
